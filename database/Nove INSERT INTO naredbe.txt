@@ -1,0 +1,246 @@
+1. OGLAS
+INSERT INTO OGLAS (
+    NAZIV_POZICIJE,
+    VRSTA_OGLASA,
+    OPIS,
+    ZAHTEVI,
+    MIN_PLATA,
+    MAX_PLATA,
+    DATUM_OBJAVE,
+    DATUM_ZATVARANJA,
+    STATUS
+)
+VALUES (
+    'Java Backend Developer',
+    'STALNI',
+    'Razvoj enterprise Java aplikacija.',
+    'Java, Spring Boot i SQL.',
+    120000,
+    180000,
+    DATE '2025-01-10',
+    DATE '2025-02-10',
+    'U_TOKU_SELEKCIJE'
+);
+
+INSERT INTO OGLAS (
+    NAZIV_POZICIJE,
+    VRSTA_OGLASA,
+    OPIS,
+    ZAHTEVI,
+    MIN_PLATA,
+    MAX_PLATA,
+    DATUM_OBJAVE,
+    DATUM_ZATVARANJA,
+    STATUS
+)
+VALUES (
+    'Project Manager',
+    'PRIVREMENI',
+    'Vodjenje projekta migracije sistema.',
+    'PMP sertifikat i Agile iskustvo.',
+    150000,
+    200000,
+    DATE '2025-01-20',
+    DATE '2025-02-20',
+    'AKTIVAN'
+);
+
+INSERT INTO OGLAS (
+    NAZIV_POZICIJE,
+    VRSTA_OGLASA,
+    OPIS,
+    ZAHTEVI,
+    MIN_PLATA,
+    MAX_PLATA,
+    DATUM_OBJAVE,
+    DATUM_ZATVARANJA,
+    STATUS
+)
+VALUES (
+    'Praksa - Data Science',
+    'PRAKSA',
+    'Placena praksa za studente.',
+    'Python i statistika.',
+    30000,
+    45000,
+    DATE '2025-01-05',
+    DATE '2025-02-01',
+    'AKTIVAN'
+);
+
+INSERT INTO OGLAS (
+    NAZIV_POZICIJE,
+    VRSTA_OGLASA,
+    OPIS,
+    ZAHTEVI,
+    MIN_PLATA,
+    MAX_PLATA,
+    DATUM_OBJAVE,
+    DATUM_ZATVARANJA,
+    STATUS
+)
+VALUES (
+    'Animator na plazi',
+    'SEZONSKI',
+    'Rad tokom letnje sezone.',
+    'Komunikativnost i strani jezici.',
+    50000,
+    70000,
+    DATE '2025-01-25',
+    DATE '2025-03-01',
+    'AKTIVAN'
+);
+
+COMMIT;
+2. OGLAS_PRIVREMENI
+INSERT INTO OGLAS_PRIVREMENI (
+    OGLAS_ID,
+    PROJEKAT,
+    PERIOD_ANGAZOVANJA
+)
+SELECT
+    OGLAS_ID,
+    'Migracija ERP sistema',
+    '6 meseci'
+FROM OGLAS
+WHERE NAZIV_POZICIJE = 'Project Manager';
+
+COMMIT;
+3. OGLAS_PRAKSA
+INSERT INTO OGLAS_PRAKSA (
+    OGLAS_ID,
+    MENTOR_IME,
+    MENTOR_PREZIME,
+    DUZINA_TRAJANJA
+)
+SELECT
+    OGLAS_ID,
+    'Nikola',
+    'Stojanovic',
+    3
+FROM OGLAS
+WHERE NAZIV_POZICIJE = 'Praksa - Data Science';
+
+COMMIT;
+4. OGLAS_SEZONSKI
+INSERT INTO OGLAS_SEZONSKI (
+    OGLAS_ID,
+    SEZONA,
+    LOKACIJA
+)
+SELECT
+    OGLAS_ID,
+    'Leto 2025',
+    'Budva'
+FROM OGLAS
+WHERE NAZIV_POZICIJE = 'Animator na plazi';
+
+COMMIT;
+5. CV
+INSERT INTO CV (
+    OGLAS_ID,
+    IME,
+    PREZIME,
+    EMAIL,
+    TELEFON,
+    DATUM_PODNOSENJA,
+    STATUS
+)
+SELECT
+    OGLAS_ID,
+    'Marko',
+    'Petrovic',
+    'marko.petrovic@email.com',
+    '+381641234567',
+    DATE '2025-01-15',
+    'POZVAN_NA_INTERVJU'
+FROM OGLAS
+WHERE NAZIV_POZICIJE = 'Java Backend Developer';
+
+INSERT INTO CV (
+    OGLAS_ID,
+    IME,
+    PREZIME,
+    EMAIL,
+    TELEFON,
+    DATUM_PODNOSENJA,
+    STATUS
+)
+SELECT
+    OGLAS_ID,
+    'Milica',
+    'Ilic',
+    'milica.ilic@pm.com',
+    '+381696789012',
+    DATE '2025-01-22',
+    'POZVAN_NA_INTERVJU'
+FROM OGLAS
+WHERE NAZIV_POZICIJE = 'Project Manager';
+
+COMMIT;
+6. INTERVJU
+INSERT INTO INTERVJU (
+    CV_ID,
+    DATUM_INTERVJUA,
+    VREME_INTERVJUA,
+    TIP_INTERVJUA,
+    LOKACIJA,
+    IME_ZAPOSLENOG,
+    PREZIME_ZAPOSLENOG,
+    OCENA,
+    NAPOMENE
+)
+SELECT
+    CV_ID,
+    DATE '2025-01-28',
+    '10:00',
+    'LICNI',
+    'Beograd - sala 3',
+    'Aleksandar',
+    'Milovanovic',
+    8,
+    'Odlicno poznavanje Spring Boot-a.'
+FROM CV
+WHERE EMAIL = 'marko.petrovic@email.com';
+
+COMMIT;
+7. TEST
+INSERT INTO TEST (
+    CV_ID,
+    REZULTAT,
+    DATUM_TESTIRANJA,
+    VRSTA_TESTIRANJA,
+    KOMENTAR
+)
+SELECT
+    CV_ID,
+    87.50,
+    DATE '2025-01-26',
+    'Tehnicki Java test',
+    'Veoma dobar rezultat.'
+FROM CV
+WHERE EMAIL = 'marko.petrovic@email.com';
+
+COMMIT;
+8. ODLUKA
+INSERT INTO ODLUKA (
+    CV_ID,
+    STATUS,
+    DATUM_DONOSENJA,
+    PONUDJENA_PLATA,
+    PONUDA_PRIHVACENA,
+    DATUM_POCETKA_RADA,
+    RAZLOG_ODBIJANJA
+)
+SELECT
+    CV_ID,
+    'IZABRAN',
+    DATE '2025-02-10',
+    165000,
+    'D',
+    DATE '2025-03-01',
+    NULL
+FROM CV
+WHERE EMAIL = 'marko.petrovic@email.com';
+
+COMMIT;

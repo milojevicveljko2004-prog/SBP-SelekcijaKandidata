@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace App.Entiteti
+{
+    public class Test
+    {
+        public virtual int TestId { get; protected set; }
+
+        public virtual decimal? Rezultat { get; set; }
+        public virtual DateTime DatumTestiranja { get; set; }
+        public virtual string VrstaTestiranja { get; set; }
+        public virtual string Komentar { get; set; }
+
+        public virtual CV CV { get; set; }
+
+        public Test()
+        {
+        }
+    }
+}
