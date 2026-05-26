@@ -1,0 +1,1276 @@
+CREATE TABLE OGLAS (
+    OGLAS_ID NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    NAZIV_POZICIJE VARCHAR2(200) NOT NULL,
+    VRSTA_OGLASA VARCHAR2(20) NOT NULL
+        CONSTRAINT CHK_VRSTA_OGLASA
+        CHECK (
+            VRSTA_OGLASA IN (
+                'STALNI',
+                'PRIVREMENI',
+                'PRAKSA',
+                'SEZONSKI'
+            )
+        ),
+    OPIS CLOB,
+    ZAHTEVI CLOB,
+    MIN_PLATA NUMBER(10,2),
+    MAX_PLATA NUMBER(10,2),
+    DATUM_OBJAVE DATE NOT NULL,
+    DATUM_ZATVARANJA DATE,
+    STATUS VARCHAR2(30) NOT NULL
+        CONSTRAINT CHK_STATUS_OGLAS
+        CHECK (
+            STATUS IN (
+                'AKTIVAN',
+                'ZATVOREN',
+                'U_TOKU_SELEKCIJE'
+            )
+        ),
+
+    CONSTRAINT CHK_PLATA
+        CHECK (
+            MIN_PLATA IS NULL
+            OR MAX_PLATA IS NULL
+            OR MIN_PLATA <= MAX_PLATA
+        ),
+
+    CONSTRAINT CHK_DATUMI_OGLAS
+        CHECK (
+            DATUM_ZATVARANJA IS NULL
+            OR DATUM_ZATVARANJA > DATUM_OBJAVE
+        )
+);
+
+
+CREATE TABLE OGLAS_PRIVREMENI (
+    OGLAS_ID NUMBER PRIMARY KEY,
+    PROJEKAT VARCHAR2(300) NOT NULL,
+    PERIOD_ANGAZOVANJA VARCHAR2(100) NOT NULL,
+
+    CONSTRAINT FK_PRIVREMENI_OGLAS
+        FOREIGN KEY (OGLAS_ID)
+        REFERENCES OGLAS(OGLAS_ID)
+        ON DELETE CASCADE
+);
+
+
+CREATE OR REPLACE TRIGGER TRG_PRIVREMENI_TIP
+BEFORE INSERT OR UPDATE ON OGLAS_PRIVREMENI
+FOR EACH ROW
+DECLARE
+    V_VRSTA OGLAS.VRSTA_OGLASA%TYPE;
+BEGIN
+    SELECT VRSTA_OGLASA
+    INTO V_VRSTA
+    FROM OGLAS
+    WHERE OGLAS_ID = :NEW.OGLAS_ID;
+
+    IF V_VRSTA <> 'PRIVREMENI' THEN
+        RAISE_APPLICATION_ERROR(
+            -20001,
+            'Oglas mora biti tipa PRIVREMENI.'
+        );
+    END IF;
+END;
+/
+
+
+CREATE TABLE OGLAS_PRAKSA (
+    OGLAS_ID NUMBER PRIMARY KEY,
+    IME_ZAPOSLENOG VARCHAR2(100) NOT NULL,
+    PREZIME_ZAPOSLENOG VARCHAR2(100) NOT NULL,
+    DUZINA_TRAJANJA NUMBER(2) NOT NULL
+        CONSTRAINT CHK_DUZINA_TRAJANJA
+        CHECK (DUZINA_TRAJANJA > 0),
+
+    CONSTRAINT FK_PRAKSA_OGLAS
+        FOREIGN KEY (OGLAS_ID)
+        REFERENCES OGLAS(OGLAS_ID)
+        ON DELETE CASCADE
+);
+
+
+CREATE OR REPLACE TRIGGER TRG_PRAKSA_TIP
+BEFORE INSERT OR UPDATE ON OGLAS_PRAKSA
+FOR EACH ROW
+DECLARE
+    V_VRSTA OGLAS.VRSTA_OGLASA%TYPE;
+BEGIN
+    SELECT VRSTA_OGLASA
+    INTO V_VRSTA
+    FROM OGLAS
+    WHERE OGLAS_ID = :NEW.OGLAS_ID;
+
+    IF V_VRSTA <> 'PRAKSA' THEN
+        RAISE_APPLICATION_ERROR(
+            -20002,
+            'Oglas mora biti tipa PRAKSA.'
+        );
+    END IF;
+END;
+/
+
+
+CREATE TABLE OGLAS_SEZONSKI (
+    OGLAS_ID NUMBER PRIMARY KEY,
+    SEZONA VARCHAR2(100) NOT NULL,
+    LOKACIJA VARCHAR2(200) NOT NULL,
+
+    CONSTRAINT FK_SEZONSKI_OGLAS
+        FOREIGN KEY (OGLAS_ID)
+        REFERENCES OGLAS(OGLAS_ID)
+        ON DELETE CASCADE
+);
+
+
+CREATE OR REPLACE TRIGGER TRG_SEZONSKI_TIP
+BEFORE INSERT OR UPDATE ON OGLAS_SEZONSKI
+FOR EACH ROW
+DECLARE
+    V_VRSTA OGLAS.VRSTA_OGLASA%TYPE;
+BEGIN
+    SELECT VRSTA_OGLASA
+    INTO V_VRSTA
+    FROM OGLAS
+    WHERE OGLAS_ID = :NEW.OGLAS_ID;
+
+    IF V_VRSTA <> 'SEZONSKI' THEN
+        RAISE_APPLICATION_ERROR(
+            -20003,
+            'Oglas mora biti tipa SEZONSKI.'
+        );
+    END IF;
+END;
+/
+
+
+CREATE TABLE CV (
+    CV_ID NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    OGLAS_ID NUMBER NOT NULL,
+    IME VARCHAR2(100) NOT NULL,
+    PREZIME VARCHAR2(100) NOT NULL,
+    EMAIL VARCHAR2(200) NOT NULL,
+    TELEFON VARCHAR2(30),
+    DATUM_PODNOSENJA DATE NOT NULL,
+    STATUS VARCHAR2(30) NOT NULL
+        CONSTRAINT CHK_STATUS_CV
+        CHECK (
+            STATUS IN (
+                'PRIMLJEN',
+                'U_PROCESU',
+                'ODBIJEN',
+                'POZVAN_NA_INTERVJU'
+            )
+        ),
+
+    CONSTRAINT FK_CV_OGLAS
+        FOREIGN KEY (OGLAS_ID)
+        REFERENCES OGLAS(OGLAS_ID),
+
+    CONSTRAINT UQ_EMAIL_OGLAS
+        UNIQUE (EMAIL, OGLAS_ID)
+);
+
+
+CREATE TABLE INTERVJU (
+    INTERVJU_ID NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    CV_ID NUMBER NOT NULL,
+    DATUM DATE NOT NULL,
+    VREME DATE NOT NULL,
+    TIP VARCHAR2(20) NOT NULL
+        CONSTRAINT CHK_TIP_INTERVJU
+        CHECK (
+            TIP IN (
+                'LICNI',
+                'VIDEO',
+                'TELEFONSKI'
+            )
+        ),
+    LOKACIJA VARCHAR2(300),
+    IME_ZAPOSLENOG VARCHAR2(100) NOT NULL,
+    PREZIME_ZAPOSLENOG VARCHAR2(100) NOT NULL,
+    OCENA NUMBER(2)
+        CONSTRAINT CHK_OCENA
+        CHECK (OCENA BETWEEN 1 AND 10),
+    NAPOMENE CLOB,
+
+    CONSTRAINT FK_INTERVJU_CV
+        FOREIGN KEY (CV_ID)
+        REFERENCES CV(CV_ID)
+        ON DELETE CASCADE
+);
+
+
+CREATE TABLE TEST (
+    TEST_ID NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    CV_ID NUMBER NOT NULL,
+    REZULTAT NUMBER(5,2)
+        CONSTRAINT CHK_REZULTAT
+        CHECK (REZULTAT BETWEEN 0 AND 100),
+    DATUM_TESTIRANJA DATE NOT NULL,
+    VRSTA_TESTIRANJA VARCHAR2(100) NOT NULL,
+    KOMENTAR CLOB,
+
+    CONSTRAINT FK_TEST_CV
+        FOREIGN KEY (CV_ID)
+        REFERENCES CV(CV_ID)
+        ON DELETE CASCADE
+);
+
+
+CREATE TABLE ODLUKA (
+    ODLUKA_ID NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    CV_ID NUMBER NOT NULL UNIQUE,
+    STATUS VARCHAR2(20) NOT NULL
+        CONSTRAINT CHK_STATUS_ODLUKA
+        CHECK (
+            STATUS IN (
+                'IZABRAN',
+                'ODBIJEN',
+                'REZERVA',
+                'NA_CEKANJU'
+            )
+        ),
+    DATUM_DONOSENJA_ODLUKE DATE NOT NULL,
+    PONUDJENA_PLATA NUMBER(10,2),
+    PRIHVATANJE_PONUDE CHAR(1)
+        CONSTRAINT CHK_PRIHVATANJE
+        CHECK (
+            PRIHVATANJE_PONUDE IN ('D', 'N')
+        ),
+    DATUM_POCETKA_RADA DATE,
+    RAZLOG_ODBIJANJA VARCHAR2(500),
+
+    CONSTRAINT FK_ODLUKA_CV
+        FOREIGN KEY (CV_ID)
+        REFERENCES CV(CV_ID)
+        ON DELETE CASCADE
+);
+
+
+CREATE INDEX IDX_CV_OGLAS
+    ON CV(OGLAS_ID);
+
+CREATE INDEX IDX_CV_EMAIL
+    ON CV(EMAIL);
+
+CREATE INDEX IDX_INTERVJU_CV
+    ON INTERVJU(CV_ID);
+
+CREATE INDEX IDX_TEST_CV
+    ON TEST(CV_ID);
+
+CREATE INDEX IDX_OGLAS_STATUS
+    ON OGLAS(STATUS);
+
+
+INSERT INTO OGLAS (
+    NAZIV_POZICIJE,
+    VRSTA_OGLASA,
+    OPIS,
+    ZAHTEVI,
+    MIN_PLATA,
+    MAX_PLATA,
+    DATUM_OBJAVE,
+    DATUM_ZATVARANJA,
+    STATUS
+)
+VALUES (
+    'Java Backend Developer',
+    'STALNI',
+    'Razvoj enterprise Java aplikacija.',
+    'Java, Spring Boot i SQL.',
+    120000,
+    180000,
+    DATE '2025-01-10',
+    DATE '2025-02-10',
+    'U_TOKU_SELEKCIJE'
+);
+
+
+INSERT INTO OGLAS (
+    NAZIV_POZICIJE,
+    VRSTA_OGLASA,
+    OPIS,
+    ZAHTEVI,
+    MIN_PLATA,
+    MAX_PLATA,
+    DATUM_OBJAVE,
+    DATUM_ZATVARANJA,
+    STATUS
+)
+VALUES (
+    'Project Manager',
+    'PRIVREMENI',
+    'Vodjenje projekta migracije sistema.',
+    'PMP sertifikat i Agile iskustvo.',
+    150000,
+    200000,
+    DATE '2025-01-20',
+    DATE '2025-02-20',
+    'AKTIVAN'
+);
+
+
+INSERT INTO OGLAS_PRIVREMENI (
+    OGLAS_ID,
+    PROJEKAT,
+    PERIOD_ANGAZOVANJA
+)
+VALUES (
+    2,
+    'Migracija ERP sistema',
+    '6 meseci'
+);
+
+
+INSERT INTO OGLAS (
+    NAZIV_POZICIJE,
+    VRSTA_OGLASA,
+    OPIS,
+    ZAHTEVI,
+    MIN_PLATA,
+    MAX_PLATA,
+    DATUM_OBJAVE,
+    DATUM_ZATVARANJA,
+    STATUS
+)
+VALUES (
+    'Praksa - Data Science',
+    'PRAKSA',
+    'Placena praksa za studente.',
+    'Python i statistika.',
+    30000,
+    45000,
+    DATE '2025-01-05',
+    DATE '2025-02-01',
+    'AKTIVAN'
+);
+
+
+INSERT INTO OGLAS_PRAKSA (
+    OGLAS_ID,
+    IME_ZAPOSLENOG,
+    PREZIME_ZAPOSLENOG,
+    DUZINA_TRAJANJA
+)
+VALUES (
+    3,
+    'Nikola',
+    'Stojanovic',
+    3
+);
+
+
+INSERT INTO OGLAS (
+    NAZIV_POZICIJE,
+    VRSTA_OGLASA,
+    OPIS,
+    ZAHTEVI,
+    MIN_PLATA,
+    MAX_PLATA,
+    DATUM_OBJAVE,
+    DATUM_ZATVARANJA,
+    STATUS
+)
+VALUES (
+    'Animator na plazi',
+    'SEZONSKI',
+    'Rad tokom letnje sezone.',
+    'Komunikativnost i strani jezici.',
+    50000,
+    70000,
+    DATE '2025-01-25',
+    DATE '2025-03-01',
+    'AKTIVAN'
+);
+
+
+INSERT INTO OGLAS_SEZONSKI (
+    OGLAS_ID,
+    SEZONA,
+    LOKACIJA
+)
+VALUES (
+    4,
+    'Leto 2025',
+    'Budva'
+);
+
+
+INSERT INTO CV (
+    OGLAS_ID,
+    IME,
+    PREZIME,
+    EMAIL,
+    TELEFON,
+    DATUM_PODNOSENJA,
+    STATUS
+)
+VALUES (
+    1,
+    'Marko',
+    'Petrovic',
+    'marko.petrovic@email.com',
+    '+381641234567',
+    DATE '2025-01-15',
+    'POZVAN_NA_INTERVJU'
+);
+
+
+INSERT INTO CV (
+    OGLAS_ID,
+    IME,
+    PREZIME,
+    EMAIL,
+    TELEFON,
+    DATUM_PODNOSENJA,
+    STATUS
+)
+VALUES (
+    1,
+    'Ana',
+    'Jovanovic',
+    'ana.jovanovic@gmail.com',
+    '+381652345678',
+    DATE '2025-01-18',
+    'U_PROCESU'
+);
+
+
+INSERT INTO CV (
+    OGLAS_ID,
+    IME,
+    PREZIME,
+    EMAIL,
+    TELEFON,
+    DATUM_PODNOSENJA,
+    STATUS
+)
+VALUES (
+    2,
+    'Milica',
+    'Ilic',
+    'milica.ilic@pm.com',
+    '+381696789012',
+    DATE '2025-01-22',
+    'POZVAN_NA_INTERVJU'
+);
+
+
+INSERT INTO INTERVJU (
+    CV_ID,
+    DATUM,
+    VREME,
+    TIP,
+    LOKACIJA,
+    IME_ZAPOSLENOG,
+    PREZIME_ZAPOSLENOG,
+    OCENA,
+    NAPOMENE
+)
+VALUES (
+    1,
+    DATE '2025-01-28',
+    TO_DATE('10:00', 'HH24:MI'),
+    'LICNI',
+    'Beograd - sala 3',
+    'Aleksandar',
+    'Milovanovic',
+    8,
+    'Odlicno poznavanje Spring Boot-a.'
+);
+
+
+INSERT INTO INTERVJU (
+    CV_ID,
+    DATUM,
+    VREME,
+    TIP,
+    LOKACIJA,
+    IME_ZAPOSLENOG,
+    PREZIME_ZAPOSLENOG,
+    OCENA,
+    NAPOMENE
+)
+VALUES (
+    3,
+    DATE '2025-01-30',
+    TO_DATE('14:00', 'HH24:MI'),
+    'VIDEO',
+    'Microsoft Teams',
+    'Snezana',
+    'Todorovic',
+    9,
+    'Odlicne komunikacione vestine.'
+);
+
+
+INSERT INTO TEST (
+    CV_ID,
+    REZULTAT,
+    DATUM_TESTIRANJA,
+    VRSTA_TESTIRANJA,
+    KOMENTAR
+)
+VALUES (
+    1,
+    87.50,
+    DATE '2025-01-26',
+    'Tehnicki Java test',
+    'Veoma dobar rezultat.'
+);
+
+
+INSERT INTO TEST (
+    CV_ID,
+    REZULTAT,
+    DATUM_TESTIRANJA,
+    VRSTA_TESTIRANJA,
+    KOMENTAR
+)
+VALUES (
+    3,
+    92.00,
+    DATE '2025-01-28',
+    'Test upravljanja projektima',
+    'Odlican rezultat.'
+);
+
+
+INSERT INTO ODLUKA (
+    CV_ID,
+    STATUS,
+    DATUM_DONOSENJA_ODLUKE,
+    PONUDJENA_PLATA,
+    PRIHVATANJE_PONUDE,
+    DATUM_POCETKA_RADA,
+    RAZLOG_ODBIJANJA
+)
+VALUES (
+    1,
+    'IZABRAN',
+    DATE '2025-02-10',
+    165000,
+    'D',
+    DATE '2025-03-01',
+    NULL
+);
+
+
+INSERT INTO ODLUKA (
+    CV_ID,
+    STATUS,
+    DATUM_DONOSENJA_ODLUKE,
+    PONUDJENA_PLATA,
+    PRIHVATANJE_PONUDE,
+    DATUM_POCETKA_RADA,
+    RAZLOG_ODBIJANJA
+)
+VALUES (
+    2,
+    'REZERVA',
+    DATE '2025-02-10',
+    155000,
+    NULL,
+    NULL,
+    NULL
+);
+
+
+INSERT INTO ODLUKA (
+    CV_ID,
+    STATUS,
+    DATUM_DONOSENJA_ODLUKE,
+    PONUDJENA_PLATA,
+    PRIHVATANJE_PONUDE,
+    DATUM_POCETKA_RADA,
+    RAZLOG_ODBIJANJA
+)
+VALUES (
+    3,
+    'IZABRAN',
+    DATE '2025-02-05',
+    190000,
+    'D',
+    DATE '2025-04-01',
+    NULL
+);
+
+INSERT INTO OGLAS (
+    NAZIV_POZICIJE,
+    VRSTA_OGLASA,
+    OPIS,
+    ZAHTEVI,
+    MIN_PLATA,
+    MAX_PLATA,
+    DATUM_OBJAVE,
+    DATUM_ZATVARANJA,
+    STATUS
+)
+VALUES (
+    'DevOps Engineer',
+    'STALNI',
+    'Odrzavanje CI/CD infrastrukture.',
+    'Docker, Kubernetes, Linux.',
+    140000,
+    210000,
+    DATE '2025-02-01',
+    DATE '2025-03-10',
+    'AKTIVAN'
+);
+
+INSERT INTO OGLAS (
+    NAZIV_POZICIJE,
+    VRSTA_OGLASA,
+    OPIS,
+    ZAHTEVI,
+    MIN_PLATA,
+    MAX_PLATA,
+    DATUM_OBJAVE,
+    DATUM_ZATVARANJA,
+    STATUS
+)
+VALUES (
+    'Frontend React Developer',
+    'PRIVREMENI',
+    'Razvoj React aplikacije.',
+    'React i TypeScript.',
+    110000,
+    160000,
+    DATE '2025-02-03',
+    DATE '2025-03-05',
+    'AKTIVAN'
+);
+
+INSERT INTO OGLAS_PRIVREMENI (
+    OGLAS_ID,
+    PROJEKAT,
+    PERIOD_ANGAZOVANJA
+)
+VALUES (
+    6,
+    'E-commerce platforma',
+    '4 meseca'
+);
+
+INSERT INTO OGLAS (
+    NAZIV_POZICIJE,
+    VRSTA_OGLASA,
+    OPIS,
+    ZAHTEVI,
+    MIN_PLATA,
+    MAX_PLATA,
+    DATUM_OBJAVE,
+    DATUM_ZATVARANJA,
+    STATUS
+)
+VALUES (
+    'QA Intern',
+    'PRAKSA',
+    'Praksa za QA testera.',
+    'Osnove testiranja.',
+    25000,
+    40000,
+    DATE '2025-02-05',
+    DATE '2025-03-01',
+    'AKTIVAN'
+);
+
+INSERT INTO OGLAS_PRAKSA (
+    OGLAS_ID,
+    IME_ZAPOSLENOG,
+    PREZIME_ZAPOSLENOG,
+    DUZINA_TRAJANJA
+)
+VALUES (
+    7,
+    'Milan',
+    'Jovic',
+    6
+);
+
+INSERT INTO OGLAS (
+    NAZIV_POZICIJE,
+    VRSTA_OGLASA,
+    OPIS,
+    ZAHTEVI,
+    MIN_PLATA,
+    MAX_PLATA,
+    DATUM_OBJAVE,
+    DATUM_ZATVARANJA,
+    STATUS
+)
+VALUES (
+    'Konobar',
+    'SEZONSKI',
+    'Rad u hotelu tokom sezone.',
+    'Iskustvo u ugostiteljstvu.',
+    60000,
+    85000,
+    DATE '2025-02-10',
+    DATE '2025-04-01',
+    'AKTIVAN'
+);
+
+INSERT INTO OGLAS_SEZONSKI (
+    OGLAS_ID,
+    SEZONA,
+    LOKACIJA
+)
+VALUES (
+    8,
+    'Leto 2025',
+    'Kopaonik'
+);
+
+INSERT INTO CV (
+    OGLAS_ID,
+    IME,
+    PREZIME,
+    EMAIL,
+    TELEFON,
+    DATUM_PODNOSENJA,
+    STATUS
+)
+VALUES (
+    5,
+    'Petar',
+    'Simic',
+    'petar.simic@gmail.com',
+    '+381641111111',
+    DATE '2025-02-06',
+    'PRIMLJEN'
+);
+
+INSERT INTO CV (
+    OGLAS_ID,
+    IME,
+    PREZIME,
+    EMAIL,
+    TELEFON,
+    DATUM_PODNOSENJA,
+    STATUS
+)
+VALUES (
+    5,
+    'Marija',
+    'Nikolic',
+    'marija.nikolic@gmail.com',
+    '+381642222222',
+    DATE '2025-02-07',
+    'U_PROCESU'
+);
+
+INSERT INTO CV (
+    OGLAS_ID,
+    IME,
+    PREZIME,
+    EMAIL,
+    TELEFON,
+    DATUM_PODNOSENJA,
+    STATUS
+)
+VALUES (
+    6,
+    'Stefan',
+    'Jankovic',
+    'stefan.jankovic@gmail.com',
+    '+381643333333',
+    DATE '2025-02-08',
+    'POZVAN_NA_INTERVJU'
+);
+
+INSERT INTO CV (
+    OGLAS_ID,
+    IME,
+    PREZIME,
+    EMAIL,
+    TELEFON,
+    DATUM_PODNOSENJA,
+    STATUS
+)
+VALUES (
+    7,
+    'Ivana',
+    'Petrovic',
+    'ivana.petrovic@gmail.com',
+    '+381644444444',
+    DATE '2025-02-09',
+    'PRIMLJEN'
+);
+
+INSERT INTO CV (
+    OGLAS_ID,
+    IME,
+    PREZIME,
+    EMAIL,
+    TELEFON,
+    DATUM_PODNOSENJA,
+    STATUS
+)
+VALUES (
+    8,
+    'Nikola',
+    'Pavlovic',
+    'nikola.pavlovic@gmail.com',
+    '+381645555555',
+    DATE '2025-02-10',
+    'ODBIJEN'
+);
+
+INSERT INTO INTERVJU (
+    CV_ID,
+    DATUM,
+    VREME,
+    TIP,
+    LOKACIJA,
+    IME_ZAPOSLENOG,
+    PREZIME_ZAPOSLENOG,
+    OCENA,
+    NAPOMENE
+)
+VALUES (
+    4,
+    TO_DATE('2025-02-12 10:00', 'YYYY-MM-DD HH24:MI'),
+    TO_DATE('2025-02-12 10:00', 'YYYY-MM-DD HH24:MI'),
+    'VIDEO',
+    'Zoom',
+    'Marko',
+    'Milic',
+    8,
+    'Veoma komunikativan kandidat.'
+);
+
+INSERT INTO INTERVJU (
+    CV_ID,
+    DATUM,
+    VREME,
+    TIP,
+    LOKACIJA,
+    IME_ZAPOSLENOG,
+    PREZIME_ZAPOSLENOG,
+    OCENA,
+    NAPOMENE
+)
+VALUES (
+    5,
+    TO_DATE('2025-02-13 11:30', 'YYYY-MM-DD HH24:MI'),
+    TO_DATE('2025-02-13 11:30', 'YYYY-MM-DD HH24:MI'),
+    'LICNI',
+    'Novi Sad',
+    'Jelena',
+    'Markovic',
+    7,
+    'Solidno tehnicko znanje.'
+);
+
+INSERT INTO INTERVJU (
+    CV_ID,
+    DATUM,
+    VREME,
+    TIP,
+    LOKACIJA,
+    IME_ZAPOSLENOG,
+    PREZIME_ZAPOSLENOG,
+    OCENA,
+    NAPOMENE
+)
+VALUES (
+    6,
+    TO_DATE('2025-02-14 09:00', 'YYYY-MM-DD HH24:MI'),
+    TO_DATE('2025-02-14 09:00', 'YYYY-MM-DD HH24:MI'),
+    'TELEFONSKI',
+    NULL,
+    'Nikola',
+    'Jovanovic',
+    9,
+    'Odlicno iskustvo sa projektima.'
+);
+
+INSERT INTO TEST (
+    CV_ID,
+    REZULTAT,
+    DATUM_TESTIRANJA,
+    VRSTA_TESTIRANJA,
+    KOMENTAR
+)
+VALUES (
+    4,
+    78.50,
+    DATE '2025-02-10',
+    'React test',
+    'Dobar rezultat.'
+);
+
+INSERT INTO TEST (
+    CV_ID,
+    REZULTAT,
+    DATUM_TESTIRANJA,
+    VRSTA_TESTIRANJA,
+    KOMENTAR
+)
+VALUES (
+    5,
+    65.00,
+    DATE '2025-02-11',
+    'QA test',
+    'Potrebno dodatno znanje automatizacije.'
+);
+
+INSERT INTO TEST (
+    CV_ID,
+    REZULTAT,
+    DATUM_TESTIRANJA,
+    VRSTA_TESTIRANJA,
+    KOMENTAR
+)
+VALUES (
+    6,
+    91.00,
+    DATE '2025-02-12',
+    'Menadzment test',
+    'Odlican rezultat.'
+);
+
+INSERT INTO ODLUKA (
+    CV_ID,
+    STATUS,
+    DATUM_DONOSENJA_ODLUKE,
+    PONUDJENA_PLATA,
+    PRIHVATANJE_PONUDE,
+    DATUM_POCETKA_RADA,
+    RAZLOG_ODBIJANJA
+)
+VALUES (
+    4,
+    'IZABRAN',
+    DATE '2025-02-20',
+    150000,
+    'D',
+    DATE '2025-03-15',
+    NULL
+);
+
+INSERT INTO ODLUKA (
+    CV_ID,
+    STATUS,
+    DATUM_DONOSENJA_ODLUKE,
+    PONUDJENA_PLATA,
+    PRIHVATANJE_PONUDE,
+    DATUM_POCETKA_RADA,
+    RAZLOG_ODBIJANJA
+)
+VALUES (
+    5,
+    'ODBIJEN',
+    DATE '2025-02-18',
+    NULL,
+    'N',
+    NULL,
+    'Nedovoljno iskustva.'
+);
+
+INSERT INTO ODLUKA (
+    CV_ID,
+    STATUS,
+    DATUM_DONOSENJA_ODLUKE,
+    PONUDJENA_PLATA,
+    PRIHVATANJE_PONUDE,
+    DATUM_POCETKA_RADA,
+    RAZLOG_ODBIJANJA
+)
+VALUES (
+    6,
+    'NA_CEKANJU',
+    DATE '2025-02-19',
+    180000,
+    NULL,
+    NULL,
+    NULL
+);
+
+INSERT INTO OGLAS (
+    NAZIV_POZICIJE,
+    VRSTA_OGLASA,
+    OPIS,
+    ZAHTEVI,
+    MIN_PLATA,
+    MAX_PLATA,
+    DATUM_OBJAVE,
+    DATUM_ZATVARANJA,
+    STATUS
+)
+VALUES (
+    'Business Analyst',
+    'STALNI',
+    'Analiza poslovnih procesa.',
+    'SQL i UML modelovanje.',
+    120000,
+    170000,
+    DATE '2025-02-15',
+    DATE '2025-03-20',
+    'AKTIVAN'
+);
+
+INSERT INTO OGLAS (
+    NAZIV_POZICIJE,
+    VRSTA_OGLASA,
+    OPIS,
+    ZAHTEVI,
+    MIN_PLATA,
+    MAX_PLATA,
+    DATUM_OBJAVE,
+    DATUM_ZATVARANJA,
+    STATUS
+)
+VALUES (
+    'Android Developer',
+    'PRIVREMENI',
+    'Razvoj Android aplikacije.',
+    'Kotlin i REST API.',
+    130000,
+    180000,
+    DATE '2025-02-18',
+    DATE '2025-03-25',
+    'AKTIVAN'
+);
+
+INSERT INTO OGLAS_PRIVREMENI (
+    OGLAS_ID,
+    PROJEKAT,
+    PERIOD_ANGAZOVANJA
+)
+VALUES (
+    10,
+    'Mobile banking aplikacija',
+    '5 meseci'
+);
+
+INSERT INTO OGLAS (
+    NAZIV_POZICIJE,
+    VRSTA_OGLASA,
+    OPIS,
+    ZAHTEVI,
+    MIN_PLATA,
+    MAX_PLATA,
+    DATUM_OBJAVE,
+    DATUM_ZATVARANJA,
+    STATUS
+)
+VALUES (
+    'HR Intern',
+    'PRAKSA',
+    'Praksa u HR sektoru.',
+    'Komunikativnost i organizacija.',
+    25000,
+    35000,
+    DATE '2025-02-20',
+    DATE '2025-03-10',
+    'AKTIVAN'
+);
+
+INSERT INTO OGLAS_PRAKSA (
+    OGLAS_ID,
+    IME_ZAPOSLENOG,
+    PREZIME_ZAPOSLENOG,
+    DUZINA_TRAJANJA
+)
+VALUES (
+    11,
+    'Tamara',
+    'Ilic',
+    4
+);
+
+INSERT INTO CV (
+    OGLAS_ID,
+    IME,
+    PREZIME,
+    EMAIL,
+    TELEFON,
+    DATUM_PODNOSENJA,
+    STATUS
+)
+VALUES (
+    9,
+    'Milos',
+    'Peric',
+    'milos.peric@gmail.com',
+    '+381646666666',
+    DATE '2025-02-16',
+    'PRIMLJEN'
+);
+
+INSERT INTO CV (
+    OGLAS_ID,
+    IME,
+    PREZIME,
+    EMAIL,
+    TELEFON,
+    DATUM_PODNOSENJA,
+    STATUS
+)
+VALUES (
+    9,
+    'Katarina',
+    'Jovic',
+    'katarina.jovic@gmail.com',
+    '+381647777777',
+    DATE '2025-02-17',
+    'U_PROCESU'
+);
+
+INSERT INTO CV (
+    OGLAS_ID,
+    IME,
+    PREZIME,
+    EMAIL,
+    TELEFON,
+    DATUM_PODNOSENJA,
+    STATUS
+)
+VALUES (
+    10,
+    'Andrej',
+    'Matic',
+    'andrej.matic@gmail.com',
+    '+381648888888',
+    DATE '2025-02-19',
+    'POZVAN_NA_INTERVJU'
+);
+
+INSERT INTO CV (
+    OGLAS_ID,
+    IME,
+    PREZIME,
+    EMAIL,
+    TELEFON,
+    DATUM_PODNOSENJA,
+    STATUS
+)
+VALUES (
+    11,
+    'Sara',
+    'Vukovic',
+    'sara.vukovic@gmail.com',
+    '+381649999999',
+    DATE '2025-02-21',
+    'PRIMLJEN'
+);
+
+INSERT INTO INTERVJU (
+    CV_ID,
+    DATUM,
+    VREME,
+    TIP,
+    LOKACIJA,
+    IME_ZAPOSLENOG,
+    PREZIME_ZAPOSLENOG,
+    OCENA,
+    NAPOMENE
+)
+VALUES (
+    7,
+    TO_DATE('2025-02-22 13:00', 'YYYY-MM-DD HH24:MI'),
+    TO_DATE('2025-02-22 13:00', 'YYYY-MM-DD HH24:MI'),
+    'LICNI',
+    'Beograd',
+    'Milica',
+    'Nikolic',
+    8,
+    'Kandidat ima dobro analiticko razmisljanje.'
+);
+
+INSERT INTO INTERVJU (
+    CV_ID,
+    DATUM,
+    VREME,
+    TIP,
+    LOKACIJA,
+    IME_ZAPOSLENOG,
+    PREZIME_ZAPOSLENOG,
+    OCENA,
+    NAPOMENE
+)
+VALUES (
+    8,
+    TO_DATE('2025-02-23 15:30', 'YYYY-MM-DD HH24:MI'),
+    TO_DATE('2025-02-23 15:30', 'YYYY-MM-DD HH24:MI'),
+    'VIDEO',
+    'Google Meet',
+    'Petar',
+    'Markovic',
+    9,
+    'Odlicno poznavanje Android razvoja.'
+);
+
+INSERT INTO TEST (
+    CV_ID,
+    REZULTAT,
+    DATUM_TESTIRANJA,
+    VRSTA_TESTIRANJA,
+    KOMENTAR
+)
+VALUES (
+    7,
+    84.00,
+    DATE '2025-02-20',
+    'SQL i analiza podataka',
+    'Veoma dobar rezultat.'
+);
+
+INSERT INTO TEST (
+    CV_ID,
+    REZULTAT,
+    DATUM_TESTIRANJA,
+    VRSTA_TESTIRANJA,
+    KOMENTAR
+)
+VALUES (
+    8,
+    89.50,
+    DATE '2025-02-21',
+    'Android Kotlin test',
+    'Odlicno reseni zadaci.'
+);
+
+INSERT INTO ODLUKA (
+    CV_ID,
+    STATUS,
+    DATUM_DONOSENJA_ODLUKE,
+    PONUDJENA_PLATA,
+    PRIHVATANJE_PONUDE,
+    DATUM_POCETKA_RADA,
+    RAZLOG_ODBIJANJA
+)
+VALUES (
+    7,
+    'IZABRAN',
+    DATE '2025-02-28',
+    160000,
+    'D',
+    DATE '2025-04-01',
+    NULL
+);
+
+INSERT INTO ODLUKA (
+    CV_ID,
+    STATUS,
+    DATUM_DONOSENJA_ODLUKE,
+    PONUDJENA_PLATA,
+    PRIHVATANJE_PONUDE,
+    DATUM_POCETKA_RADA,
+    RAZLOG_ODBIJANJA
+)
+VALUES (
+    8,
+    'REZERVA',
+    DATE '2025-03-01',
+    175000,
+    NULL,
+    NULL,
+    NULL
+);
+
+COMMIT;
