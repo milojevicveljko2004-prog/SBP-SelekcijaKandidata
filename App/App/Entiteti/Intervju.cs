@@ -10,12 +10,12 @@ namespace App.Entiteti
     {
         public virtual int IntervjuId { get; protected set; }
 
-        public virtual DateTime DatumIntervjua { get; set; }
-        public virtual string VremeIntervjua { get; set; }
-        public virtual string TipIntervjua { get; set; }
+        public virtual DateTime Datum { get; set; }
+        public virtual string Vreme { get; set; }
+        public virtual string Tip { get; set; }
         public virtual string Lokacija { get; set; }
-        public virtual string ImeZaposlenog { get; set; }
-        public virtual string PrezimeZaposlenog { get; set; }
+        public virtual string ZaposleniIme { get; set; }
+        public virtual string ZaposleniPrezime { get; set; }
         public virtual int? Ocena { get; set; }
         public virtual string Napomene { get; set; }
 
