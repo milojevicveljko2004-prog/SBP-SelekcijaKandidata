@@ -1,4 +1,5 @@
-﻿using System;
+﻿using App.Entiteti.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +11,9 @@ namespace App.Entiteti
     {
         public virtual int OglasId { get; protected set; }
 
-        public virtual string NazivPozicije { get; set; }
+        public virtual string NazivPozicije { get; set; } = string.Empty;
 
-        public virtual string VrstaOglasa { get; set; }
+        public virtual VrstaOglasa VrstaOglasa { get; set; }
 
         public virtual string Opis { get; set; }
 
@@ -26,9 +27,13 @@ namespace App.Entiteti
 
         public virtual DateTime? DatumZatvaranja { get; set; }
 
-        public virtual string Status { get; set; }
+        public virtual StatusOglasa Status { get; set; }
 
         public virtual IList<CV> CVjevi { get; set; }
+
+        public virtual OglasPraksa PodaciPraksa { get; set; }
+        public virtual OglasPrivremeni PodaciPrivremeni { get; set; }
+        public virtual OglasSezonski PodaciSezonski { get; set; }
 
         public Oglas()
         {

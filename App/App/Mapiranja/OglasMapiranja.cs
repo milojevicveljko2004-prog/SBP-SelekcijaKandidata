@@ -7,6 +7,8 @@ using FluentNHibernate.Mapping;
 using App.Entiteti;
 using FluentNHibernate.Conventions.Helpers;
 using NHibernate.Mapping;
+using NHibernate.Type;
+using App.Entiteti.Enums;
 
 namespace App.Mapiranja
 {
@@ -14,24 +16,43 @@ namespace App.Mapiranja
     {
         public OglasMapiranja() 
         {
-            //mapiranje tabele
+            //mapiranje tabele, kljuca i svojstava
+
             Table("OGLAS");
 
             Id(x => x.OglasId, "OGLAS_ID")
-                .GeneratedBy.Sequence("OGLAS_SEQ");
+                .GeneratedBy.TriggerIdentity();
 
-            //mapiranje svojstava
             Map(x => x.NazivPozicije, "NAZIV_POZICIJE");
-            Map(x => x.VrstaOglasa, "VRSTA_OGLASA");
+
+            Map(x => x.VrstaOglasa, "VRSTA_OGLASA")
+                .CustomType<EnumStringType<VrstaOglasa>>();
+
             Map(x => x.Opis, "OPIS");
             Map(x => x.Zahtevi, "ZAHTEVI");
             Map(x => x.MinPlata, "MIN_PLATA");
             Map(x => x.MaxPlata, "MAX_PLATA");
             Map(x => x.DatumObjave, "DATUM_OBJAVE");
             Map(x => x.DatumZatvaranja, "DATUM_ZATVARANJA");
-            Map(x => x.Status, "STATUS");
 
-            //TODO: mapiranje veza
+            Map(x => x.Status, "STATUS")
+                .CustomType<EnumStringType<StatusOglasa>>();
+
+            //mapiranje veza
+
+            HasMany(x => x.CVjevi)
+            .KeyColumn("OGLAS_ID")
+            .Inverse()
+            .Cascade.All();
+
+            HasOne(x => x.PodaciPraksa)
+                .Cascade.All();
+
+            HasOne(x => x.PodaciPrivremeni)
+                .Cascade.All();
+
+            HasOne(x => x.PodaciSezonski)
+                .Cascade.All();
         }
     }
 }

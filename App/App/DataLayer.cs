@@ -45,8 +45,7 @@ namespace App
             {
                 var cfg = OracleManagedDataClientConfiguration.Oracle10
                 .ConnectionString(c =>
-                    c.Is("DATA SOURCE=gislab-oracle.elfak.ni.ac.rs:1521/SBP_PDB;PERSIST SECURITY INFO=True;USER ID=S19751;Password=S19751"))
-                .Dialect<NHibernate.Dialect.Oracle12cDialect>(); //ovo je dodato da ne bi bilo problema jer se ID povecava po IDENTITY
+                    c.Is("DATA SOURCE=gislab-oracle.elfak.ni.ac.rs:1521/SBP_PDB;PERSIST SECURITY INFO=True;USER ID=S19751;Password=S19751"));
 
                 return Fluently.Configure()
                     .Database(cfg.ShowSql()) //moze i bez ShowSql() ali zgodno je za debug - prikazuju se svi upiti koji idu ka bazi

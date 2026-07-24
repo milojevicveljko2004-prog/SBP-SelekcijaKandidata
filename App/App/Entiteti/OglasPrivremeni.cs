@@ -11,8 +11,8 @@ namespace App.Entiteti
         public virtual int OglasId { get; protected set; }
         public virtual Oglas Oglas { get; set; }
 
-        public virtual string Projekat { get; set; }
-        public virtual string PeriodAngazovanja { get; set; }
+        public virtual string Projekat { get; set; } = string.Empty;
+        public virtual string PeriodAngazovanja { get; set; } = string.Empty;
 
         public OglasPrivremeni()
         {

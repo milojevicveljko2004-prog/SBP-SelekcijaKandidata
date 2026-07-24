@@ -11,8 +11,8 @@ namespace App.Entiteti
         public virtual int OglasId { get; protected set; }
         public virtual Oglas Oglas { get; set; }
 
-        public virtual string MentorIme { get; set; }
-        public virtual string MentorPrezime { get; set; }
+        public virtual string MentorIme { get; set; } = string.Empty;
+        public virtual string MentorPrezime { get; set; } = string.Empty;
         public virtual int DuzinaTrajanja { get; set; }
 
         public OglasPraksa()
