@@ -8,20 +8,17 @@ using System.Threading.Tasks;
 
 namespace App.Mapiranja
 {
-    public class OglasPrivremeniMapiranja : ClassMap<OglasPrivremeni>
+    public class OglasPrivremeniMapiranja : SubclassMap<OglasPrivremeni>
     {
         public OglasPrivremeniMapiranja()
         {
             Table("OGLAS_PRIVREMENI");
 
-            Id(x => x.OglasId, "OGLAS_ID")
-                .GeneratedBy.Foreign("Oglas");
-
-            HasOne(x => x.Oglas)
-                .Constrained();
+            KeyColumn("OGLAS_ID");
 
             Map(x => x.Projekat, "PROJEKAT");
-            Map(x => x.PeriodAngazovanja, "PERIOD_ANGAZOVANJA");
+            Map(x => x.DatumPocetka, "DATUM_POCETKA");
+            Map(x => x.DatumZavrsetka, "DATUM_ZAVRSETKA");
         }
     }
 }

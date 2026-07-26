@@ -46,10 +46,14 @@
             this.btnDodajOglas = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnCVPrijaveZaOglas = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.btnPosebniPodaci = new System.Windows.Forms.Button();
             colNazivPozicije = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupBoxListaOglasa.SuspendLayout();
             this.groupBoxPodaciOOglasu.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // colNazivPozicije
@@ -210,19 +214,43 @@
             this.btnCVPrijaveZaOglas.UseVisualStyleBackColor = false;
             this.btnCVPrijaveZaOglas.Click += new System.EventHandler(this.btnCVPrijaveZaOglas_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.btnPosebniPodaci);
+            this.groupBox1.Location = new System.Drawing.Point(949, 374);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(234, 93);
+            this.groupBox1.TabIndex = 39;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Posebni podaci";
+            // 
+            // btnPosebniPodaci
+            // 
+            this.btnPosebniPodaci.BackColor = System.Drawing.Color.Turquoise;
+            this.btnPosebniPodaci.Font = new System.Drawing.Font("Georgia", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPosebniPodaci.Location = new System.Drawing.Point(25, 29);
+            this.btnPosebniPodaci.Name = "btnPosebniPodaci";
+            this.btnPosebniPodaci.Size = new System.Drawing.Size(175, 46);
+            this.btnPosebniPodaci.TabIndex = 0;
+            this.btnPosebniPodaci.Text = "Posebni podaci";
+            this.btnPosebniPodaci.UseVisualStyleBackColor = false;
+            this.btnPosebniPodaci.Click += new System.EventHandler(this.btnPosebniPodaci_Click);
+            // 
             // OglasiForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSeaGreen;
             this.ClientSize = new System.Drawing.Size(1223, 648);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBoxPodaciOOglasu);
             this.Controls.Add(this.groupBoxListaOglasa);
             this.Location = new System.Drawing.Point(696, 20);
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(1239, 687);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(956, 687);
+            this.MinimumSize = new System.Drawing.Size(1239, 687);
             this.Name = "OglasiForm";
             this.Padding = new System.Windows.Forms.Padding(4);
             this.Text = "LISTA OGLASA";
@@ -230,6 +258,7 @@
             this.groupBoxListaOglasa.ResumeLayout(false);
             this.groupBoxPodaciOOglasu.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -253,5 +282,8 @@
         private System.Windows.Forms.ColumnHeader colZahtevi;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button btnCVPrijaveZaOglas;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button btnPosebniPodaci;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }

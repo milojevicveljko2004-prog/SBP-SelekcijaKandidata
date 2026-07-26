@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace App.Entiteti
 {
-    public class OglasPrivremeni
+    public class OglasPrivremeni : Oglas
     {
-        public virtual int OglasId { get; protected set; }
-        public virtual Oglas Oglas { get; set; }
-
         public virtual string Projekat { get; set; } = string.Empty;
-        public virtual string PeriodAngazovanja { get; set; } = string.Empty;
+
+        public virtual DateTime DatumPocetka { get; set; }
+
+        public virtual DateTime DatumZavrsetka { get; set; }
 
         public OglasPrivremeni()
         {

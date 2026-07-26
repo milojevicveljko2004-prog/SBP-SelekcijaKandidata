@@ -31,10 +31,6 @@ namespace App.Entiteti
 
         public virtual IList<CV> CVjevi { get; set; }
 
-        public virtual OglasPraksa PodaciPraksa { get; set; }
-        public virtual OglasPrivremeni PodaciPrivremeni { get; set; }
-        public virtual OglasSezonski PodaciSezonski { get; set; }
-
         public Oglas()
         {
             CVjevi = new List<CV>();

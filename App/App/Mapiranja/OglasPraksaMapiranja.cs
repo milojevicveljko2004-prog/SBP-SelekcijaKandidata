@@ -7,18 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace App.Mapiranja
-{
-    public class OglasPraksaMapiranja : ClassMap<OglasPraksa>
+{                                   //Subclass jer je izvedena klasa
+    public class OglasPraksaMapiranja : SubclassMap<OglasPraksa>
     {
         public OglasPraksaMapiranja()
         {
             Table("OGLAS_PRAKSA");
 
-            Id(x => x.OglasId, "OGLAS_ID")
-                .GeneratedBy.Foreign("Oglas");
-
-            HasOne(x => x.Oglas)
-                .Constrained();
+            KeyColumn("OGLAS_ID");
 
             Map(x => x.MentorIme, "MENTOR_IME");
             Map(x => x.MentorPrezime, "MENTOR_PREZIME");

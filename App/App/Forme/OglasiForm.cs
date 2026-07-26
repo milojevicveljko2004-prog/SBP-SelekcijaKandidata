@@ -1,4 +1,5 @@
-﻿using System;
+﻿using App.Entiteti.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -36,7 +37,6 @@ namespace App.Forme
 
             }
 
-            listaOglasa.Refresh();
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -111,6 +111,43 @@ namespace App.Forme
 
             CVPrijaveZaOglasForm form = new CVPrijaveZaOglasForm(ob);
             form.ShowDialog();
+        }
+
+        private void btnPosebniPodaci_Click(object sender, EventArgs e)
+        {
+            // za oznaceni oglas se proverava koje je vrste - da li je STALNI, PRAKSA, PRIVREMENI ili SEZONSKI
+            // na osnovu toga se otvara odgovarajuca forma OglasPraksaForm, OglasPrivremeniForm ili OglasSezonskiForm
+            // za STALNI nema posebnih podataka
+
+            if (listaOglasa.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Izaberite oglas.");
+                return;
+            }
+
+            int oglasId = int.Parse(listaOglasa.SelectedItems[0].SubItems[0].Text);
+
+            OglasBasic oglas = DTOManager.vratiOglas(oglasId);
+
+            switch (oglas.VrstaOglasa)
+            {
+                case VrstaOglasa.PRAKSA:
+                    new OglasPraksaForm(oglas).ShowDialog();
+                    break;
+
+                case VrstaOglasa.PRIVREMENI:
+                    new OglasPrivremeniForm(oglas).ShowDialog();
+                    break;
+
+                case VrstaOglasa.SEZONSKI:
+                    new OglasSezonskiForm(oglas).ShowDialog();
+                    break;
+
+                case VrstaOglasa.STALNI:
+                    MessageBox.Show(
+                        "Oglas za stalni rad nema posebne podatke.");
+                    break;
+            }
         }
     }
 }

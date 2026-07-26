@@ -12,7 +12,7 @@ namespace App.Entiteti
         public virtual int IntervjuId { get; protected set; }
 
         public virtual DateTime Datum { get; set; }
-        public virtual string Vreme { get; set; } = string.Empty;
+        public virtual DateTime Vreme { get; set; }
         public virtual TipIntervjua Tip { get; set; }
         public virtual string Lokacija { get; set; } = string.Empty;
         public virtual string ZaposleniIme { get; set; } = string.Empty;

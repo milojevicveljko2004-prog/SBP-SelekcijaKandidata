@@ -45,14 +45,6 @@ namespace App.Mapiranja
             .Inverse()
             .Cascade.All();
 
-            HasOne(x => x.PodaciPraksa)
-                .Cascade.All();
-
-            HasOne(x => x.PodaciPrivremeni)
-                .Cascade.All();
-
-            HasOne(x => x.PodaciSezonski)
-                .Cascade.All();
         }
     }
 }

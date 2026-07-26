@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace App
 {
+    //Pregled klase se koriste kada se podaci trebaju samo prikazati(citanje/ispis) bez da se vracaju u bazu
+    //Basic klase se koriste kada korisnik menja ili unosi nove podatke - dakle menja bazu
     #region Oglas
     public class OglasPregled
     {
@@ -84,7 +86,134 @@ namespace App
 
     #endregion
 
+    #region OglasPraksa
+
+    public class OglasPraksaBasic : OglasBasic
+    {
+        public string MentorIme;
+        public string MentorPrezime;
+        public int DuzinaTrajanja;
+
+        public OglasPraksaBasic() : base()
+        {
+
+        }
+
+        //Za kreiranje novog oglasa
+        public OglasPraksaBasic(string MentorIme, string MentorPrezime, int DuzinaTrajanja) : base()
+        {
+            this.MentorIme = MentorIme;
+            this.MentorPrezime = MentorPrezime;
+            this.DuzinaTrajanja = DuzinaTrajanja;
+        }
+
+        //Za vracanje postojeceg oglasa iz baze
+        public OglasPraksaBasic(
+            int oglasId,
+            string mentorIme,
+            string mentorPrezime,
+            int duzinaTrajanja) : base()
+        {
+            OglasId = oglasId;
+            MentorIme = mentorIme;
+            MentorPrezime = mentorPrezime;
+            DuzinaTrajanja = duzinaTrajanja;
+        }
+    }
+
+    #endregion
+
+    #region OglasPrivremeni
+
+    public class OglasPrivremeniBasic : OglasBasic
+    {
+        public string Projekat;
+        public DateTime DatumPocetka;
+        public DateTime DatumZavrsetka;
+
+        public OglasPrivremeniBasic() : base()
+        {
+            
+        }
+
+        //Za kreiranje novog oglasa
+        public OglasPrivremeniBasic(int oglasId, string projekat, DateTime datumPocetka, DateTime datumZavrsetka) : base()
+        {
+            this.OglasId = oglasId;
+            this.Projekat = projekat;
+            this.DatumPocetka = datumPocetka;
+            this.DatumZavrsetka = datumZavrsetka;
+        }
+
+        //Za vracanje postojeceg oglasa iz baze
+        public OglasPrivremeniBasic(string projekat, DateTime datumPocetka, DateTime datumZavrsetka) : base()
+        {
+            this.Projekat = projekat;
+            this.DatumPocetka = datumPocetka;
+            this.DatumZavrsetka = datumZavrsetka;
+        }
+    }
+
+    #endregion
+
+    #region OglasSezonski
+
+    public class OglasSezonskiBasic : OglasBasic
+    {
+        public string Sezona;
+        public string Lokacija;
+
+        public OglasSezonskiBasic() : base()
+        {
+
+        }
+
+        //Za kreiranje novog oglasa
+        public OglasSezonskiBasic(string sezona, string lokacija) : base()
+        {
+            this.Sezona = sezona;
+            this.Lokacija = lokacija;
+        }
+
+        //Za vracanje postojeceg oglasa iz baze
+        public OglasSezonskiBasic(int oglasId, string sezona, string lokacija) : base()
+        {
+            this.OglasId = oglasId;
+            this.Sezona = sezona;
+            this.Lokacija = lokacija;
+        }
+    }
+
+    #endregion
+
     #region CV
+
+    public class CVPregled
+    {
+        public int CvId;
+        public string Ime;
+        public string Prezime;
+        public string Email;
+        public string Telefon;
+        public DateTime DatumPodnosenja;
+        public CVStatus Status;
+
+        public CVPregled()
+        { 
+
+        }
+
+        public CVPregled(int cvId, string ime, string prezime, string email, string telefon, DateTime datumPodnosenja, CVStatus status) : this()
+        {
+            CvId = cvId;
+            Ime = ime;
+            Prezime = prezime;
+            Email = email;
+            Telefon = telefon;
+            DatumPodnosenja = datumPodnosenja;
+            Status = status;
+        }
+    }
 
     public class CVBasic
     {
@@ -120,6 +249,38 @@ namespace App
     #endregion
 
     #region Intervju
+
+    public class IntervjuPregled
+    {
+        public int IntervjuId;
+        public DateTime Datum;
+        public DateTime Vreme;
+        public TipIntervjua Tip;
+        public string Lokacija;
+        public string ZaposleniIme;
+        public string ZaposleniPrezime;
+        public int Ocena;
+        public string Napomene;
+
+        public IntervjuPregled()
+        {
+
+        }
+
+        public IntervjuPregled(int intervjuId, DateTime datum, DateTime vreme, TipIntervjua tip, string lokacija,
+            string zaposleniIme, string zaposleniPrezime, int ocena, string napomene)
+        {
+            IntervjuId = intervjuId;
+            Datum = datum;
+            Vreme = vreme;
+            Tip = tip;
+            Lokacija = lokacija;
+            ZaposleniIme = zaposleniIme;
+            ZaposleniPrezime = zaposleniPrezime;
+            Ocena = ocena;
+            Napomene = napomene;
+        }
+    }
 
     public class IntervjuBasic
     {
