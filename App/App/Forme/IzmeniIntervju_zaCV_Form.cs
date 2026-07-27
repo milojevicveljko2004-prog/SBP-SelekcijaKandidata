@@ -8,19 +8,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace App.Forme
 {
-    public partial class DodajIntervju_zaCV_Form : Form
+    public partial class IzmeniIntervju_zaCV_Form : Form
     {
-        CVBasic cv;
         IntervjuBasic intervju;
+        CVBasic cv;
 
-        public DodajIntervju_zaCV_Form(CVBasic cvb)
+        public IzmeniIntervju_zaCV_Form(IntervjuBasic ib, CVBasic cvb)
         {
             InitializeComponent();
+            this.intervju = ib;
             this.cv = cvb;
-            this.intervju = new IntervjuBasic();
 
             //omogucava da se u vreme unese tacan sat
             dateVreme.Format = DateTimePickerFormat.Custom;
@@ -33,9 +34,27 @@ namespace App.Forme
             comboBoxTipIntervjua.DataSource = Enum.GetValues(typeof(TipIntervjua));
         }
 
-        private void btnDodajIntervju_Click(object sender, EventArgs e)
+        private void IzmeniIntervju_zaCV_Form_Load(object sender, EventArgs e)
         {
-            string poruka = "Da li zelite da dodate novi Intervju u CV?";
+            popuniPodacima();
+            this.Text = "IZMENA INTERVJUA ZA CV sa ID = " + this.cv.CvId;
+        }
+
+        public void popuniPodacima()
+        {
+            dateDatum.Value = this.intervju.Datum;
+            dateVreme.Value = this.intervju.Vreme;
+            comboBoxTipIntervjua.Text = this.intervju.Tip.ToString();
+            textBoxLokacija.Text = this.intervju.Lokacija;
+            textBoxImeZaposlenog.Text = this.intervju.ZaposleniIme;
+            textBoxPrezimeZaposlenog.Text = this.intervju.ZaposleniPrezime;
+            numericOcena.Value = this.intervju.Ocena;
+            richTextBoxNapomene.Text = this.intervju.Napomene;
+        }
+
+        private void btnIzmeniIntervju_Click(object sender, EventArgs e)
+        {
+            string poruka = $"Da li zelite da izmenite intervju sa ID={this.intervju.IntervjuId}?";
             string title = "Pitanje";
             MessageBoxButtons buttons = MessageBoxButtons.OKCancel;
             DialogResult result = MessageBox.Show(poruka, title, buttons);
@@ -77,10 +96,10 @@ namespace App.Forme
                 this.intervju.Napomene = richTextBoxNapomene.Text.Trim();
 
 
-                DTOManager.dodajIntervju(this.intervju, this.cv.CvId);
+                DTOManager.izmeniIntervju(this.intervju);
 
                 MessageBox.Show(
-                    "Uspesno ste dodali novi intervju u CV!",
+                    $"Uspesno ste izmenili intervju sa ID={this.intervju.IntervjuId}!",
                     "Uspesno",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
@@ -89,7 +108,7 @@ namespace App.Forme
             }
             else
             {
-                
+                //nista se ne desi, korisnik je kliknuo Cancel
             }
         }
     }

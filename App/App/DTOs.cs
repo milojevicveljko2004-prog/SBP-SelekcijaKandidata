@@ -228,10 +228,13 @@ namespace App
         public virtual IList<IntervjuBasic> Intervjui { get; set; }
         public virtual IList<TestBasic> Testovi { get; set; }
 
+        //public Odluka Odluka { get; set; }
+
         public CVBasic()
         {
             Intervjui = new List<IntervjuBasic>();
             Testovi = new List<TestBasic>();
+            //Odluka = null; //CV ne mora odma da ima odluku
         }
 
         public CVBasic(int cvId, string ime, string prezime, string email, string telefon, DateTime datumPodnosenja, CVStatus status) : this()
@@ -286,7 +289,7 @@ namespace App
     {
         public int IntervjuId;
         public DateTime Datum;
-        public string Vreme;
+        public DateTime Vreme;
         public TipIntervjua Tip;
         public string Lokacija;
         public string ZaposleniIme;
@@ -299,7 +302,7 @@ namespace App
 
         }
 
-        public IntervjuBasic(int IntervjuId, DateTime Datum, string Vreme, TipIntervjua Tip, string Lokacija,
+        public IntervjuBasic(int IntervjuId, DateTime Datum, DateTime Vreme, TipIntervjua Tip, string Lokacija,
             string ZaposleniIme, string ZaposleniPrezime, int Ocena, string Napomene)
         {
             this.IntervjuId = IntervjuId;
@@ -317,6 +320,29 @@ namespace App
     #endregion
 
     #region Test
+
+    public class TestPregled
+    {
+        public int TestId;
+        public decimal Rezultat;
+        public DateTime DatumTestiranja;
+        public string VrstaTestiranja;
+        public string Komentar;
+
+        public TestPregled()
+        {
+
+        }
+
+        public TestPregled(int TestId, decimal Rezultat, DateTime DatumTestiranja, string VrstaTestiranja, string Komentar)
+        {
+            this.TestId = TestId;
+            this.Rezultat = Rezultat;
+            this.DatumTestiranja = DatumTestiranja;
+            this.VrstaTestiranja = VrstaTestiranja;
+            this.Komentar = Komentar;
+        }
+    }
 
     public class TestBasic 
     {
@@ -339,6 +365,43 @@ namespace App
             this.VrstaTestiranja = VrstaTestiranja;
             this.Komentar = Komentar;
          }
+    }
+
+    #endregion
+
+    #region Odluka
+
+    public class OdlukaBasic
+    {
+        public int OdlukaId;
+        public StatusOdluke Status;
+        public DateTime DatumDonosenjaOdluke;
+        public decimal? PonudjenaPlata;
+        public bool? PrihvatioPonudu;
+        public DateTime? DatumPocetkaRada;
+        public string RazlogOdbijanja;
+
+        public OdlukaBasic()
+        {
+        }
+
+        public OdlukaBasic(
+            int odlukaId,
+            StatusOdluke status,
+            DateTime datumDonosenjaOdluke,
+            decimal? ponudjenaPlata,
+            bool? prihvatioPonudu,
+            DateTime? datumPocetkaRada,
+            string razlogOdbijanja)
+        {
+            OdlukaId = odlukaId;
+            Status = status;
+            DatumDonosenjaOdluke = datumDonosenjaOdluke;
+            PonudjenaPlata = ponudjenaPlata;
+            PrihvatioPonudu = prihvatioPonudu;
+            DatumPocetkaRada = datumPocetkaRada;
+            RazlogOdbijanja = razlogOdbijanja;
+        }
     }
 
     #endregion

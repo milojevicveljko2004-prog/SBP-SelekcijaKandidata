@@ -109,13 +109,31 @@ namespace App.Forme
 
         private void btnTestovi_Click(object sender, EventArgs e)
         {
-            Testovi_CV_Za_Oglas_Form form = new Testovi_CV_Za_Oglas_Form();
+            if (listCVPrijaveZaOglas.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Izaberite CV za koji zelite da vidite testove!");
+                return;
+            }
+
+            int idCv = Int32.Parse(listCVPrijaveZaOglas.SelectedItems[0].SubItems[0].Text);
+            CVBasic cvb = DTOManager.vratiCV(idCv);
+
+            Testovi_CV_ZaOglas_Form form = new Testovi_CV_ZaOglas_Form(cvb);
             form.ShowDialog();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnOdluka_Click(object sender, EventArgs e)
         {
-            Odluka_CV_Za_Oglas_Form form = new Odluka_CV_Za_Oglas_Form();
+            if (listCVPrijaveZaOglas.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Izaberite CV za koji zelite da vidite Odluku!");
+                return;
+            }
+
+            int idCv = Int32.Parse(listCVPrijaveZaOglas.SelectedItems[0].SubItems[0].Text);
+            CVBasic cvb = DTOManager.vratiCV(idCv);
+
+            Odluka_CV_Za_Oglas_Form form = new Odluka_CV_Za_Oglas_Form(cvb);
             form.ShowDialog();
         }
     }

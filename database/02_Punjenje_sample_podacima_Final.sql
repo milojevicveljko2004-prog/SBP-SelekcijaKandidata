@@ -202,13 +202,23 @@ WHERE NAZIV_POZICIJE = 'Praksa za QA testera';
 -- INTERVJUI
 -- ============================================================
 
+-- ============================================================
+-- INTERVJUI
+-- ============================================================
+
 INSERT INTO INTERVJU (
     DATUM, VREME, TIP_INTERVJUA, LOKACIJA,
     ZAPOSLENI_IME, ZAPOSLENI_PREZIME, OCENA, NAPOMENE, CV_ID
 )
 SELECT
-    DATE '2026-06-20', TIMESTAMP '2026-07-22 22:00:00', 'VIDEO', 'Microsoft Teams',
-    'Petar', 'Petrovic', 9, 'Kandidat je pokazao veoma dobro tehnicko znanje.',
+    DATE '2026-06-20',
+    TIMESTAMP '2026-06-20 10:00:00',
+    'VIDEO',
+    'Microsoft Teams',
+    'Petar',
+    'Petrovic',
+    9,
+    'Kandidat je pokazao veoma dobro tehnicko znanje.',
     CV_ID
 FROM CV
 WHERE EMAIL = 'nikola.nikolic@example.com';
@@ -218,8 +228,14 @@ INSERT INTO INTERVJU (
     ZAPOSLENI_IME, ZAPOSLENI_PREZIME, OCENA, NAPOMENE, CV_ID
 )
 SELECT
-    DATE '2026-05-28', TIMESTAMP '2026-07-22 22:00:00', 'LICNI', 'Beograd, Bulevar oslobodjenja 10',
-    'Ivana', 'Simic', 8, 'Dobre analiticke i komunikacione sposobnosti.',
+    DATE '2026-05-28',
+    TIMESTAMP '2026-05-28 12:00:00',
+    'LICNI',
+    'Beograd, Bulevar oslobodjenja 10',
+    'Ivana',
+    'Simic',
+    8,
+    'Dobre analiticke i komunikacione sposobnosti.',
     CV_ID
 FROM CV
 WHERE EMAIL = 'milica.markovic@example.com';
@@ -229,8 +245,14 @@ INSERT INTO INTERVJU (
     ZAPOSLENI_IME, ZAPOSLENI_PREZIME, OCENA, NAPOMENE, CV_ID
 )
 SELECT
-    DATE '2026-06-28', TIMESTAMP '2026-07-22 22:00:00', 'TELEFONSKI', 'Telefonski razgovor',
-    'Marko', 'Jovanovic', 7, 'Kandidat ispunjava uslove za nastavak selekcije.',
+    DATE '2026-06-28',
+    TIMESTAMP '2026-06-28 09:30:00',
+    'TELEFONSKI',
+    'Telefonski razgovor',
+    'Marko',
+    'Jovanovic',
+    7,
+    'Kandidat ispunjava uslove za nastavak selekcije.',
     CV_ID
 FROM CV
 WHERE EMAIL = 'luka.stojanovic@example.com';
@@ -270,33 +292,71 @@ WHERE EMAIL = 'luka.stojanovic@example.com';
 -- ODLUKE
 -- ============================================================
 
+-- ============================================================
+-- ODLUKE
+-- ============================================================
+
+-- Kandidat je izabran i prihvatio je ponudu.
 INSERT INTO ODLUKA (
-    STATUS, DATUM_DONOSENJA_ODLUKE, PONUDJENA_PLATA,
-    PRIHVATIO_PONUDU, DATUM_POCETKA_RADA, RAZLOG_ODBIJANJA, CV_ID
+    STATUS,
+    DATUM_DONOSENJA_ODLUKE,
+    PONUDJENA_PLATA,
+    PRIHVATIO_PONUDU,
+    DATUM_POCETKA_RADA,
+    RAZLOG_ODBIJANJA,
+    CV_ID
 )
 SELECT
-    'IZABRAN', DATE '2026-06-25', 230000,
-    1, DATE '2026-07-15', NULL, CV_ID
+    'IZABRAN',
+    DATE '2026-06-25',
+    230000,
+    1,
+    DATE '2026-07-15',
+    NULL,
+    CV_ID
 FROM CV
 WHERE EMAIL = 'nikola.nikolic@example.com';
 
+-- Kandidat je rezerva, pa mu ponuda još nije data.
 INSERT INTO ODLUKA (
-    STATUS, DATUM_DONOSENJA_ODLUKE, PONUDJENA_PLATA,
-    PRIHVATIO_PONUDU, DATUM_POCETKA_RADA, RAZLOG_ODBIJANJA, CV_ID
+    STATUS,
+    DATUM_DONOSENJA_ODLUKE,
+    PONUDJENA_PLATA,
+    PRIHVATIO_PONUDU,
+    DATUM_POCETKA_RADA,
+    RAZLOG_ODBIJANJA,
+    CV_ID
 )
 SELECT
-    'REZERVA', DATE '2026-06-02', NULL,
-    0, NULL, NULL, CV_ID
+    'REZERVA',
+    DATE '2026-06-02',
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    CV_ID
 FROM CV
 WHERE EMAIL = 'milica.markovic@example.com';
 
+-- Kandidat je odbijen u procesu selekcije.
+-- Ponuda mu nije data, pa je PRIHVATIO_PONUDU NULL.
 INSERT INTO ODLUKA (
-    STATUS, DATUM_DONOSENJA_ODLUKE, PONUDJENA_PLATA,
-    PRIHVATIO_PONUDU, DATUM_POCETKA_RADA, RAZLOG_ODBIJANJA, CV_ID
+    STATUS,
+    DATUM_DONOSENJA_ODLUKE,
+    PONUDJENA_PLATA,
+    PRIHVATIO_PONUDU,
+    DATUM_POCETKA_RADA,
+    RAZLOG_ODBIJANJA,
+    CV_ID
 )
 SELECT
-    'ODBIJEN', DATE '2026-06-10', NULL,
-    0, NULL, 'Nedovoljan rezultat na testu za ovu poziciju.', CV_ID
+    'ODBIJEN',
+    DATE '2026-06-10',
+    NULL,
+    NULL,
+    NULL,
+    'Nedovoljan rezultat na testu za ovu poziciju.',
+    CV_ID
 FROM CV
 WHERE EMAIL = 'sara.djordjevic@example.com';
 

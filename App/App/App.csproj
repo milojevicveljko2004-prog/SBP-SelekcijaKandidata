@@ -153,6 +153,12 @@
     <Compile Include="Forme\DodajOglasForm.Designer.cs">
       <DependentUpon>DodajOglasForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forme\DodajTest_zaCV_Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forme\DodajTest_zaCV_Form.Designer.cs">
+      <DependentUpon>DodajTest_zaCV_Form.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forme\Intervjui_CV_Za_Oglas_Form.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -165,11 +171,23 @@
     <Compile Include="Forme\IzmeniCV_ZaOglas_Form.Designer.cs">
       <DependentUpon>IzmeniCV_ZaOglas_Form.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forme\IzmeniIntervju_zaCV_Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forme\IzmeniIntervju_zaCV_Form.Designer.cs">
+      <DependentUpon>IzmeniIntervju_zaCV_Form.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forme\IzmeniOglasForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forme\IzmeniOglasForm.Designer.cs">
       <DependentUpon>IzmeniOglasForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forme\IzmeniTest_zaCV_Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forme\IzmeniTest_zaCV_Form.Designer.cs">
+      <DependentUpon>IzmeniTest_zaCV_Form.cs</DependentUpon>
     </Compile>
     <Compile Include="Forme\Odluka_CV_Za_Oglas_Form.cs">
       <SubType>Form</SubType>
@@ -207,11 +225,11 @@
     <Compile Include="Forme\PocetnaForma.Designer.cs">
       <DependentUpon>PocetnaForma.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forme\Testovi_CV_Za_Oglas_Form.cs">
+    <Compile Include="Forme\Testovi_CV_ZaOglas_Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forme\Testovi_CV_Za_Oglas_Form.Designer.cs">
-      <DependentUpon>Testovi_CV_Za_Oglas_Form.cs</DependentUpon>
+    <Compile Include="Forme\Testovi_CV_ZaOglas_Form.Designer.cs">
+      <DependentUpon>Testovi_CV_ZaOglas_Form.cs</DependentUpon>
     </Compile>
     <Compile Include="Mapiranja\CVMapiranja.cs" />
     <Compile Include="Mapiranja\IntervjuMapiranja.cs" />
@@ -235,14 +253,26 @@
     <EmbeddedResource Include="Forme\DodajOglasForm.resx">
       <DependentUpon>DodajOglasForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forme\DodajTest_zaCV_Form.resx">
+      <DependentUpon>DodajTest_zaCV_Form.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forme\Intervjui_CV_Za_Oglas_Form.resx">
       <DependentUpon>Intervjui_CV_Za_Oglas_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forme\IzmeniCV_ZaOglas_Form.resx">
       <DependentUpon>IzmeniCV_ZaOglas_Form.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forme\IzmeniIntervju_zaCV_Form.resx">
+      <DependentUpon>IzmeniIntervju_zaCV_Form.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forme\IzmeniOglasForm.resx">
       <DependentUpon>IzmeniOglasForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forme\IzmeniTest_zaCV_Form.resx">
+      <DependentUpon>IzmeniTest_zaCV_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forme\Odluka_CV_Za_Oglas_Form.resx">
+      <DependentUpon>Odluka_CV_Za_Oglas_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forme\OglasiForm.resx">
       <DependentUpon>OglasiForm.cs</DependentUpon>
@@ -258,6 +288,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forme\PocetnaForma.resx">
       <DependentUpon>PocetnaForma.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forme\Testovi_CV_ZaOglas_Form.resx">
+      <DependentUpon>Testovi_CV_ZaOglas_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

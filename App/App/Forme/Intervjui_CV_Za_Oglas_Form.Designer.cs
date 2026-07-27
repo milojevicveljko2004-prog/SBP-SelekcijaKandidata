@@ -41,6 +41,7 @@
             this.btnObrisiOglas = new System.Windows.Forms.Button();
             this.btnIzmeniOglas = new System.Windows.Forms.Button();
             this.btnDodajOglas = new System.Windows.Forms.Button();
+            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,7 +50,7 @@
             this.groupBox1.Controls.Add(this.listIntervjui);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(817, 402);
+            this.groupBox1.Size = new System.Drawing.Size(928, 402);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Intervjui za CV";
@@ -61,6 +62,7 @@
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4,
+            this.columnHeader9,
             this.columnHeader5,
             this.columnHeader6,
             this.columnHeader7,
@@ -70,7 +72,7 @@
             this.listIntervjui.HideSelection = false;
             this.listIntervjui.Location = new System.Drawing.Point(6, 19);
             this.listIntervjui.Name = "listIntervjui";
-            this.listIntervjui.Size = new System.Drawing.Size(795, 377);
+            this.listIntervjui.Size = new System.Drawing.Size(915, 377);
             this.listIntervjui.TabIndex = 0;
             this.listIntervjui.UseCompatibleStateImageBehavior = false;
             this.listIntervjui.View = System.Windows.Forms.View.Details;
@@ -119,46 +121,56 @@
             // 
             this.btnObrisiOglas.BackColor = System.Drawing.Color.Turquoise;
             this.btnObrisiOglas.Font = new System.Drawing.Font("Georgia", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnObrisiOglas.Location = new System.Drawing.Point(850, 196);
+            this.btnObrisiOglas.Location = new System.Drawing.Point(959, 202);
             this.btnObrisiOglas.Name = "btnObrisiOglas";
             this.btnObrisiOglas.Size = new System.Drawing.Size(175, 46);
             this.btnObrisiOglas.TabIndex = 5;
             this.btnObrisiOglas.Text = "Obrisi intervju";
             this.btnObrisiOglas.UseVisualStyleBackColor = false;
+            this.btnObrisiOglas.Click += new System.EventHandler(this.btnObrisiOglas_Click);
             // 
             // btnIzmeniOglas
             // 
             this.btnIzmeniOglas.BackColor = System.Drawing.Color.Turquoise;
             this.btnIzmeniOglas.Font = new System.Drawing.Font("Georgia", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnIzmeniOglas.Location = new System.Drawing.Point(850, 130);
+            this.btnIzmeniOglas.Location = new System.Drawing.Point(959, 136);
             this.btnIzmeniOglas.Name = "btnIzmeniOglas";
             this.btnIzmeniOglas.Size = new System.Drawing.Size(175, 46);
             this.btnIzmeniOglas.TabIndex = 4;
             this.btnIzmeniOglas.Text = "Izmeni intervju";
             this.btnIzmeniOglas.UseVisualStyleBackColor = false;
+            this.btnIzmeniOglas.Click += new System.EventHandler(this.btnIzmeniOglas_Click);
             // 
             // btnDodajOglas
             // 
             this.btnDodajOglas.BackColor = System.Drawing.Color.Turquoise;
             this.btnDodajOglas.Font = new System.Drawing.Font("Georgia", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDodajOglas.Location = new System.Drawing.Point(850, 63);
+            this.btnDodajOglas.Location = new System.Drawing.Point(959, 69);
             this.btnDodajOglas.Margin = new System.Windows.Forms.Padding(4);
             this.btnDodajOglas.Name = "btnDodajOglas";
             this.btnDodajOglas.Size = new System.Drawing.Size(175, 46);
             this.btnDodajOglas.TabIndex = 3;
             this.btnDodajOglas.Text = "Dodaj intervju";
             this.btnDodajOglas.UseVisualStyleBackColor = false;
+            this.btnDodajOglas.Click += new System.EventHandler(this.btnDodajOglas_Click);
+            // 
+            // columnHeader9
+            // 
+            this.columnHeader9.Text = "Lokacija";
+            this.columnHeader9.Width = 120;
             // 
             // Intervjui_CV_Za_Oglas_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.ClientSize = new System.Drawing.Size(1054, 426);
+            this.ClientSize = new System.Drawing.Size(1158, 426);
             this.Controls.Add(this.btnObrisiOglas);
             this.Controls.Add(this.btnIzmeniOglas);
             this.Controls.Add(this.btnDodajOglas);
             this.Controls.Add(this.groupBox1);
+            this.MaximumSize = new System.Drawing.Size(1174, 465);
+            this.MinimumSize = new System.Drawing.Size(1174, 465);
             this.Name = "Intervjui_CV_Za_Oglas_Form";
             this.Text = "Intervjui_CV_Za_Oglas";
             this.Load += new System.EventHandler(this.Intervjui_CV_Za_Oglas_Form_Load);
@@ -182,5 +194,6 @@
         private System.Windows.Forms.Button btnObrisiOglas;
         private System.Windows.Forms.Button btnIzmeniOglas;
         private System.Windows.Forms.Button btnDodajOglas;
+        private System.Windows.Forms.ColumnHeader columnHeader9;
     }
 }

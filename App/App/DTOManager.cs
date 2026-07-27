@@ -750,6 +750,365 @@ namespace App
             return intervjui;
         }
 
+        public static void dodajIntervju(IntervjuBasic intervju, int idCv)
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+
+                //ucitava CV za koji se intervju odnosi
+                CV cv = s.Load<CV>(idCv);
+
+                Intervju i = new Intervju();
+
+                //Povezuje CV za Intervjuom !!!
+                i.CV = cv;
+
+                i.Datum = intervju.Datum;
+                i.Vreme = intervju.Vreme;
+                i.Tip = intervju.Tip;
+                i.Lokacija = intervju.Lokacija;
+                i.ZaposleniIme = intervju.ZaposleniIme;
+                i.ZaposleniPrezime = intervju.ZaposleniPrezime;
+                i.Ocena = intervju.Ocena;
+                i.Napomene = intervju.Napomene;
+
+                s.Save(i);
+
+                s.Flush();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Greska prilikom dodavanja intervjua za CV: " + ec.Message, ec);
+            }
+        }
+        public static void izmeniIntervju(IntervjuBasic intervju)
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+
+                //ucitava intervju koji treba da se menja
+                Intervju i = s.Load<Intervju>(intervju.IntervjuId);
+
+                i.Datum = intervju.Datum;
+                i.Vreme = intervju.Vreme;
+                i.Tip = intervju.Tip;
+                i.Lokacija = intervju.Lokacija;
+                i.ZaposleniIme = intervju.ZaposleniIme;
+                i.ZaposleniPrezime = intervju.ZaposleniPrezime;
+                i.Ocena = intervju.Ocena;
+                i.Napomene = intervju.Napomene;
+
+                s.Update(i);
+
+                s.Flush();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Greska prilikom izmene intervjua za CV: " + ec.Message, ec);
+            }
+        }
+
+        public static void obrisiIntervju(int intervjuId)
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+
+                Intervju intervju = s.Load<Intervju>(intervjuId);
+
+                s.Delete(intervju);
+
+                s.Flush();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Greska prilikom brisanja intervjua za CV: " + ec.Message, ec);
+            }
+        }
+
+        public static IntervjuBasic vratiIntervju(int id)
+        {
+            IntervjuBasic ib = new IntervjuBasic();
+            try
+            {
+                ISession s = DataLayer.GetSession();
+
+                Intervju intervju = s.Load<Intervju>(id);
+                ib = new IntervjuBasic(intervju.IntervjuId, intervju.Datum, intervju.Vreme, intervju.Tip, intervju.Lokacija,
+                     intervju.ZaposleniIme, intervju.ZaposleniPrezime, intervju.Ocena, intervju.Napomene);
+
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Greska prilikom vracanja intervjua: " + ec.Message, ec);
+            }
+
+            return ib;
+        }
+
+        #endregion
+
+        #region Test
+
+        public static List<TestPregled> vratiTestoveCVPrijave(int idCv)
+        {
+            List<TestPregled> testovi = new List<TestPregled>();
+
+            try
+            {
+                using (ISession s = DataLayer.GetSession())
+                {
+                    IList<Test> testovi_cv = s.Query<Test>()
+                        .Where(i => i.CV.CvId == idCv)
+                        .ToList();
+
+                    foreach (Test t in testovi_cv)
+                    {
+                        TestPregled test = new TestPregled
+                        {
+                            TestId = t.TestId,
+                            Rezultat = t.Rezultat,
+                            DatumTestiranja = t.DatumTestiranja,
+                            VrstaTestiranja = t.VrstaTestiranja,
+                            Komentar = t.Komentar
+                        };
+
+                        testovi.Add(test);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(
+                    "Greska prilikom ucitavanja testova za odabrani CV.",
+                    ex);
+            }
+
+            return testovi;
+        }
+
+        public static void dodajTest(TestBasic test, int idCv)
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+
+                //ucitava CV za koji se test odnosi
+                CV cv = s.Load<CV>(idCv);
+
+                Test t = new Test();
+
+                //Povezuje CV za Testom !!!
+                t.CV = cv;
+
+                t.Rezultat = test.Rezultat;
+                t.DatumTestiranja = test.DatumTestiranja;
+                t.VrstaTestiranja= test.VrstaTestiranja;
+                t.Komentar = test.Komentar;
+
+                s.Save(t);
+
+                s.Flush();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Greska prilikom dodavanja testa za CV: " + ec.Message, ec);
+            }
+        }
+
+        public static void izmeniTest(TestBasic test)
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+
+                //ucitava intervju koji treba da se menja
+                Test t = s.Load<Test>(test.TestId);
+
+                t.Rezultat = test.Rezultat;
+                t.DatumTestiranja = test.DatumTestiranja;
+                t.VrstaTestiranja = test.VrstaTestiranja;
+                t.Komentar = test.Komentar;
+
+                s.Update(t);
+
+                s.Flush();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Greska prilikom izmene testa za CV: " + ec.Message, ec);
+            }
+        }
+
+        public static void obrisiTest(int testId)
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+
+                Test test = s.Load<Test>(testId);
+
+                s.Delete(test);
+
+                s.Flush();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Greska prilikom brisanja testa za CV: " + ec.Message, ec);
+            }
+        }
+
+        public static TestBasic vratiTest(int id)
+        {
+            TestBasic tb = new TestBasic();
+            try
+            {
+                ISession s = DataLayer.GetSession();
+
+                Test test = s.Load<Test>(id);
+                tb = new TestBasic(test.TestId, test.Rezultat, test.DatumTestiranja, test.VrstaTestiranja, test.Komentar);
+
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Greska prilikom vracanja testa: " + ec.Message, ec);
+            }
+
+            return tb;
+        }
+
+        #endregion
+
+        #region Odluka
+
+        public static OdlukaBasic vratiOdlukuZaCV(int cvId)
+        {
+            using (ISession s = DataLayer.GetSession())
+            {
+                try
+                {
+                    Odluka o = s.Query<Odluka>()
+                        .FirstOrDefault(x => x.CV.CvId == cvId);
+
+                    if (o == null)
+                        return null;
+
+                    return new OdlukaBasic
+                    {
+                        OdlukaId = o.OdlukaId,
+                        Status = o.Status,
+                        DatumDonosenjaOdluke = o.DatumDonosenjaOdluke,
+                        PonudjenaPlata = o.PonudjenaPlata,
+                        PrihvatioPonudu = o.PrihvatioPonudu,
+                        DatumPocetkaRada = o.DatumPocetkaRada,
+                        RazlogOdbijanja = o.RazlogOdbijanja
+                    };
+                }
+                catch (Exception ec)
+                {
+                    throw new Exception(
+                        "Greska prilikom vracanja odluke: "
+                        + ec.Message, ec);
+                }
+            }
+        }
+
+        public static void dodajOdluku(OdlukaBasic ob, int cvId)
+        {
+            ISession s = null;
+
+            try
+            {
+                s = DataLayer.GetSession();
+
+                CV cv = s.Get<CV>(cvId);
+
+                if (cv == null)
+                {
+                    throw new Exception($"CV sa ID-em {cvId} ne postoji.");
+                }
+
+                bool odlukaPostoji = s.Query<Odluka>()
+                    .Any(x => x.CV.CvId == cvId);
+
+                if (odlukaPostoji)
+                {
+                    throw new Exception("Za izabrani CV vec postoji odluka.");
+                }
+
+                Odluka o = new Odluka
+                {
+                    CV = cv,
+                    Status = ob.Status,
+                    DatumDonosenjaOdluke = ob.DatumDonosenjaOdluke, //Uvek na DateTime.Now zato ga nema na formi
+                    PonudjenaPlata = ob.PonudjenaPlata,
+                    PrihvatioPonudu = ob.PrihvatioPonudu,
+                    DatumPocetkaRada = ob.DatumPocetkaRada,
+                    RazlogOdbijanja = ob.RazlogOdbijanja
+                };
+
+                s.Save(o);
+
+                ob.OdlukaId = o.OdlukaId;
+
+                s.Flush();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception(
+                    "Greska prilikom dodavanja odluke: "
+                    + ec.Message, ec);
+            }
+        }
+
+        public static void izmeniOdluku(OdlukaBasic ob)
+        {
+            ISession s = null;
+
+            try
+            {
+                s = DataLayer.GetSession();
+
+                Odluka o = s.Get<Odluka>(ob.OdlukaId);
+
+                if (o == null)
+                {
+                    throw new Exception($"Odluka sa ID-em {ob.OdlukaId} ne postoji.");
+                }
+
+                o.Status = ob.Status;
+                o.PonudjenaPlata = ob.PonudjenaPlata;
+                o.PrihvatioPonudu = ob.PrihvatioPonudu;
+                o.DatumPocetkaRada = ob.DatumPocetkaRada;
+                o.RazlogOdbijanja = ob.RazlogOdbijanja;
+
+                // Datum donosenja odluke i CV se ne menjaju.
+
+                s.Update(o);
+
+                s.Flush();
+                s.Close();
+
+            }
+            catch (Exception ec)
+            {
+                throw new Exception(
+                    "Greska prilikom izmene odluke: "
+                    + ec.Message, ec);
+            }
+        }
+
         #endregion
     }
 }

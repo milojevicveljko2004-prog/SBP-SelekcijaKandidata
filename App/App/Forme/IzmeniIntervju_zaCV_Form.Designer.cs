@@ -1,6 +1,6 @@
 ﻿namespace App.Forme
 {
-    partial class DodajIntervju_zaCV_Form
+    partial class IzmeniIntervju_zaCV_Form
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnDodajIntervju = new System.Windows.Forms.Button();
+            this.btnIzmeniIntervju = new System.Windows.Forms.Button();
             this.numericOcena = new System.Windows.Forms.NumericUpDown();
             this.textBoxImeZaposlenog = new System.Windows.Forms.TextBox();
             this.textBoxPrezimeZaposlenog = new System.Windows.Forms.TextBox();
@@ -52,7 +52,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.btnDodajIntervju);
+            this.groupBox1.Controls.Add(this.btnIzmeniIntervju);
             this.groupBox1.Controls.Add(this.numericOcena);
             this.groupBox1.Controls.Add(this.textBoxImeZaposlenog);
             this.groupBox1.Controls.Add(this.textBoxPrezimeZaposlenog);
@@ -72,30 +72,25 @@
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(788, 373);
-            this.groupBox1.TabIndex = 1;
+            this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Dodaj intervju za CV";
+            this.groupBox1.Text = "Izmeni intervju za CV";
             // 
-            // btnDodajIntervju
+            // btnIzmeniIntervju
             // 
-            this.btnDodajIntervju.BackColor = System.Drawing.Color.Aquamarine;
-            this.btnDodajIntervju.Font = new System.Drawing.Font("Georgia", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDodajIntervju.Location = new System.Drawing.Point(487, 248);
-            this.btnDodajIntervju.Name = "btnDodajIntervju";
-            this.btnDodajIntervju.Size = new System.Drawing.Size(181, 57);
-            this.btnDodajIntervju.TabIndex = 19;
-            this.btnDodajIntervju.Text = "Dodaj";
-            this.btnDodajIntervju.UseVisualStyleBackColor = false;
-            this.btnDodajIntervju.Click += new System.EventHandler(this.btnDodajIntervju_Click);
+            this.btnIzmeniIntervju.BackColor = System.Drawing.Color.Aquamarine;
+            this.btnIzmeniIntervju.Font = new System.Drawing.Font("Georgia", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnIzmeniIntervju.Location = new System.Drawing.Point(487, 248);
+            this.btnIzmeniIntervju.Name = "btnIzmeniIntervju";
+            this.btnIzmeniIntervju.Size = new System.Drawing.Size(181, 57);
+            this.btnIzmeniIntervju.TabIndex = 19;
+            this.btnIzmeniIntervju.Text = "Izmeni";
+            this.btnIzmeniIntervju.UseVisualStyleBackColor = false;
+            this.btnIzmeniIntervju.Click += new System.EventHandler(this.btnIzmeniIntervju_Click);
             // 
             // numericOcena
             // 
             this.numericOcena.Location = new System.Drawing.Point(547, 144);
-            this.numericOcena.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
             this.numericOcena.Name = "numericOcena";
             this.numericOcena.Size = new System.Drawing.Size(200, 20);
             this.numericOcena.TabIndex = 15;
@@ -228,17 +223,16 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Datum:";
             // 
-            // DodajIntervju_zaCV_Form
+            // IzmeniIntervju_zaCV_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.ClientSize = new System.Drawing.Size(833, 406);
+            this.ClientSize = new System.Drawing.Size(822, 402);
             this.Controls.Add(this.groupBox1);
-            this.MaximumSize = new System.Drawing.Size(849, 445);
-            this.MinimumSize = new System.Drawing.Size(849, 445);
-            this.Name = "DodajIntervju_zaCV_Form";
-            this.Text = "DodajIntervju_zaCV_Form";
+            this.Name = "IzmeniIntervju_zaCV_Form";
+            this.Text = "IzmeniIntervju_zaCV_Form";
+            this.Load += new System.EventHandler(this.IzmeniIntervju_zaCV_Form_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericOcena)).EndInit();
@@ -249,6 +243,7 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button btnIzmeniIntervju;
         private System.Windows.Forms.NumericUpDown numericOcena;
         private System.Windows.Forms.TextBox textBoxImeZaposlenog;
         private System.Windows.Forms.TextBox textBoxPrezimeZaposlenog;
@@ -265,6 +260,5 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnDodajIntervju;
     }
 }
