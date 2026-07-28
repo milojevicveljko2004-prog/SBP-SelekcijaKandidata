@@ -11,11 +11,11 @@ using System.Windows.Forms;
 
 namespace App.Forme
 {
-    public partial class Testovi_CV_ZaOglas_Form : Form
+    public partial class TestoviForm : Form
     {
         CVBasic cv;
 
-        public Testovi_CV_ZaOglas_Form(CVBasic cv)
+        public TestoviForm(CVBasic cv)
         {
             InitializeComponent();
             this.cv = cv;
@@ -34,7 +34,7 @@ namespace App.Forme
             foreach (TestPregled t in testovi)
             {
                 ListViewItem item = new ListViewItem(new string[] { t.TestId.ToString(), t.Rezultat.ToString(),
-                t.DatumTestiranja.ToString(), t.VrstaTestiranja, t.Komentar });
+                t.DatumTestiranja.ToString(), t.VrstaTestiranja, t.Komentar, t.CVid.ToString() });
 
                 listTestovi.Items.Add(item);
             }

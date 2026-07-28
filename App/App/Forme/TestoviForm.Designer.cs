@@ -1,6 +1,6 @@
 ﻿namespace App.Forme
 {
-    partial class Testovi_CV_ZaOglas_Form
+    partial class TestoviForm
     {
         /// <summary>
         /// Required designer variable.
@@ -38,6 +38,7 @@
             this.btnObrisiTest = new System.Windows.Forms.Button();
             this.btnIzmeniTest = new System.Windows.Forms.Button();
             this.btnDodajTest = new System.Windows.Forms.Button();
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,7 +47,7 @@
             this.groupBox1.Controls.Add(this.listTestovi);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(609, 402);
+            this.groupBox1.Size = new System.Drawing.Size(655, 402);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Testovi za CV";
@@ -58,13 +59,14 @@
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4,
-            this.columnHeader9});
+            this.columnHeader9,
+            this.columnHeader5});
             this.listTestovi.FullRowSelect = true;
             this.listTestovi.GridLines = true;
             this.listTestovi.HideSelection = false;
             this.listTestovi.Location = new System.Drawing.Point(6, 19);
             this.listTestovi.Name = "listTestovi";
-            this.listTestovi.Size = new System.Drawing.Size(595, 377);
+            this.listTestovi.Size = new System.Drawing.Size(638, 377);
             this.listTestovi.TabIndex = 0;
             this.listTestovi.UseCompatibleStateImageBehavior = false;
             this.listTestovi.View = System.Windows.Forms.View.Details;
@@ -98,7 +100,7 @@
             // 
             this.btnObrisiTest.BackColor = System.Drawing.Color.Turquoise;
             this.btnObrisiTest.Font = new System.Drawing.Font("Georgia", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnObrisiTest.Location = new System.Drawing.Point(648, 178);
+            this.btnObrisiTest.Location = new System.Drawing.Point(689, 181);
             this.btnObrisiTest.Name = "btnObrisiTest";
             this.btnObrisiTest.Size = new System.Drawing.Size(175, 46);
             this.btnObrisiTest.TabIndex = 8;
@@ -110,7 +112,7 @@
             // 
             this.btnIzmeniTest.BackColor = System.Drawing.Color.Turquoise;
             this.btnIzmeniTest.Font = new System.Drawing.Font("Georgia", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnIzmeniTest.Location = new System.Drawing.Point(648, 112);
+            this.btnIzmeniTest.Location = new System.Drawing.Point(689, 115);
             this.btnIzmeniTest.Name = "btnIzmeniTest";
             this.btnIzmeniTest.Size = new System.Drawing.Size(175, 46);
             this.btnIzmeniTest.TabIndex = 7;
@@ -122,7 +124,7 @@
             // 
             this.btnDodajTest.BackColor = System.Drawing.Color.Turquoise;
             this.btnDodajTest.Font = new System.Drawing.Font("Georgia", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDodajTest.Location = new System.Drawing.Point(648, 45);
+            this.btnDodajTest.Location = new System.Drawing.Point(689, 48);
             this.btnDodajTest.Margin = new System.Windows.Forms.Padding(4);
             this.btnDodajTest.Name = "btnDodajTest";
             this.btnDodajTest.Size = new System.Drawing.Size(175, 46);
@@ -131,19 +133,24 @@
             this.btnDodajTest.UseVisualStyleBackColor = false;
             this.btnDodajTest.Click += new System.EventHandler(this.btnDodajTest_Click);
             // 
-            // Testovi_CV_ZaOglas_Form
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "CV ID";
+            this.columnHeader5.Width = 45;
+            // 
+            // TestoviForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.ClientSize = new System.Drawing.Size(854, 429);
+            this.ClientSize = new System.Drawing.Size(884, 429);
             this.Controls.Add(this.btnObrisiTest);
             this.Controls.Add(this.btnIzmeniTest);
             this.Controls.Add(this.btnDodajTest);
             this.Controls.Add(this.groupBox1);
-            this.MaximumSize = new System.Drawing.Size(870, 468);
-            this.MinimumSize = new System.Drawing.Size(870, 468);
-            this.Name = "Testovi_CV_ZaOglas_Form";
+            this.MaximumSize = new System.Drawing.Size(900, 468);
+            this.MinimumSize = new System.Drawing.Size(900, 468);
+            this.Name = "TestoviForm";
             this.Text = "Testovi_CV_ZaOglas_Form";
             this.Load += new System.EventHandler(this.Testovi_CV_ZaOglas_Form_Load);
             this.groupBox1.ResumeLayout(false);
@@ -163,5 +170,6 @@
         private System.Windows.Forms.Button btnObrisiTest;
         private System.Windows.Forms.Button btnIzmeniTest;
         private System.Windows.Forms.Button btnDodajTest;
+        private System.Windows.Forms.ColumnHeader columnHeader5;
     }
 }

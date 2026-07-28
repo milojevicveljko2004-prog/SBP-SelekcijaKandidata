@@ -34,7 +34,7 @@ namespace App.Forme
             foreach (CVPregled p in podaci)
             {
                 ListViewItem item = new ListViewItem(new string[] { p.CvId.ToString(), p.Ime, p.Prezime, p.Email, p.Telefon,
-                    p.DatumPodnosenja.ToString(), p.Status.ToString() });
+                    p.DatumPodnosenja.ToString(), p.Status.ToString(), p.OglasID.ToString() });
 
                 listCVPrijaveZaOglas.Items.Add(item);
 
@@ -103,7 +103,7 @@ namespace App.Forme
             int idCv = Int32.Parse(listCVPrijaveZaOglas.SelectedItems[0].SubItems[0].Text);
             CVBasic cvb = DTOManager.vratiCV(idCv);
 
-            Intervjui_CV_Za_Oglas_Form form = new Intervjui_CV_Za_Oglas_Form(cvb);
+            IntervjuiForm form = new IntervjuiForm(cvb);
             form.ShowDialog();
         }
 
@@ -118,7 +118,7 @@ namespace App.Forme
             int idCv = Int32.Parse(listCVPrijaveZaOglas.SelectedItems[0].SubItems[0].Text);
             CVBasic cvb = DTOManager.vratiCV(idCv);
 
-            Testovi_CV_ZaOglas_Form form = new Testovi_CV_ZaOglas_Form(cvb);
+            TestoviForm form = new TestoviForm(cvb);
             form.ShowDialog();
         }
 

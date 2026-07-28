@@ -9,6 +9,7 @@ using NHibernate;
 using NHibernate.Linq;
 using ISession = NHibernate.ISession;
 using App.Entiteti.Enums;
+using System.Windows.Forms;
 
 namespace App
 {
@@ -591,7 +592,8 @@ namespace App
                             Email = cv.Email,
                             Telefon = cv.Telefon,
                             DatumPodnosenja = cv.DatumPodnosenja,
-                            Status = cv.Status
+                            Status = cv.Status,
+                            OglasID = cv.Oglas.OglasId
                         };
 
                         prijave.Add(pregled);
@@ -685,6 +687,47 @@ namespace App
             }
         }
 
+        //Brise celu CV prijavu, ne samo iz oglasa
+        public static bool ObrisiCVPrijavu(int cvId)
+        {
+            try
+            {
+                using (ISession session = DataLayer.GetSession())
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    CV cv = session.Get<CV>(cvId);
+
+                    if (cv == null)
+                    {
+                        MessageBox.Show(
+                            "Izabrana CV prijava vise ne postoji.",
+                            "Greška",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error
+                        );
+
+                        return false;
+                    }
+
+                    session.Delete(cv);
+                    transaction.Commit();
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Nije moguce obrisati CV prijavu.\n{ex.Message}",
+                    "Greška",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+
+                return false;
+            }
+        }
+
         public static CVBasic vratiCV(int idCv)
         {
             CVBasic cvb = new CVBasic();
@@ -703,6 +746,45 @@ namespace App
             }
 
             return cvb;
+        }
+
+        public static List<CVPregled> vratiSveCVPrijave()
+        {
+            List<CVPregled> rezultat = new List<CVPregled>();
+
+            try
+            {
+                ISession session = DataLayer.GetSession();
+
+                IList<CV> prijave = session.Query<CV>().ToList(); //vraca sve CV prijave iz baze
+
+                foreach (CV cv in prijave)
+                {
+                    rezultat.Add(new CVPregled(
+                        cv.CvId,
+                        cv.Ime,
+                        cv.Prezime,
+                        cv.Email,
+                        cv.Telefon,
+                        cv.DatumPodnosenja,
+                        cv.Status,
+                        cv.Oglas.OglasId
+                    ));
+                }
+
+                session.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Greska",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+
+            return rezultat;
         }
 
         #endregion
@@ -733,7 +815,8 @@ namespace App
                             ZaposleniIme = i.ZaposleniIme,
                             ZaposleniPrezime = i.ZaposleniPrezime,
                             Ocena = i.Ocena,
-                            Napomene = i.Napomene
+                            Napomene = i.Napomene,
+                            CVid = i.CV.CvId
                         };
 
                         intervjui.Add(intervju);
@@ -876,7 +959,8 @@ namespace App
                             Rezultat = t.Rezultat,
                             DatumTestiranja = t.DatumTestiranja,
                             VrstaTestiranja = t.VrstaTestiranja,
-                            Komentar = t.Komentar
+                            Komentar = t.Komentar,
+                            CVid = t.CV.CvId
                         };
 
                         testovi.Add(test);

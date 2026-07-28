@@ -1,6 +1,6 @@
 ﻿namespace App.Forme
 {
-    partial class CVPrijaveForm
+    partial class Testovi_CV_Za_Oglas_Form
     {
         /// <summary>
         /// Required designer variable.
@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "CVPrijaveForm";
+            this.Text = "Testovi_CV_Za_Oglas_Form";
         }
 
         #endregion

@@ -197,13 +197,15 @@ namespace App
         public string Telefon;
         public DateTime DatumPodnosenja;
         public CVStatus Status;
+        public int OglasID;
 
         public CVPregled()
         { 
 
         }
 
-        public CVPregled(int cvId, string ime, string prezime, string email, string telefon, DateTime datumPodnosenja, CVStatus status) : this()
+        public CVPregled(int cvId, string ime, string prezime, string email, string telefon,
+            DateTime datumPodnosenja, CVStatus status, int oglasID) : this()
         {
             CvId = cvId;
             Ime = ime;
@@ -212,6 +214,7 @@ namespace App
             Telefon = telefon;
             DatumPodnosenja = datumPodnosenja;
             Status = status;
+            OglasID = oglasID;
         }
     }
 
@@ -264,6 +267,7 @@ namespace App
         public string ZaposleniPrezime;
         public int Ocena;
         public string Napomene;
+        public int CVid;
 
         public IntervjuPregled()
         {
@@ -271,7 +275,7 @@ namespace App
         }
 
         public IntervjuPregled(int intervjuId, DateTime datum, DateTime vreme, TipIntervjua tip, string lokacija,
-            string zaposleniIme, string zaposleniPrezime, int ocena, string napomene)
+            string zaposleniIme, string zaposleniPrezime, int ocena, string napomene, int cvId)
         {
             IntervjuId = intervjuId;
             Datum = datum;
@@ -282,6 +286,7 @@ namespace App
             ZaposleniPrezime = zaposleniPrezime;
             Ocena = ocena;
             Napomene = napomene;
+            CVid = cvId;
         }
     }
 
@@ -328,19 +333,21 @@ namespace App
         public DateTime DatumTestiranja;
         public string VrstaTestiranja;
         public string Komentar;
+        public int CVid;
 
         public TestPregled()
         {
 
         }
 
-        public TestPregled(int TestId, decimal Rezultat, DateTime DatumTestiranja, string VrstaTestiranja, string Komentar)
+        public TestPregled(int TestId, decimal Rezultat, DateTime DatumTestiranja, string VrstaTestiranja, string Komentar, int cVid)
         {
             this.TestId = TestId;
             this.Rezultat = Rezultat;
             this.DatumTestiranja = DatumTestiranja;
             this.VrstaTestiranja = VrstaTestiranja;
             this.Komentar = Komentar;
+            CVid = cVid;
         }
     }
 

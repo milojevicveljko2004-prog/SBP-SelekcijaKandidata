@@ -47,8 +47,8 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnCVPrijaveZaOglas = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.btnPosebniPodaci = new System.Windows.Forms.Button();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             colNazivPozicije = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupBoxListaOglasa.SuspendLayout();
             this.groupBoxPodaciOOglasu.SuspendLayout();
@@ -59,14 +59,14 @@
             // colNazivPozicije
             // 
             colNazivPozicije.Text = "Naziv pozicije";
-            colNazivPozicije.Width = 125;
+            colNazivPozicije.Width = 130;
             // 
             // groupBoxListaOglasa
             // 
             this.groupBoxListaOglasa.Controls.Add(this.listaOglasa);
             this.groupBoxListaOglasa.Location = new System.Drawing.Point(14, 20);
             this.groupBoxListaOglasa.Name = "groupBoxListaOglasa";
-            this.groupBoxListaOglasa.Size = new System.Drawing.Size(914, 601);
+            this.groupBoxListaOglasa.Size = new System.Drawing.Size(1015, 601);
             this.groupBoxListaOglasa.TabIndex = 24;
             this.groupBoxListaOglasa.TabStop = false;
             this.groupBoxListaOglasa.Text = "Lista oglasa";
@@ -92,7 +92,7 @@
             this.listaOglasa.Location = new System.Drawing.Point(3, 16);
             this.listaOglasa.Margin = new System.Windows.Forms.Padding(4);
             this.listaOglasa.Name = "listaOglasa";
-            this.listaOglasa.Size = new System.Drawing.Size(908, 582);
+            this.listaOglasa.Size = new System.Drawing.Size(1009, 582);
             this.listaOglasa.TabIndex = 4;
             this.listaOglasa.UseCompatibleStateImageBehavior = false;
             this.listaOglasa.View = System.Windows.Forms.View.Details;
@@ -100,17 +100,17 @@
             // colOglasId
             // 
             this.colOglasId.Text = "ID";
-            this.colOglasId.Width = 40;
+            this.colOglasId.Width = 45;
             // 
             // colVrstaOglasa
             // 
             this.colVrstaOglasa.Text = "Vrsta oglasa";
-            this.colVrstaOglasa.Width = 85;
+            this.colVrstaOglasa.Width = 80;
             // 
             // colOpis
             // 
             this.colOpis.Text = "Opis";
-            this.colOpis.Width = 120;
+            this.colOpis.Width = 130;
             // 
             // colZahtevi
             // 
@@ -120,34 +120,34 @@
             // colMinPlata
             // 
             this.colMinPlata.Text = "Min. plata";
-            this.colMinPlata.Width = 75;
+            this.colMinPlata.Width = 70;
             // 
             // colMaxPlata
             // 
             this.colMaxPlata.Text = "Max. plata";
-            this.colMaxPlata.Width = 80;
+            this.colMaxPlata.Width = 70;
             // 
             // colDatumObjave
             // 
             this.colDatumObjave.Text = "Objavljen";
-            this.colDatumObjave.Width = 85;
+            this.colDatumObjave.Width = 120;
             // 
             // colDatumZatvaranja
             // 
             this.colDatumZatvaranja.Text = "Datum zatvaranja";
-            this.colDatumZatvaranja.Width = 90;
+            this.colDatumZatvaranja.Width = 120;
             // 
             // colStatus
             // 
             this.colStatus.Text = "Status";
-            this.colStatus.Width = 75;
+            this.colStatus.Width = 110;
             // 
             // groupBoxPodaciOOglasu
             // 
             this.groupBoxPodaciOOglasu.Controls.Add(this.btnObrisiOglas);
             this.groupBoxPodaciOOglasu.Controls.Add(this.btnIzmeniOglas);
             this.groupBoxPodaciOOglasu.Controls.Add(this.btnDodajOglas);
-            this.groupBoxPodaciOOglasu.Location = new System.Drawing.Point(949, 20);
+            this.groupBoxPodaciOOglasu.Location = new System.Drawing.Point(1035, 20);
             this.groupBoxPodaciOOglasu.Name = "groupBoxPodaciOOglasu";
             this.groupBoxPodaciOOglasu.Size = new System.Drawing.Size(234, 220);
             this.groupBoxPodaciOOglasu.TabIndex = 37;
@@ -195,7 +195,7 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.btnCVPrijaveZaOglas);
-            this.groupBox2.Location = new System.Drawing.Point(949, 255);
+            this.groupBox2.Location = new System.Drawing.Point(1035, 255);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(234, 93);
             this.groupBox2.TabIndex = 38;
@@ -217,7 +217,7 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.btnPosebniPodaci);
-            this.groupBox1.Location = new System.Drawing.Point(949, 374);
+            this.groupBox1.Location = new System.Drawing.Point(1035, 374);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(234, 93);
             this.groupBox1.TabIndex = 39;
@@ -241,16 +241,16 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.ClientSize = new System.Drawing.Size(1223, 648);
+            this.ClientSize = new System.Drawing.Size(1278, 648);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBoxPodaciOOglasu);
             this.Controls.Add(this.groupBoxListaOglasa);
             this.Location = new System.Drawing.Point(696, 20);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(1239, 687);
+            this.MaximumSize = new System.Drawing.Size(1294, 687);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(1239, 687);
+            this.MinimumSize = new System.Drawing.Size(1294, 687);
             this.Name = "OglasiForm";
             this.Padding = new System.Windows.Forms.Padding(4);
             this.Text = "LISTA OGLASA";

@@ -28,7 +28,7 @@ namespace App
 
         private void btnCVPrijave_Click(object sender, EventArgs e)
         {
-            CVPrijaveForm form = new CVPrijaveForm();
+            SveCVPrijaveForm form = new SveCVPrijaveForm();
             form.ShowDialog();
         }
     }

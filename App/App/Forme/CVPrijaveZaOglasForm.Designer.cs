@@ -37,6 +37,7 @@
             this.colTelefon = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colDatumPodnosenja = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.btnDodajCV_UOglas = new System.Windows.Forms.Button();
             this.btnIzmeniCV_zaOglas = new System.Windows.Forms.Button();
@@ -60,7 +61,7 @@
             this.groupBox1.Controls.Add(this.listCVPrijaveZaOglas);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(668, 572);
+            this.groupBox1.Size = new System.Drawing.Size(754, 572);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "CV prijave za oglas";
@@ -74,13 +75,14 @@
             this.colEmail,
             this.colTelefon,
             this.colDatumPodnosenja,
-            this.colStatus});
+            this.colStatus,
+            this.columnHeader1});
             this.listCVPrijaveZaOglas.FullRowSelect = true;
             this.listCVPrijaveZaOglas.GridLines = true;
             this.listCVPrijaveZaOglas.HideSelection = false;
             this.listCVPrijaveZaOglas.Location = new System.Drawing.Point(6, 19);
             this.listCVPrijaveZaOglas.Name = "listCVPrijaveZaOglas";
-            this.listCVPrijaveZaOglas.Size = new System.Drawing.Size(655, 547);
+            this.listCVPrijaveZaOglas.Size = new System.Drawing.Size(741, 547);
             this.listCVPrijaveZaOglas.TabIndex = 0;
             this.listCVPrijaveZaOglas.UseCompatibleStateImageBehavior = false;
             this.listCVPrijaveZaOglas.View = System.Windows.Forms.View.Details;
@@ -88,7 +90,7 @@
             // colCvId
             // 
             this.colCvId.Text = "ID";
-            this.colCvId.Width = 40;
+            this.colCvId.Width = 45;
             // 
             // colIme
             // 
@@ -98,7 +100,7 @@
             // colPrezime
             // 
             this.colPrezime.Text = "Prezime";
-            this.colPrezime.Width = 85;
+            this.colPrezime.Width = 95;
             // 
             // colEmail
             // 
@@ -118,7 +120,11 @@
             // colStatus
             // 
             this.colStatus.Text = "Status";
-            this.colStatus.Width = 80;
+            this.colStatus.Width = 90;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Oglas ID";
             // 
             // btnDodajCV_UOglas
             // 
@@ -161,7 +167,7 @@
             this.groupBoxPodaciCV.Controls.Add(this.btnDodajCV_UOglas);
             this.groupBoxPodaciCV.Controls.Add(this.btnObrisiCV_zaOglas);
             this.groupBoxPodaciCV.Controls.Add(this.btnIzmeniCV_zaOglas);
-            this.groupBoxPodaciCV.Location = new System.Drawing.Point(697, 12);
+            this.groupBoxPodaciCV.Location = new System.Drawing.Point(781, 12);
             this.groupBoxPodaciCV.Name = "groupBoxPodaciCV";
             this.groupBoxPodaciCV.Size = new System.Drawing.Size(234, 217);
             this.groupBoxPodaciCV.TabIndex = 38;
@@ -171,7 +177,7 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.btnIntervjui);
-            this.groupBox2.Location = new System.Drawing.Point(697, 244);
+            this.groupBox2.Location = new System.Drawing.Point(781, 244);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(234, 100);
             this.groupBox2.TabIndex = 39;
@@ -193,7 +199,7 @@
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.btnTestovi);
-            this.groupBox3.Location = new System.Drawing.Point(697, 362);
+            this.groupBox3.Location = new System.Drawing.Point(781, 362);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(234, 100);
             this.groupBox3.TabIndex = 40;
@@ -215,7 +221,7 @@
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.btnOdluka);
-            this.groupBox4.Location = new System.Drawing.Point(697, 484);
+            this.groupBox4.Location = new System.Drawing.Point(781, 484);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(234, 100);
             this.groupBox4.TabIndex = 41;
@@ -239,7 +245,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.ClientSize = new System.Drawing.Size(953, 599);
+            this.ClientSize = new System.Drawing.Size(1038, 599);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -281,5 +287,6 @@
         private System.Windows.Forms.Button btnTestovi;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Button btnOdluka;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
     }
 }

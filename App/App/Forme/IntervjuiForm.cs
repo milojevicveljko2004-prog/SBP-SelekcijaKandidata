@@ -11,11 +11,11 @@ using System.Windows.Forms;
 
 namespace App.Forme
 {
-    public partial class Intervjui_CV_Za_Oglas_Form : Form
+    public partial class IntervjuiForm : Form
     {
         CVBasic cv;
 
-        public Intervjui_CV_Za_Oglas_Form(CVBasic cv)
+        public IntervjuiForm(CVBasic cv)
         {
             InitializeComponent();
             this.cv = cv;
@@ -34,7 +34,7 @@ namespace App.Forme
             {
                 ListViewItem item = new ListViewItem(new string[] { i.IntervjuId.ToString(), i.Datum.ToString(),
                 i.Vreme.ToString(), i.Tip.ToString(), i.Lokacija, i.ZaposleniIme, i.ZaposleniPrezime, 
-                i.Ocena.ToString(), i.Napomene});
+                i.Ocena.ToString(), i.Napomene, i.CVid.ToString()});
 
                 listIntervjui.Items.Add(item);
             }
