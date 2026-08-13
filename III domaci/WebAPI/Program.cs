@@ -1,6 +1,5 @@
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddCors(policy =>
 {
     policy.AddPolicy("CORS", options =>

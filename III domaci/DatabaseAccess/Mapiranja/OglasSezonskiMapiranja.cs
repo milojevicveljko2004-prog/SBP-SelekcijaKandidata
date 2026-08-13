@@ -1,5 +1,4 @@
-﻿using DatabaseAccess.Entiteti;
-using FluentNHibernate.Mapping;
+﻿using FluentNHibernate.Mapping;
 
 namespace DatabaseAccess.Mapiranja
 {

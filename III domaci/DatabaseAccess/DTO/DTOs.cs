@@ -91,7 +91,6 @@ namespace DatabaseAccess
 
         }
 
-        //Za kreiranje novog oglasa
         public OglasPraksaBasic(string MentorIme, string MentorPrezime, int DuzinaTrajanja) : base()
         {
             this.MentorIme = MentorIme;
@@ -99,7 +98,6 @@ namespace DatabaseAccess
             this.DuzinaTrajanja = DuzinaTrajanja;
         }
 
-        //Za vracanje postojeceg oglasa iz baze
         public OglasPraksaBasic(
             int oglasId,
             string mentorIme,
@@ -158,14 +156,12 @@ namespace DatabaseAccess
 
         }
 
-        //Za kreiranje novog oglasa
         public OglasSezonskiBasic(string sezona, string lokacija) : base()
         {
             this.Sezona = sezona;
             this.Lokacija = lokacija;
         }
 
-        //Za vracanje postojeceg oglasa iz baze
         public OglasSezonskiBasic(int oglasId, string sezona, string lokacija) : base()
         {
             this.OglasId = oglasId;
@@ -221,13 +217,11 @@ namespace DatabaseAccess
         public virtual IList<IntervjuBasic> Intervjui { get; set; }
         public virtual IList<TestBasic> Testovi { get; set; }
 
-        //public Odluka Odluka { get; set; }
 
         public CVBasic()
         {
             Intervjui = new List<IntervjuBasic>();
             Testovi = new List<TestBasic>();
-            //Odluka = null; //CV ne mora odma da ima odluku
         }
 
         public CVBasic(int cvId, string ime, string prezime, string email, string telefon, DateTime datumPodnosenja, CVStatus status) : this()

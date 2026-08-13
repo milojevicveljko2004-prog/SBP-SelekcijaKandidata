@@ -1,5 +1,4 @@
 ﻿using DatabaseAccess.Entiteti.Enums;
-using DatabaseAccess.Entiteti;
 using FluentNHibernate.Mapping;
 using NHibernate.Type;
 

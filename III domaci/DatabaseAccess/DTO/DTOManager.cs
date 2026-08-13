@@ -1,5 +1,4 @@
-﻿using DatabaseAccess.Entiteti;
-using DatabaseAccess.Entiteti.Enums;
+﻿using DatabaseAccess.Entiteti.Enums;
 using ISession = NHibernate.ISession;
 
 namespace DatabaseAccess
@@ -74,11 +73,9 @@ namespace DatabaseAccess
                 }
                 else
                 {
-                    //Obican Oglas predstavlja STALNI oglas
                     o = new Oglas();
                 }
 
-                // Zajednicka svojstva
                 o.NazivPozicije = p.NazivPozicije;
                 o.VrstaOglasa = p.VrstaOglasa;
                 o.Opis = p.Opis;
@@ -184,7 +181,6 @@ namespace DatabaseAccess
                     break;
 
                 case VrstaOglasa.STALNI:
-                    // STALNI nema poseban red
                     return;
 
                 default:
