@@ -31,19 +31,19 @@ Screens.openOglasi = async function () {
             const listHolder = body.querySelector("#listHolder");
 
             const columns = [
-                { header: "ID", render: (o) => String(o.OglasId) },
-                { header: "Naziv pozicije", render: (o) => o.NazivPozicije || "" },
-                { header: "Vrsta oglasa", render: (o) => prettyEnum(o.VrstaOglasa) },
-                { header: "Opis", render: (o) => o.Opis || "" },
-                { header: "Zahtevi", render: (o) => o.Zahtevi || "" },
-                { header: "Min. plata", render: (o) => formatMoney(o.MinPlata) },
-                { header: "Max. plata", render: (o) => formatMoney(o.MaxPlata) },
-                { header: "Datum objave", render: (o) => formatDate(o.DatumObjave) },
-                { header: "Datum zatvaranja", render: (o) => o.DatumZatvaranja ? formatDate(o.DatumZatvaranja) : "-" },
-                { header: "Status", render: (o) => prettyEnum(o.Status) }
+                { header: "ID", render: (o) => String(o.oglasId) },
+                { header: "Naziv pozicije", render: (o) => o.nazivPozicije || "" },
+                { header: "Vrsta oglasa", render: (o) => prettyEnum(o.vrstaOglasa) },
+                { header: "opis", render: (o) => o.opis || "" },
+                { header: "zahtevi", render: (o) => o.zahtevi || "" },
+                { header: "Min. plata", render: (o) => formatMoney(o.minPlata) },
+                { header: "Max. plata", render: (o) => formatMoney(o.maxPlata) },
+                { header: "datum objave", render: (o) => formatDate(o.datumObjave) },
+                { header: "datum zatvaranja", render: (o) => o.datumZatvaranja ? formatDate(o.datumZatvaranja) : "-" },
+                { header: "status", render: (o) => prettyEnum(o.status) }
             ];
 
-            const lv = buildListView({ columns, rows: [], rowId: (o) => o.OglasId, emptyText: "Trenutno nema oglasa." });
+            const lv = buildListView({ columns, rows: [], rowId: (o) => o.oglasId, emptyText: "Trenutno nema oglasa." });
             listHolder.appendChild(lv.el);
 
             async function refresh() {
@@ -69,7 +69,7 @@ Screens.openOglasi = async function () {
                     await alertBox("Izaberite oglas cije podatke zelite da izmenite!");
                     return;
                 }
-                const ob = await api.oglas.get(sel.OglasId);
+                const ob = await api.oglas.get(sel.oglasId);
                 await Screens.openIzmeniOglas(ob);
                 await refresh();
             });
@@ -83,7 +83,7 @@ Screens.openOglasi = async function () {
                 const ok = await confirmBox("Da li zelite da obrisete izabrani oglas?", "Pitanje");
                 if (!ok) return;
                 try {
-                    await api.oglas.delete(sel.OglasId);
+                    await api.oglas.delete(sel.oglasId);
                     await alertBox("Brisanje oglasa je uspesno obavljeno!");
                     await refresh();
                 } catch (err) {
@@ -97,7 +97,7 @@ Screens.openOglasi = async function () {
                     await alertBox("Izaberite oglas za koji zelite da vidite prijave!");
                     return;
                 }
-                const ob = await api.oglas.get(sel.OglasId);
+                const ob = await api.oglas.get(sel.oglasId);
                 await Screens.openCVPrijaveZaOglas(ob);
                 await refresh();
             });
@@ -108,7 +108,7 @@ Screens.openOglasi = async function () {
                     await alertBox("Izaberite oglas.");
                     return;
                 }
-                const ob = await api.oglas.get(sel.OglasId);
+                const ob = await api.oglas.get(sel.oglasId);
                 await Screens.openPosebniPodaci(ob);
                 await refresh();
             });
@@ -125,15 +125,15 @@ Screens.openOglasi = async function () {
 function renderOglasFormFields(container, oglas) {
     const f = {};
 
-    f.naziv = makeInput("text", "f_naziv", oglas?.NazivPozicije || "");
-    f.vrsta = makeSelect("f_vrsta", Enums.VrstaOglasa, oglas?.VrstaOglasa || "STALNI");
-    f.status = makeSelect("f_status", Enums.StatusOglasa, oglas?.Status || "AKTIVAN");
-    f.opis = makeTextarea("f_opis", oglas?.Opis || "");
-    f.zahtevi = makeTextarea("f_zahtevi", oglas?.Zahtevi || "");
-    f.minPlata = makeInput("number", "f_minplata", oglas?.MinPlata ?? "");
-    f.maxPlata = makeInput("number", "f_maxplata", oglas?.MaxPlata ?? "");
-    f.datumZatvaranjaChk = makeCheckbox("f_dzchk", !!oglas?.DatumZatvaranja);
-    f.datumZatvaranja = makeInput("date", "f_dz", toDateInputValue(oglas?.DatumZatvaranja));
+    f.naziv = makeInput("text", "f_naziv", oglas?.nazivPozicije || "");
+    f.vrsta = makeSelect("f_vrsta", Enums.vrstaOglasa, oglas?.vrstaOglasa || "STALNI");
+    f.status = makeSelect("f_status", Enums.StatusOglasa, oglas?.status || "AKTIVAN");
+    f.opis = makeTextarea("f_opis", oglas?.opis || "");
+    f.zahtevi = makeTextarea("f_zahtevi", oglas?.zahtevi || "");
+    f.minPlata = makeInput("number", "f_minplata", oglas?.minPlata ?? "");
+    f.maxPlata = makeInput("number", "f_maxplata", oglas?.maxPlata ?? "");
+    f.datumZatvaranjaChk = makeCheckbox("f_dzchk", !!oglas?.datumZatvaranja);
+    f.datumZatvaranja = makeInput("date", "f_dz", toDateInputValue(oglas?.datumZatvaranja));
     f.datumZatvaranja.disabled = !f.datumZatvaranjaChk.checked;
     f.datumZatvaranjaChk.addEventListener("change", () => {
         f.datumZatvaranja.disabled = !f.datumZatvaranjaChk.checked;
@@ -142,50 +142,50 @@ function renderOglasFormFields(container, oglas) {
     const grid = el("div", { class: "form-grid" }, [
         el("label", { class: "field-label" }, "Naziv pozicije *"), f.naziv,
         el("label", { class: "field-label" }, "Vrsta oglasa *"), f.vrsta,
-        el("label", { class: "field-label" }, "Status *"), f.status,
+        el("label", { class: "field-label" }, "status *"), f.status,
         el("label", { class: "field-label" }, "Min. plata"), f.minPlata,
         el("label", { class: "field-label" }, "Max. plata"), f.maxPlata,
-        el("label", { class: "field-label" }, "Datum zatvaranja"),
+        el("label", { class: "field-label" }, "datum zatvaranja"),
         el("div", { class: "inline-fields" }, [f.datumZatvaranjaChk, f.datumZatvaranja]),
-        el("label", { class: "field-label" }, "Opis"), f.opis,
-        el("label", { class: "field-label" }, "Zahtevi"), f.zahtevi
+        el("label", { class: "field-label" }, "opis"), f.opis,
+        el("label", { class: "field-label" }, "zahtevi"), f.zahtevi
     ]);
     container.appendChild(grid);
 
     // Praksa
-    f.mentorIme = makeInput("text", "f_mentorIme", oglas?.MentorIme || "");
-    f.mentorPrezime = makeInput("text", "f_mentorPrezime", oglas?.MentorPrezime || "");
-    f.duzinaTrajanja = makeInput("number", "f_duzina", oglas?.DuzinaTrajanja ?? 1);
+    f.mentorIme = makeInput("text", "f_mentorIme", oglas?.mentorIme || "");
+    f.mentorPrezime = makeInput("text", "f_mentorPrezime", oglas?.mentorPrezime || "");
+    f.duzinaTrajanja = makeInput("number", "f_duzina", oglas?.duzinaTrajanja ?? 1);
     const gbPraksa = el("fieldset", { class: "groupbox hidden", id: "gbPraksa" }, [
         el("legend", {}, "Podaci o praksi"),
         el("div", { class: "form-grid" }, [
-            el("label", { class: "field-label" }, "Ime mentora *"), f.mentorIme,
-            el("label", { class: "field-label" }, "Prezime mentora *"), f.mentorPrezime,
+            el("label", { class: "field-label" }, "ime mentora *"), f.mentorIme,
+            el("label", { class: "field-label" }, "prezime mentora *"), f.mentorPrezime,
             el("label", { class: "field-label" }, "Duzina trajanja (meseci) *"), f.duzinaTrajanja
         ])
     ]);
 
     // Privremeni
-    f.projekat = makeInput("text", "f_projekat", oglas?.Projekat || "");
-    f.datumPocetka = makeInput("date", "f_datumPocetka", toDateInputValue(oglas?.DatumPocetka) || new Date().toISOString().substring(0, 10));
-    f.datumZavrsetka = makeInput("date", "f_datumZavrsetka", toDateInputValue(oglas?.DatumZavrsetka) || new Date().toISOString().substring(0, 10));
+    f.projekat = makeInput("text", "f_projekat", oglas?.projekat || "");
+    f.datumPocetka = makeInput("date", "f_datumPocetka", toDateInputValue(oglas?.datumPocetka) || new Date().toISOString().substring(0, 10));
+    f.datumZavrsetka = makeInput("date", "f_datumZavrsetka", toDateInputValue(oglas?.datumZavrsetka) || new Date().toISOString().substring(0, 10));
     const gbPrivremeni = el("fieldset", { class: "groupbox hidden", id: "gbPrivremeni" }, [
         el("legend", {}, "Podaci o privremenom oglasu"),
         el("div", { class: "form-grid" }, [
-            el("label", { class: "field-label" }, "Projekat *"), f.projekat,
-            el("label", { class: "field-label" }, "Datum pocetka *"), f.datumPocetka,
-            el("label", { class: "field-label" }, "Datum zavrsetka *"), f.datumZavrsetka
+            el("label", { class: "field-label" }, "projekat *"), f.projekat,
+            el("label", { class: "field-label" }, "datum pocetka *"), f.datumPocetka,
+            el("label", { class: "field-label" }, "datum zavrsetka *"), f.datumZavrsetka
         ])
     ]);
 
     // Sezonski
-    f.sezona = makeInput("text", "f_sezona", oglas?.Sezona || "");
-    f.lokacija = makeInput("text", "f_lokacija", oglas?.Lokacija || "");
+    f.sezona = makeInput("text", "f_sezona", oglas?.sezona || "");
+    f.lokacija = makeInput("text", "f_lokacija", oglas?.lokacija || "");
     const gbSezonski = el("fieldset", { class: "groupbox hidden", id: "gbSezonski" }, [
         el("legend", {}, "Podaci o sezonskom oglasu"),
         el("div", { class: "form-grid" }, [
-            el("label", { class: "field-label" }, "Sezona *"), f.sezona,
-            el("label", { class: "field-label" }, "Lokacija *"), f.lokacija
+            el("label", { class: "field-label" }, "sezona *"), f.sezona,
+            el("label", { class: "field-label" }, "lokacija *"), f.lokacija
         ])
     ]);
 
@@ -227,7 +227,7 @@ function validateAndBuildOglas(f, existing) {
 
     if (vrsta === "PRAKSA") {
         if (!f.mentorIme.value.trim() || !f.mentorPrezime.value.trim()) {
-            alertBox("Ime i prezime mentora su obavezni.", "Nedostaju podaci", MsgIcon.WARN);
+            alertBox("ime i prezime mentora su obavezni.", "Nedostaju podaci", MsgIcon.WARN);
             return null;
         }
         if (Number(f.duzinaTrajanja.value) <= 0) {
@@ -235,9 +235,9 @@ function validateAndBuildOglas(f, existing) {
             return null;
         }
         extra = {
-            MentorIme: f.mentorIme.value.trim(),
-            MentorPrezime: f.mentorPrezime.value.trim(),
-            DuzinaTrajanja: Number(f.duzinaTrajanja.value)
+            mentorIme: f.mentorIme.value.trim(),
+            mentorPrezime: f.mentorPrezime.value.trim(),
+            duzinaTrajanja: Number(f.duzinaTrajanja.value)
         };
     } else if (vrsta === "PRIVREMENI") {
         if (!f.projekat.value.trim()) {
@@ -245,44 +245,44 @@ function validateAndBuildOglas(f, existing) {
             return null;
         }
         if (f.datumPocetka.value > f.datumZavrsetka.value) {
-            alertBox("Datum pocetka ne moze biti posle datuma zavrsetka.", "Neispravan period", MsgIcon.WARN);
+            alertBox("datum pocetka ne moze biti posle datuma zavrsetka.", "Neispravan period", MsgIcon.WARN);
             return null;
         }
         extra = {
-            Projekat: f.projekat.value.trim(),
-            DatumPocetka: dateInputToIso(f.datumPocetka.value),
-            DatumZavrsetka: dateInputToIso(f.datumZavrsetka.value)
+            projekat: f.projekat.value.trim(),
+            datumPocetka: dateInputToIso(f.datumPocetka.value),
+            datumZavrsetka: dateInputToIso(f.datumZavrsetka.value)
         };
     } else if (vrsta === "SEZONSKI") {
         if (!f.sezona.value.trim() || !f.lokacija.value.trim()) {
-            alertBox("Sezona i lokacija su obavezne.", "Nedostaju podaci", MsgIcon.WARN);
+            alertBox("sezona i lokacija su obavezne.", "Nedostaju podaci", MsgIcon.WARN);
             return null;
         }
         extra = {
-            Sezona: f.sezona.value.trim(),
-            Lokacija: f.lokacija.value.trim()
+            sezona: f.sezona.value.trim(),
+            lokacija: f.lokacija.value.trim()
         };
     }
 
-    const datumObjave = existing ? existing.DatumObjave : new Date().toISOString();
+    const datumObjave = existing ? existing.datumObjave : new Date().toISOString();
     const datumZatvaranja = f.datumZatvaranjaChk.checked ? dateInputToIso(f.datumZatvaranja.value) : null;
 
     if (datumZatvaranja && new Date(datumZatvaranja) < new Date(datumObjave.substring(0, 10) + "T00:00:00")) {
-        alertBox("Datum zatvaranja ne moze biti pre datuma objave.", "Greska", MsgIcon.WARN);
+        alertBox("datum zatvaranja ne moze biti pre datuma objave.", "Greska", MsgIcon.WARN);
         return null;
     }
 
     const dto = {
-        OglasId: existing ? existing.OglasId : 0,
-        NazivPozicije: f.naziv.value.trim(),
-        VrstaOglasa: vrsta,
-        Opis: f.opis.value.trim() || null,
-        Zahtevi: f.zahtevi.value.trim() || null,
-        MinPlata: minPlata,
-        MaxPlata: maxPlata,
-        DatumObjave: datumObjave,
-        DatumZatvaranja: datumZatvaranja,
-        Status: f.status.value,
+        oglasId: existing ? existing.oglasId : 0,
+        nazivPozicije: f.naziv.value.trim(),
+        vrstaOglasa: vrsta,
+        opis: f.opis.value.trim() || null,
+        zahtevi: f.zahtevi.value.trim() || null,
+        minPlata: minPlata,
+        maxPlata: maxPlata,
+        datumObjave: datumObjave,
+        datumZatvaranja: datumZatvaranja,
+        status: f.status.value,
         ...extra
     };
 
@@ -317,9 +317,9 @@ Screens.openDodajOglas = async function () {
                 if (!ok) return;
 
                 try {
-                    if (dto.VrstaOglasa === "PRAKSA") await api.oglas.addPraksa(dto);
-                    else if (dto.VrstaOglasa === "PRIVREMENI") await api.oglas.addPrivremeni(dto);
-                    else if (dto.VrstaOglasa === "SEZONSKI") await api.oglas.addSezonski(dto);
+                    if (dto.vrstaOglasa === "PRAKSA") await api.oglas.addPraksa(dto);
+                    else if (dto.vrstaOglasa === "PRIVREMENI") await api.oglas.addPrivremeni(dto);
+                    else if (dto.vrstaOglasa === "SEZONSKI") await api.oglas.addSezonski(dto);
                     else await api.oglas.addStalni(dto);
 
                     await alertBox("Uspesno ste dodali novi oglas!", "Uspesno");
@@ -334,7 +334,7 @@ Screens.openDodajOglas = async function () {
 
 Screens.openIzmeniOglas = async function (oglasOsnovni) {
     await openModal({
-        title: `Azuriranje oglasa ${oglasOsnovni.NazivPozicije?.toUpperCase() || ""}`,
+        title: `Azuriranje oglasa ${oglasOsnovni.nazivPozicije?.toUpperCase() || ""}`,
         width: 560,
         height: 640,
         resizable: true,
@@ -343,7 +343,7 @@ Screens.openIzmeniOglas = async function (oglasOsnovni) {
 
             let oglas;
             try {
-                oglas = await api.oglas.get(oglasOsnovni.OglasId);
+                oglas = await api.oglas.get(oglasOsnovni.oglasId);
             } catch (err) {
                 body.innerHTML = "";
                 await errorBox(err.message);
@@ -357,7 +357,7 @@ Screens.openIzmeniOglas = async function (oglasOsnovni) {
                 return;
             }
 
-            const staraVrsta = oglas.VrstaOglasa;
+            const staraVrsta = oglas.vrstaOglasa;
 
             body.innerHTML = "";
             const form = el("div");
@@ -381,12 +381,12 @@ Screens.openIzmeniOglas = async function (oglasOsnovni) {
                 if (!ok) return;
 
                 try {
-                    if (dto.VrstaOglasa === "PRAKSA") await api.oglas.editPraksa(dto, staraVrsta);
-                    else if (dto.VrstaOglasa === "PRIVREMENI") await api.oglas.editPrivremeni(dto, staraVrsta);
-                    else if (dto.VrstaOglasa === "SEZONSKI") await api.oglas.editSezonski(dto, staraVrsta);
+                    if (dto.vrstaOglasa === "PRAKSA") await api.oglas.editPraksa(dto, staraVrsta);
+                    else if (dto.vrstaOglasa === "PRIVREMENI") await api.oglas.editPrivremeni(dto, staraVrsta);
+                    else if (dto.vrstaOglasa === "SEZONSKI") await api.oglas.editSezonski(dto, staraVrsta);
                     else await api.oglas.editStalni(dto, staraVrsta);
 
-                    await alertBox(`Uspesno ste izmenili oglas sa ID=${dto.OglasId}!`, "Uspesno");
+                    await alertBox(`Uspesno ste izmenili oglas sa ID=${dto.oglasId}!`, "Uspesno");
                     win.close();
                 } catch (err) {
                     await errorBox(err.message);
@@ -401,13 +401,13 @@ Screens.openIzmeniOglas = async function (oglasOsnovni) {
 // ---------------------------------------------------------------------------
 
 Screens.openPosebniPodaci = async function (oglas) {
-    if (oglas.VrstaOglasa === "STALNI") {
+    if (oglas.vrstaOglasa === "STALNI") {
         await alertBox("Oglas za stalni rad nema posebne podatke.");
         return;
     }
-    if (oglas.VrstaOglasa === "PRAKSA") return Screens.openPosebniPraksa(oglas);
-    if (oglas.VrstaOglasa === "PRIVREMENI") return Screens.openPosebniPrivremeni(oglas);
-    if (oglas.VrstaOglasa === "SEZONSKI") return Screens.openPosebniSezonski(oglas);
+    if (oglas.vrstaOglasa === "PRAKSA") return Screens.openPosebniPraksa(oglas);
+    if (oglas.vrstaOglasa === "PRIVREMENI") return Screens.openPosebniPrivremeni(oglas);
+    if (oglas.vrstaOglasa === "SEZONSKI") return Screens.openPosebniSezonski(oglas);
 };
 
 Screens.openPosebniPraksa = async function (oglas) {
@@ -417,7 +417,7 @@ Screens.openPosebniPraksa = async function (oglas) {
         build: async (body, win) => {
             let podaci = null;
             try {
-                podaci = await api.oglasPraksa.get(oglas.OglasId);
+                podaci = await api.oglasPraksa.get(oglas.oglasId);
             } catch { /* nema podataka */ }
 
             win.setTitle(podaci ? "Izmena podataka o praksi" : "Podaci o praksi nisu pronadjeni");
@@ -430,13 +430,13 @@ Screens.openPosebniPraksa = async function (oglas) {
                 return;
             }
 
-            const mentorIme = makeInput("text", "pp_mi", podaci.MentorIme);
-            const mentorPrezime = makeInput("text", "pp_mp", podaci.MentorPrezime);
-            const duzina = makeInput("number", "pp_dt", podaci.DuzinaTrajanja);
+            const mentorIme = makeInput("text", "pp_mi", podaci.mentorIme);
+            const mentorPrezime = makeInput("text", "pp_mp", podaci.mentorPrezime);
+            const duzina = makeInput("number", "pp_dt", podaci.duzinaTrajanja);
 
             body.appendChild(el("div", { class: "form-grid" }, [
-                el("label", { class: "field-label" }, "Ime mentora *"), mentorIme,
-                el("label", { class: "field-label" }, "Prezime mentora *"), mentorPrezime,
+                el("label", { class: "field-label" }, "ime mentora *"), mentorIme,
+                el("label", { class: "field-label" }, "prezime mentora *"), mentorPrezime,
                 el("label", { class: "field-label" }, "Duzina trajanja (meseci) *"), duzina
             ]));
 
@@ -451,15 +451,15 @@ Screens.openPosebniPraksa = async function (oglas) {
 
             btnSacuvaj.addEventListener("click", async () => {
                 if (!mentorIme.value.trim() || !mentorPrezime.value.trim()) {
-                    await alertBox("Ime i prezime mentora su obavezni.", "Greska", MsgIcon.WARN);
+                    await alertBox("ime i prezime mentora su obavezni.", "Greska", MsgIcon.WARN);
                     return;
                 }
                 const ok = await confirmBox("Da li zelite da sacuvate oglas prakse?");
                 if (!ok) return;
                 try {
-                    podaci.MentorIme = mentorIme.value.trim();
-                    podaci.MentorPrezime = mentorPrezime.value.trim();
-                    podaci.DuzinaTrajanja = Number(duzina.value);
+                    podaci.mentorIme = mentorIme.value.trim();
+                    podaci.mentorPrezime = mentorPrezime.value.trim();
+                    podaci.duzinaTrajanja = Number(duzina.value);
                     await api.oglasPraksa.edit(podaci);
                     await alertBox("Podaci su uspesno sacuvani.", "Uspeh");
                     win.close();
@@ -478,7 +478,7 @@ Screens.openPosebniPrivremeni = async function (oglas) {
         build: async (body, win) => {
             let podaci = null;
             try {
-                podaci = await api.oglasPrivremeni.get(oglas.OglasId);
+                podaci = await api.oglasPrivremeni.get(oglas.oglasId);
             } catch { /* nema podataka */ }
 
             if (!podaci) {
@@ -489,14 +489,14 @@ Screens.openPosebniPrivremeni = async function (oglas) {
                 return;
             }
 
-            const projekat = makeInput("text", "pp_proj", podaci.Projekat);
-            const datumPocetka = makeInput("date", "pp_dp", toDateInputValue(podaci.DatumPocetka));
-            const datumZavrsetka = makeInput("date", "pp_dzv", toDateInputValue(podaci.DatumZavrsetka));
+            const projekat = makeInput("text", "pp_proj", podaci.projekat);
+            const datumPocetka = makeInput("date", "pp_dp", toDateInputValue(podaci.datumPocetka));
+            const datumZavrsetka = makeInput("date", "pp_dzv", toDateInputValue(podaci.datumZavrsetka));
 
             body.appendChild(el("div", { class: "form-grid" }, [
-                el("label", { class: "field-label" }, "Projekat *"), projekat,
-                el("label", { class: "field-label" }, "Datum pocetka *"), datumPocetka,
-                el("label", { class: "field-label" }, "Datum zavrsetka *"), datumZavrsetka
+                el("label", { class: "field-label" }, "projekat *"), projekat,
+                el("label", { class: "field-label" }, "datum pocetka *"), datumPocetka,
+                el("label", { class: "field-label" }, "datum zavrsetka *"), datumZavrsetka
             ]));
 
             const btnRow = el("div", { class: "btn-row" });
@@ -510,19 +510,19 @@ Screens.openPosebniPrivremeni = async function (oglas) {
 
             btnSacuvaj.addEventListener("click", async () => {
                 if (!projekat.value.trim()) {
-                    await alertBox("Ime projekta je obavezno.", "Greska", MsgIcon.WARN);
+                    await alertBox("ime projekta je obavezno.", "Greska", MsgIcon.WARN);
                     return;
                 }
                 if (datumPocetka.value > datumZavrsetka.value) {
-                    await alertBox("Datum pocetka mora biti pre datuma zavrsetka!", "Greska", MsgIcon.WARN);
+                    await alertBox("datum pocetka mora biti pre datuma zavrsetka!", "Greska", MsgIcon.WARN);
                     return;
                 }
                 const ok = await confirmBox("Da li zelite da sacuvate privremeni oglas?");
                 if (!ok) return;
                 try {
-                    podaci.Projekat = projekat.value.trim();
-                    podaci.DatumPocetka = dateInputToIso(datumPocetka.value);
-                    podaci.DatumZavrsetka = dateInputToIso(datumZavrsetka.value);
+                    podaci.projekat = projekat.value.trim();
+                    podaci.datumPocetka = dateInputToIso(datumPocetka.value);
+                    podaci.datumZavrsetka = dateInputToIso(datumZavrsetka.value);
                     await api.oglasPrivremeni.edit(podaci);
                     await alertBox("Podaci su uspesno sacuvani.", "Uspeh");
                     win.close();
@@ -541,7 +541,7 @@ Screens.openPosebniSezonski = async function (oglas) {
         build: async (body, win) => {
             let podaci = null;
             try {
-                podaci = await api.oglasSezonski.get(oglas.OglasId);
+                podaci = await api.oglasSezonski.get(oglas.oglasId);
             } catch { /* nema podataka */ }
 
             if (!podaci) {
@@ -552,12 +552,12 @@ Screens.openPosebniSezonski = async function (oglas) {
                 return;
             }
 
-            const sezona = makeInput("text", "pp_sez", podaci.Sezona);
-            const lokacija = makeInput("text", "pp_lok", podaci.Lokacija);
+            const sezona = makeInput("text", "pp_sez", podaci.sezona);
+            const lokacija = makeInput("text", "pp_lok", podaci.lokacija);
 
             body.appendChild(el("div", { class: "form-grid" }, [
-                el("label", { class: "field-label" }, "Sezona *"), sezona,
-                el("label", { class: "field-label" }, "Lokacija *"), lokacija
+                el("label", { class: "field-label" }, "sezona *"), sezona,
+                el("label", { class: "field-label" }, "lokacija *"), lokacija
             ]));
 
             const btnRow = el("div", { class: "btn-row" });
@@ -571,14 +571,14 @@ Screens.openPosebniSezonski = async function (oglas) {
 
             btnSacuvaj.addEventListener("click", async () => {
                 if (!sezona.value.trim() || !lokacija.value.trim()) {
-                    await alertBox("Sezona i lokacija su obavezni.", "Greska", MsgIcon.WARN);
+                    await alertBox("sezona i lokacija su obavezni.", "Greska", MsgIcon.WARN);
                     return;
                 }
                 const ok = await confirmBox("Da li zelite da sacuvate sezonski oglas?");
                 if (!ok) return;
                 try {
-                    podaci.Sezona = sezona.value.trim();
-                    podaci.Lokacija = lokacija.value.trim();
+                    podaci.sezona = sezona.value.trim();
+                    podaci.lokacija = lokacija.value.trim();
                     await api.oglasSezonski.edit(podaci);
                     await alertBox("Podaci su uspesno sacuvani.", "Uspeh");
                     win.close();
@@ -596,7 +596,7 @@ Screens.openPosebniSezonski = async function (oglas) {
 
 Screens.openCVPrijaveZaOglas = async function (oglas) {
     await openModal({
-        title: `Oglas ${oglas.NazivPozicije?.toUpperCase() || ""}`,
+        title: `Oglas ${oglas.nazivPozicije?.toUpperCase() || ""}`,
         width: 860,
         height: 520,
         resizable: true,
@@ -615,22 +615,22 @@ Screens.openCVPrijaveZaOglas = async function (oglas) {
             const listHolder = body.querySelector("#listHolder");
 
             const columns = [
-                { header: "ID", render: (c) => String(c.CvId) },
-                { header: "Ime", render: (c) => c.Ime || "" },
-                { header: "Prezime", render: (c) => c.Prezime || "" },
-                { header: "Email", render: (c) => c.Email || "" },
-                { header: "Telefon", render: (c) => c.Telefon || "" },
-                { header: "Datum podnosenja", render: (c) => formatDate(c.DatumPodnosenja) },
-                { header: "Status", render: (c) => prettyEnum(c.Status) },
-                { header: "Oglas ID", render: (c) => String(c.OglasID) }
+                { header: "ID", render: (c) => String(c.cvId) },
+                { header: "ime", render: (c) => c.ime || "" },
+                { header: "prezime", render: (c) => c.prezime || "" },
+                { header: "email", render: (c) => c.email || "" },
+                { header: "telefon", render: (c) => c.telefon || "" },
+                { header: "datum podnosenja", render: (c) => formatDate(c.datumPodnosenja) },
+                { header: "status", render: (c) => prettyEnum(c.status) },
+                { header: "Oglas ID", render: (c) => String(c.oglasID) }
             ];
 
-            const lv = buildListView({ columns, rows: [], rowId: (c) => c.CvId, emptyText: "Nema CV prijava za ovaj oglas." });
+            const lv = buildListView({ columns, rows: [], rowId: (c) => c.cvId, emptyText: "Nema CV prijava za ovaj oglas." });
             listHolder.appendChild(lv.el);
 
             async function refresh() {
                 try {
-                    const podaci = await api.cv.getForOglas(oglas.OglasId);
+                    const podaci = await api.cv.getForOglas(oglas.oglasId);
                     lv.setRows(podaci || []);
                     win.setStatus(`Broj prijava: ${(podaci || []).length}`);
                 } catch (err) {
@@ -646,7 +646,7 @@ Screens.openCVPrijaveZaOglas = async function (oglas) {
             body.querySelector("#btnIzmeniCV").addEventListener("click", async () => {
                 const sel = lv.getSelected();
                 if (!sel) return alertBox("Izaberite CV prijavu cije podatke zelite da izmenite!");
-                const cvb = await api.cv.get(sel.CvId);
+                const cvb = await api.cv.get(sel.cvId);
                 await Screens.openIzmeniCV(cvb, oglas);
                 await refresh();
             });
@@ -657,7 +657,7 @@ Screens.openCVPrijaveZaOglas = async function (oglas) {
                 const ok = await confirmBox("Da li zelite da obrisete izabranu CV prijavu?");
                 if (!ok) return;
                 try {
-                    await api.cv.delete(sel.CvId);
+                    await api.cv.delete(sel.cvId);
                     await alertBox("Brisanje CV prijave iz oglasa je uspesno obavljeno!");
                     await refresh();
                 } catch (err) {
@@ -668,21 +668,21 @@ Screens.openCVPrijaveZaOglas = async function (oglas) {
             body.querySelector("#btnIntervjui").addEventListener("click", async () => {
                 const sel = lv.getSelected();
                 if (!sel) return alertBox("Izaberite CV za koji zelite da vidite intervjue!");
-                const cvb = await api.cv.get(sel.CvId);
+                const cvb = await api.cv.get(sel.cvId);
                 await Screens.openIntervjui(cvb);
             });
 
             body.querySelector("#btnTestovi").addEventListener("click", async () => {
                 const sel = lv.getSelected();
                 if (!sel) return alertBox("Izaberite CV za koji zelite da vidite testove!");
-                const cvb = await api.cv.get(sel.CvId);
+                const cvb = await api.cv.get(sel.cvId);
                 await Screens.openTestovi(cvb);
             });
 
             body.querySelector("#btnOdluka").addEventListener("click", async () => {
                 const sel = lv.getSelected();
                 if (!sel) return alertBox("Izaberite CV za koji zelite da vidite Odluku!");
-                const cvb = await api.cv.get(sel.CvId);
+                const cvb = await api.cv.get(sel.cvId);
                 await Screens.openOdluka(cvb);
             });
 
@@ -693,7 +693,7 @@ Screens.openCVPrijaveZaOglas = async function (oglas) {
 
 Screens.openDodajCV = async function (oglas) {
     await openModal({
-        title: `Novi CV za oglas ${oglas.NazivPozicije || ""}`,
+        title: `Novi CV za oglas ${oglas.nazivPozicije || ""}`,
         width: 440,
         build: (body, win) => {
             const ime = makeInput("text", "cv_ime", "");
@@ -702,12 +702,12 @@ Screens.openDodajCV = async function (oglas) {
             const telefon = makeInput("text", "cv_telefon", "");
 
             body.appendChild(el("div", { class: "form-grid" }, [
-                el("label", { class: "field-label" }, "Ime *"), ime,
-                el("label", { class: "field-label" }, "Prezime *"), prezime,
-                el("label", { class: "field-label" }, "Email *"), email,
-                el("label", { class: "field-label" }, "Telefon *"), telefon
+                el("label", { class: "field-label" }, "ime *"), ime,
+                el("label", { class: "field-label" }, "prezime *"), prezime,
+                el("label", { class: "field-label" }, "email *"), email,
+                el("label", { class: "field-label" }, "telefon *"), telefon
             ]));
-            body.appendChild(el("div", { class: "small-note" }, "Datum podnosenja i status (PRIMLJEN) se postavljaju automatski."));
+            body.appendChild(el("div", { class: "small-note" }, "datum podnosenja i status (PRIMLJEN) se postavljaju automatski."));
 
             const btnRow = el("div", { class: "btn-row" });
             const btnDodaj = el("button", { class: "winbtn primary" }, "Dodaj CV");
@@ -719,7 +719,7 @@ Screens.openDodajCV = async function (oglas) {
             btnOtkazi.addEventListener("click", () => win.close());
 
             btnDodaj.addEventListener("click", async () => {
-                const ok = await confirmBox(`Da li zelite da dodate novi CV u oglas ${oglas.NazivPozicije}?`);
+                const ok = await confirmBox(`Da li zelite da dodate novi CV u oglas ${oglas.nazivPozicije}?`);
                 if (!ok) return;
 
                 if (!ime.value.trim() || !prezime.value.trim() || !email.value.trim() || !telefon.value.trim()) {
@@ -728,18 +728,18 @@ Screens.openDodajCV = async function (oglas) {
                 }
 
                 const dto = {
-                    CvId: 0,
-                    Ime: ime.value.trim(),
-                    Prezime: prezime.value.trim(),
-                    Email: email.value.trim(),
-                    Telefon: telefon.value.trim(),
-                    DatumPodnosenja: new Date().toISOString(),
-                    Status: "PRIMLJEN"
+                    cvId: 0,
+                    ime: ime.value.trim(),
+                    prezime: prezime.value.trim(),
+                    email: email.value.trim(),
+                    telefon: telefon.value.trim(),
+                    datumPodnosenja: new Date().toISOString(),
+                    status: "PRIMLJEN"
                 };
 
                 try {
-                    await api.cv.add(oglas.OglasId, dto);
-                    await alertBox(`Uspesno ste dodali novi CV u oglas ${oglas.NazivPozicije}!`, "Uspesno");
+                    await api.cv.add(oglas.oglasId, dto);
+                    await alertBox(`Uspesno ste dodali novi CV u oglas ${oglas.nazivPozicije}!`, "Uspesno");
                     win.close();
                 } catch (err) {
                     await errorBox(err.message);
@@ -751,24 +751,24 @@ Screens.openDodajCV = async function (oglas) {
 
 Screens.openIzmeniCV = async function (cv, oglas) {
     await openModal({
-        title: `Izmena CV-a za oglas ${oglas.NazivPozicije || ""}`,
+        title: `Izmena CV-a za oglas ${oglas.nazivPozicije || ""}`,
         width: 440,
         build: (body, win) => {
-            const ime = makeInput("text", "cv_ime", cv.Ime);
-            const prezime = makeInput("text", "cv_prezime", cv.Prezime);
-            const email = makeInput("email", "cv_email", cv.Email);
-            const telefon = makeInput("text", "cv_telefon", cv.Telefon);
-            const datumPodnosenja = makeInput("date", "cv_dp", toDateInputValue(cv.DatumPodnosenja));
+            const ime = makeInput("text", "cv_ime", cv.ime);
+            const prezime = makeInput("text", "cv_prezime", cv.prezime);
+            const email = makeInput("email", "cv_email", cv.email);
+            const telefon = makeInput("text", "cv_telefon", cv.telefon);
+            const datumPodnosenja = makeInput("date", "cv_dp", toDateInputValue(cv.datumPodnosenja));
             datumPodnosenja.disabled = true;
-            const status = makeSelect("cv_status", Enums.CVStatus, cv.Status);
+            const status = makeSelect("cv_status", Enums.CVStatus, cv.status);
 
             body.appendChild(el("div", { class: "form-grid" }, [
-                el("label", { class: "field-label" }, "Ime *"), ime,
-                el("label", { class: "field-label" }, "Prezime *"), prezime,
-                el("label", { class: "field-label" }, "Email *"), email,
-                el("label", { class: "field-label" }, "Telefon *"), telefon,
-                el("label", { class: "field-label" }, "Datum podnosenja"), datumPodnosenja,
-                el("label", { class: "field-label" }, "Status *"), status
+                el("label", { class: "field-label" }, "ime *"), ime,
+                el("label", { class: "field-label" }, "prezime *"), prezime,
+                el("label", { class: "field-label" }, "email *"), email,
+                el("label", { class: "field-label" }, "telefon *"), telefon,
+                el("label", { class: "field-label" }, "datum podnosenja"), datumPodnosenja,
+                el("label", { class: "field-label" }, "status *"), status
             ]));
 
             const btnRow = el("div", { class: "btn-row" });
@@ -781,7 +781,7 @@ Screens.openIzmeniCV = async function (cv, oglas) {
             btnOtkazi.addEventListener("click", () => win.close());
 
             btnIzmeni.addEventListener("click", async () => {
-                const ok = await confirmBox(`Da li zelite da izmenite CV sa ID=${cv.CvId}?`);
+                const ok = await confirmBox(`Da li zelite da izmenite CV sa ID=${cv.cvId}?`);
                 if (!ok) return;
 
                 if (!ime.value.trim() || !prezime.value.trim() || !email.value.trim() || !telefon.value.trim() || !status.value) {
@@ -789,11 +789,11 @@ Screens.openIzmeniCV = async function (cv, oglas) {
                     return;
                 }
 
-                cv.Ime = ime.value.trim();
-                cv.Prezime = prezime.value.trim();
-                cv.Email = email.value.trim();
-                cv.Telefon = telefon.value.trim();
-                cv.Status = status.value;
+                cv.ime = ime.value.trim();
+                cv.prezime = prezime.value.trim();
+                cv.email = email.value.trim();
+                cv.telefon = telefon.value.trim();
+                cv.status = status.value;
 
                 try {
                     await api.cv.edit(cv);
@@ -813,38 +813,38 @@ Screens.openIzmeniCV = async function (cv, oglas) {
 
 Screens.openOdluka = async function (cv) {
     await openModal({
-        title: `Odluka za CV: ${cv.Ime} ${cv.Prezime}`,
+        title: `Odluka za CV: ${cv.ime} ${cv.prezime}`,
         width: 480,
         height: 520,
         resizable: true,
         build: async (body, win) => {
             let odluka = null;
             try {
-                odluka = await api.odluka.getForCV(cv.CvId);
+                odluka = await api.odluka.getForCV(cv.cvId);
             } catch { odluka = null; }
 
             const odlukaPostoji = !!odluka;
             if (!odluka) {
-                odluka = { OdlukaId: 0, Status: "NA_CEKANJU", DatumDonosenjaOdluke: new Date().toISOString(), PonudjenaPlata: null, PrihvatioPonudu: null, DatumPocetkaRada: null, RazlogOdbijanja: null };
+                odluka = { odlukaId: 0, status: "NA_CEKANJU", datumDonosenjaOdluke: new Date().toISOString(), ponudjenaPlata: null, prihvatioPonudu: null, datumPocetkaRada: null, razlogOdbijanja: null };
             }
 
-            const status = makeSelect("od_status", Enums.StatusOdluke, odluka.Status);
-            const ponudjenaPlata = makeInput("number", "od_plata", odluka.PonudjenaPlata ?? 0);
-            const checkDa = makeCheckbox("od_da", odluka.PrihvatioPonudu === true);
-            const checkNe = makeCheckbox("od_ne", odluka.PrihvatioPonudu === false);
-            const datumPocetkaChk = makeCheckbox("od_dprchk", !!odluka.DatumPocetkaRada);
-            const datumPocetka = makeInput("date", "od_dpr", toDateInputValue(odluka.DatumPocetkaRada));
-            const razlog = makeTextarea("od_razlog", odluka.RazlogOdbijanja || "");
+            const status = makeSelect("od_status", Enums.StatusOdluke, odluka.status);
+            const ponudjenaPlata = makeInput("number", "od_plata", odluka.ponudjenaPlata ?? 0);
+            const checkDa = makeCheckbox("od_da", odluka.prihvatioPonudu === true);
+            const checkNe = makeCheckbox("od_ne", odluka.prihvatioPonudu === false);
+            const datumPocetkaChk = makeCheckbox("od_dprchk", !!odluka.datumPocetkaRada);
+            const datumPocetka = makeInput("date", "od_dpr", toDateInputValue(odluka.datumPocetkaRada));
+            const razlog = makeTextarea("od_razlog", odluka.razlogOdbijanja || "");
 
             body.appendChild(el("div", { class: "form-grid" }, [
-                el("label", { class: "field-label" }, "Status odluke *"), status,
+                el("label", { class: "field-label" }, "status odluke *"), status,
                 el("label", { class: "field-label" }, "Ponudjena plata"), ponudjenaPlata,
                 el("label", { class: "field-label" }, "Prihvatio ponudu"),
                 el("div", { class: "inline-fields" }, [
                     el("span", { class: "checkline" }, [checkDa, "Da"]),
                     el("span", { class: "checkline" }, [checkNe, "Ne"])
                 ]),
-                el("label", { class: "field-label" }, "Datum pocetka rada"),
+                el("label", { class: "field-label" }, "datum pocetka rada"),
                 el("div", { class: "inline-fields" }, [datumPocetkaChk, datumPocetka]),
                 el("label", { class: "field-label" }, "Razlog odbijanja"), razlog
             ]));
@@ -891,7 +891,7 @@ Screens.openOdluka = async function (cv) {
                     return;
                 }
 
-                odluka.Status = st;
+                odluka.status = st;
 
                 if (st === "IZABRAN") {
                     if (Number(ponudjenaPlata.value) <= 0) {
@@ -902,7 +902,7 @@ Screens.openOdluka = async function (cv) {
                         await alertBox("Oznacite da li je ponuda prihvacena.", "Nedostaju podaci", MsgIcon.WARN);
                         return;
                     }
-                    odluka.PonudjenaPlata = Number(ponudjenaPlata.value);
+                    odluka.ponudjenaPlata = Number(ponudjenaPlata.value);
 
                     if (checkDa.checked) {
                         if (!datumPocetkaChk.checked) {
@@ -910,35 +910,35 @@ Screens.openOdluka = async function (cv) {
                             return;
                         }
                         const dpr = dateInputToIso(datumPocetka.value);
-                        if (new Date(dpr) < new Date(odluka.DatumDonosenjaOdluke.substring(0, 10) + "T00:00:00")) {
-                            await alertBox("Datum pocetka rada ne moze biti pre datuma donosenja odluke.", "Neispravan datum", MsgIcon.WARN);
+                        if (new Date(dpr) < new Date(odluka.datumDonosenjaOdluke.substring(0, 10) + "T00:00:00")) {
+                            await alertBox("datum pocetka rada ne moze biti pre datuma donosenja odluke.", "Neispravan datum", MsgIcon.WARN);
                             return;
                         }
-                        odluka.PrihvatioPonudu = true;
-                        odluka.DatumPocetkaRada = dpr;
-                        odluka.RazlogOdbijanja = null;
+                        odluka.prihvatioPonudu = true;
+                        odluka.datumPocetkaRada = dpr;
+                        odluka.razlogOdbijanja = null;
                     } else {
                         if (!razlog.value.trim()) {
                             await alertBox("Unesite razlog odbijanja ponude.", "Nedostaju podaci", MsgIcon.WARN);
                             return;
                         }
-                        odluka.PrihvatioPonudu = false;
-                        odluka.DatumPocetkaRada = null;
-                        odluka.RazlogOdbijanja = razlog.value.trim();
+                        odluka.prihvatioPonudu = false;
+                        odluka.datumPocetkaRada = null;
+                        odluka.razlogOdbijanja = razlog.value.trim();
                     }
                 } else {
-                    odluka.PonudjenaPlata = null;
-                    odluka.PrihvatioPonudu = null;
-                    odluka.DatumPocetkaRada = null;
+                    odluka.ponudjenaPlata = null;
+                    odluka.prihvatioPonudu = null;
+                    odluka.datumPocetkaRada = null;
 
                     if (st === "ODBIJEN") {
                         if (!razlog.value.trim()) {
                             await alertBox("Unesite razlog odbijanja kandidata.", "Nedostaju podaci", MsgIcon.WARN);
                             return;
                         }
-                        odluka.RazlogOdbijanja = razlog.value.trim();
+                        odluka.razlogOdbijanja = razlog.value.trim();
                     } else {
-                        odluka.RazlogOdbijanja = null;
+                        odluka.razlogOdbijanja = null;
                     }
                 }
 
@@ -950,7 +950,7 @@ Screens.openOdluka = async function (cv) {
                     if (odlukaPostoji) {
                         await api.odluka.edit(odluka);
                     } else {
-                        await api.odluka.add(cv.CvId, odluka);
+                        await api.odluka.add(cv.cvId, odluka);
                     }
                     await alertBox("Odluka je uspesno sacuvana.", "Uspesno");
                     win.close();
@@ -968,7 +968,7 @@ Screens.openOdluka = async function (cv) {
 
 Screens.openIntervjui = async function (cv) {
     await openModal({
-        title: `Intervjui za CV: ${cv.Ime} ${cv.Prezime}`,
+        title: `Intervjui za CV: ${cv.ime} ${cv.prezime}`,
         width: 860,
         height: 500,
         resizable: true,
@@ -984,23 +984,23 @@ Screens.openIntervjui = async function (cv) {
             const listHolder = body.querySelector("#listHolder");
 
             const columns = [
-                { header: "ID", render: (i) => String(i.IntervjuId) },
-                { header: "Datum", render: (i) => formatDate(i.Datum) },
-                { header: "Vreme", render: (i) => formatTime(i.Vreme) },
-                { header: "Tip", render: (i) => prettyEnum(i.Tip) },
-                { header: "Lokacija", render: (i) => i.Lokacija || "" },
-                { header: "Ime zaposlenog", render: (i) => i.ZaposleniIme || "" },
-                { header: "Prezime zaposlenog", render: (i) => i.ZaposleniPrezime || "" },
-                { header: "Ocena", render: (i) => String(i.Ocena) },
-                { header: "Napomene", render: (i) => i.Napomene || "" }
+                { header: "ID", render: (i) => String(i.intervjuId) },
+                { header: "datum", render: (i) => formatDate(i.datum) },
+                { header: "vreme", render: (i) => formatTime(i.vreme) },
+                { header: "tip", render: (i) => prettyEnum(i.tip) },
+                { header: "lokacija", render: (i) => i.lokacija || "" },
+                { header: "ime zaposlenog", render: (i) => i.zaposleniIme || "" },
+                { header: "prezime zaposlenog", render: (i) => i.zaposleniPrezime || "" },
+                { header: "ocena", render: (i) => String(i.ocena) },
+                { header: "napomene", render: (i) => i.napomene || "" }
             ];
 
-            const lv = buildListView({ columns, rows: [], rowId: (i) => i.IntervjuId, emptyText: "Nema intervjua za ovaj CV." });
+            const lv = buildListView({ columns, rows: [], rowId: (i) => i.intervjuId, emptyText: "Nema intervjua za ovaj CV." });
             listHolder.appendChild(lv.el);
 
             async function refresh() {
                 try {
-                    const podaci = await api.intervju.getForCV(cv.CvId);
+                    const podaci = await api.intervju.getForCV(cv.cvId);
                     lv.setRows(podaci || []);
                 } catch (err) {
                     await errorBox(err.message);
@@ -1015,7 +1015,7 @@ Screens.openIntervjui = async function (cv) {
             body.querySelector("#btnIzmeni").addEventListener("click", async () => {
                 const sel = lv.getSelected();
                 if (!sel) return alertBox("Izaberite intervju koji zelite da menjate!");
-                const ib = await api.intervju.get(sel.IntervjuId);
+                const ib = await api.intervju.get(sel.intervjuId);
                 await Screens.openIzmeniIntervju(ib, cv);
                 await refresh();
             });
@@ -1026,7 +1026,7 @@ Screens.openIntervjui = async function (cv) {
                 const ok = await confirmBox("Da li zelite da obrisete izabrani intervju?");
                 if (!ok) return;
                 try {
-                    await api.intervju.delete(sel.IntervjuId);
+                    await api.intervju.delete(sel.intervjuId);
                     await alertBox("Brisanje intervjua iz CV-ja je uspesno obavljeno!");
                     await refresh();
                 } catch (err) {
@@ -1058,14 +1058,14 @@ Screens.openDodajIntervju = async function (cv) {
             const napomene = makeTextarea("iv_nap", "");
 
             body.appendChild(el("div", { class: "form-grid" }, [
-                el("label", { class: "field-label" }, "Datum *"), datum,
-                el("label", { class: "field-label" }, "Vreme *"), vreme,
-                el("label", { class: "field-label" }, "Tip intervjua *"), tip,
-                el("label", { class: "field-label" }, "Lokacija *"), lokacija,
-                el("label", { class: "field-label" }, "Ime zaposlenog *"), imeZap,
-                el("label", { class: "field-label" }, "Prezime zaposlenog *"), prezimeZap,
-                el("label", { class: "field-label" }, "Ocena (1-10) *"), ocena,
-                el("label", { class: "field-label" }, "Napomene"), napomene
+                el("label", { class: "field-label" }, "datum *"), datum,
+                el("label", { class: "field-label" }, "vreme *"), vreme,
+                el("label", { class: "field-label" }, "tip intervjua *"), tip,
+                el("label", { class: "field-label" }, "lokacija *"), lokacija,
+                el("label", { class: "field-label" }, "ime zaposlenog *"), imeZap,
+                el("label", { class: "field-label" }, "prezime zaposlenog *"), prezimeZap,
+                el("label", { class: "field-label" }, "ocena (1-10) *"), ocena,
+                el("label", { class: "field-label" }, "napomene"), napomene
             ]));
 
             const btnRow = el("div", { class: "btn-row" });
@@ -1082,28 +1082,28 @@ Screens.openDodajIntervju = async function (cv) {
                 if (!ok) return;
 
                 if (!lokacija.value.trim() || !imeZap.value.trim() || !prezimeZap.value.trim()) {
-                    await alertBox("Lokacija, ime zaposlenog i prezime zaposlenog su obavezni!", "Nedostaju podaci", MsgIcon.WARN);
+                    await alertBox("lokacija, ime zaposlenog i prezime zaposlenog su obavezni!", "Nedostaju podaci", MsgIcon.WARN);
                     return;
                 }
                 if (Number(ocena.value) < 1 || Number(ocena.value) > 10) {
-                    await alertBox("Ocena mora biti u opsegu od 1 do 10.", "Greska", MsgIcon.WARN);
+                    await alertBox("ocena mora biti u opsegu od 1 do 10.", "Greska", MsgIcon.WARN);
                     return;
                 }
 
                 const dto = {
-                    IntervjuId: 0,
-                    Datum: dateInputToIso(datum.value),
-                    Vreme: timeInputToIso(vreme.value, datum.value),
-                    Tip: tip.value,
-                    Lokacija: lokacija.value.trim(),
-                    ZaposleniIme: imeZap.value.trim(),
-                    ZaposleniPrezime: prezimeZap.value.trim(),
-                    Ocena: Number(ocena.value),
-                    Napomene: napomene.value.trim()
+                    intervjuId: 0,
+                    datum: dateInputToIso(datum.value),
+                    vreme: timeInputToIso(vreme.value, datum.value),
+                    tip: tip.value,
+                    lokacija: lokacija.value.trim(),
+                    zaposleniIme: imeZap.value.trim(),
+                    zaposleniPrezime: prezimeZap.value.trim(),
+                    ocena: Number(ocena.value),
+                    napomene: napomene.value.trim()
                 };
 
                 try {
-                    await api.intervju.add(cv.CvId, dto);
+                    await api.intervju.add(cv.cvId, dto);
                     await alertBox("Uspesno ste dodali novi intervju u CV!", "Uspesno");
                     win.close();
                 } catch (err) {
@@ -1116,30 +1116,30 @@ Screens.openDodajIntervju = async function (cv) {
 
 Screens.openIzmeniIntervju = async function (intervju, cv) {
     await openModal({
-        title: `Izmena intervjua za CV sa ID = ${cv.CvId}`,
+        title: `Izmena intervjua za CV sa ID = ${cv.cvId}`,
         width: 460,
         height: 520,
         resizable: true,
         build: (body, win) => {
-            const datum = makeInput("date", "iv_datum", toDateInputValue(intervju.Datum));
-            const vreme = makeInput("time", "iv_vreme", toTimeInputValue(intervju.Vreme));
-            const tip = makeSelect("iv_tip", Enums.TipIntervjua, intervju.Tip);
-            const lokacija = makeInput("text", "iv_lok", intervju.Lokacija);
-            const imeZap = makeInput("text", "iv_ime", intervju.ZaposleniIme);
-            const prezimeZap = makeInput("text", "iv_prezime", intervju.ZaposleniPrezime);
-            const ocena = makeInput("number", "iv_ocena", intervju.Ocena);
+            const datum = makeInput("date", "iv_datum", toDateInputValue(intervju.datum));
+            const vreme = makeInput("time", "iv_vreme", toTimeInputValue(intervju.vreme));
+            const tip = makeSelect("iv_tip", Enums.TipIntervjua, intervju.tip);
+            const lokacija = makeInput("text", "iv_lok", intervju.lokacija);
+            const imeZap = makeInput("text", "iv_ime", intervju.zaposleniIme);
+            const prezimeZap = makeInput("text", "iv_prezime", intervju.zaposleniPrezime);
+            const ocena = makeInput("number", "iv_ocena", intervju.ocena);
             ocena.min = 1; ocena.max = 10;
-            const napomene = makeTextarea("iv_nap", intervju.Napomene);
+            const napomene = makeTextarea("iv_nap", intervju.napomene);
 
             body.appendChild(el("div", { class: "form-grid" }, [
-                el("label", { class: "field-label" }, "Datum *"), datum,
-                el("label", { class: "field-label" }, "Vreme *"), vreme,
-                el("label", { class: "field-label" }, "Tip intervjua *"), tip,
-                el("label", { class: "field-label" }, "Lokacija *"), lokacija,
-                el("label", { class: "field-label" }, "Ime zaposlenog *"), imeZap,
-                el("label", { class: "field-label" }, "Prezime zaposlenog *"), prezimeZap,
-                el("label", { class: "field-label" }, "Ocena (1-10) *"), ocena,
-                el("label", { class: "field-label" }, "Napomene"), napomene
+                el("label", { class: "field-label" }, "datum *"), datum,
+                el("label", { class: "field-label" }, "vreme *"), vreme,
+                el("label", { class: "field-label" }, "tip intervjua *"), tip,
+                el("label", { class: "field-label" }, "lokacija *"), lokacija,
+                el("label", { class: "field-label" }, "ime zaposlenog *"), imeZap,
+                el("label", { class: "field-label" }, "prezime zaposlenog *"), prezimeZap,
+                el("label", { class: "field-label" }, "ocena (1-10) *"), ocena,
+                el("label", { class: "field-label" }, "napomene"), napomene
             ]));
 
             const btnRow = el("div", { class: "btn-row" });
@@ -1152,30 +1152,30 @@ Screens.openIzmeniIntervju = async function (intervju, cv) {
             btnOtkazi.addEventListener("click", () => win.close());
 
             btnIzmeni.addEventListener("click", async () => {
-                const ok = await confirmBox(`Da li zelite da izmenite intervju sa ID=${intervju.IntervjuId}?`);
+                const ok = await confirmBox(`Da li zelite da izmenite intervju sa ID=${intervju.intervjuId}?`);
                 if (!ok) return;
 
                 if (!lokacija.value.trim() || !imeZap.value.trim() || !prezimeZap.value.trim()) {
-                    await alertBox("Lokacija, ime zaposlenog i prezime zaposlenog su obavezni!", "Nedostaju podaci", MsgIcon.WARN);
+                    await alertBox("lokacija, ime zaposlenog i prezime zaposlenog su obavezni!", "Nedostaju podaci", MsgIcon.WARN);
                     return;
                 }
                 if (Number(ocena.value) < 1 || Number(ocena.value) > 10) {
-                    await alertBox("Ocena mora biti u opsegu od 1 do 10.", "Greska", MsgIcon.WARN);
+                    await alertBox("ocena mora biti u opsegu od 1 do 10.", "Greska", MsgIcon.WARN);
                     return;
                 }
 
-                intervju.Datum = dateInputToIso(datum.value);
-                intervju.Vreme = timeInputToIso(vreme.value, datum.value);
-                intervju.Tip = tip.value;
-                intervju.Lokacija = lokacija.value.trim();
-                intervju.ZaposleniIme = imeZap.value.trim();
-                intervju.ZaposleniPrezime = prezimeZap.value.trim();
-                intervju.Ocena = Number(ocena.value);
-                intervju.Napomene = napomene.value.trim();
+                intervju.datum = dateInputToIso(datum.value);
+                intervju.vreme = timeInputToIso(vreme.value, datum.value);
+                intervju.tip = tip.value;
+                intervju.lokacija = lokacija.value.trim();
+                intervju.zaposleniIme = imeZap.value.trim();
+                intervju.zaposleniPrezime = prezimeZap.value.trim();
+                intervju.ocena = Number(ocena.value);
+                intervju.napomene = napomene.value.trim();
 
                 try {
                     await api.intervju.edit(intervju);
-                    await alertBox(`Uspesno ste izmenili intervju sa ID=${intervju.IntervjuId}!`, "Uspesno");
+                    await alertBox(`Uspesno ste izmenili intervju sa ID=${intervju.intervjuId}!`, "Uspesno");
                     win.close();
                 } catch (err) {
                     await errorBox(err.message);
@@ -1191,7 +1191,7 @@ Screens.openIzmeniIntervju = async function (intervju, cv) {
 
 Screens.openTestovi = async function (cv) {
     await openModal({
-        title: `Testovi za CV: ${cv.Ime} ${cv.Prezime}`,
+        title: `Testovi za CV: ${cv.ime} ${cv.prezime}`,
         width: 760,
         height: 480,
         resizable: true,
@@ -1207,19 +1207,19 @@ Screens.openTestovi = async function (cv) {
             const listHolder = body.querySelector("#listHolder");
 
             const columns = [
-                { header: "ID", render: (t) => String(t.TestId) },
-                { header: "Rezultat", render: (t) => formatMoney(t.Rezultat) },
-                { header: "Datum testiranja", render: (t) => formatDate(t.DatumTestiranja) },
-                { header: "Vrsta testiranja", render: (t) => t.VrstaTestiranja || "" },
-                { header: "Komentar", render: (t) => t.Komentar || "" }
+                { header: "ID", render: (t) => String(t.testId) },
+                { header: "rezultat", render: (t) => formatMoney(t.rezultat) },
+                { header: "datum testiranja", render: (t) => formatDate(t.datumTestiranja) },
+                { header: "Vrsta testiranja", render: (t) => t.vrstaTestiranja || "" },
+                { header: "komentar", render: (t) => t.komentar || "" }
             ];
 
-            const lv = buildListView({ columns, rows: [], rowId: (t) => t.TestId, emptyText: "Nema testova za ovaj CV." });
+            const lv = buildListView({ columns, rows: [], rowId: (t) => t.testId, emptyText: "Nema testova za ovaj CV." });
             listHolder.appendChild(lv.el);
 
             async function refresh() {
                 try {
-                    const podaci = await api.test.getForCV(cv.CvId);
+                    const podaci = await api.test.getForCV(cv.cvId);
                     lv.setRows(podaci || []);
                 } catch (err) {
                     await errorBox(err.message);
@@ -1234,7 +1234,7 @@ Screens.openTestovi = async function (cv) {
             body.querySelector("#btnIzmeni").addEventListener("click", async () => {
                 const sel = lv.getSelected();
                 if (!sel) return alertBox("Izaberite test koji zelite da menjate!");
-                const tb = await api.test.get(sel.TestId);
+                const tb = await api.test.get(sel.testId);
                 await Screens.openIzmeniTest(tb, cv);
                 await refresh();
             });
@@ -1245,7 +1245,7 @@ Screens.openTestovi = async function (cv) {
                 const ok = await confirmBox("Da li zelite da obrisete izabrani test?");
                 if (!ok) return;
                 try {
-                    await api.test.delete(sel.TestId);
+                    await api.test.delete(sel.testId);
                     await alertBox("Brisanje testa je uspesno obavljeno!");
                     await refresh();
                 } catch (err) {
@@ -1270,10 +1270,10 @@ Screens.openDodajTest = async function (cv) {
             const komentar = makeTextarea("t_kom", "");
 
             body.appendChild(el("div", { class: "form-grid" }, [
-                el("label", { class: "field-label" }, "Rezultat (0-100) *"), rezultat,
-                el("label", { class: "field-label" }, "Datum testiranja *"), datum,
+                el("label", { class: "field-label" }, "rezultat (0-100) *"), rezultat,
+                el("label", { class: "field-label" }, "datum testiranja *"), datum,
                 el("label", { class: "field-label" }, "Vrsta testiranja *"), vrsta,
-                el("label", { class: "field-label" }, "Komentar"), komentar
+                el("label", { class: "field-label" }, "komentar"), komentar
             ]));
 
             const btnRow = el("div", { class: "btn-row" });
@@ -1294,20 +1294,20 @@ Screens.openDodajTest = async function (cv) {
                     return;
                 }
                 if (Number(rezultat.value) < 0 || Number(rezultat.value) > 100) {
-                    await alertBox("Rezultat mora biti izmedju 1 i 100.", "Greska", MsgIcon.WARN);
+                    await alertBox("rezultat mora biti izmedju 1 i 100.", "Greska", MsgIcon.WARN);
                     return;
                 }
 
                 const dto = {
-                    TestId: 0,
-                    Rezultat: Number(rezultat.value),
-                    DatumTestiranja: dateInputToIso(datum.value),
-                    VrstaTestiranja: vrsta.value.trim(),
-                    Komentar: komentar.value.trim()
+                    testId: 0,
+                    rezultat: Number(rezultat.value),
+                    datumTestiranja: dateInputToIso(datum.value),
+                    vrstaTestiranja: vrsta.value.trim(),
+                    komentar: komentar.value.trim()
                 };
 
                 try {
-                    await api.test.add(cv.CvId, dto);
+                    await api.test.add(cv.cvId, dto);
                     await alertBox("Uspesno ste dodali novi test u CV!", "Uspesno");
                     win.close();
                 } catch (err) {
@@ -1320,20 +1320,20 @@ Screens.openDodajTest = async function (cv) {
 
 Screens.openIzmeniTest = async function (test, cv) {
     await openModal({
-        title: `Izmena testa za CV sa ID = ${cv.CvId}`,
+        title: `Izmena testa za CV sa ID = ${cv.cvId}`,
         width: 440,
         build: (body, win) => {
-            const rezultat = makeInput("number", "t_rez", test.Rezultat);
+            const rezultat = makeInput("number", "t_rez", test.rezultat);
             rezultat.min = 0; rezultat.max = 100;
-            const datum = makeInput("date", "t_datum", toDateInputValue(test.DatumTestiranja));
-            const vrsta = makeInput("text", "t_vrsta", test.VrstaTestiranja);
-            const komentar = makeTextarea("t_kom", test.Komentar);
+            const datum = makeInput("date", "t_datum", toDateInputValue(test.datumTestiranja));
+            const vrsta = makeInput("text", "t_vrsta", test.vrstaTestiranja);
+            const komentar = makeTextarea("t_kom", test.komentar);
 
             body.appendChild(el("div", { class: "form-grid" }, [
-                el("label", { class: "field-label" }, "Rezultat (0-100) *"), rezultat,
-                el("label", { class: "field-label" }, "Datum testiranja *"), datum,
+                el("label", { class: "field-label" }, "rezultat (0-100) *"), rezultat,
+                el("label", { class: "field-label" }, "datum testiranja *"), datum,
                 el("label", { class: "field-label" }, "Vrsta testiranja *"), vrsta,
-                el("label", { class: "field-label" }, "Komentar"), komentar
+                el("label", { class: "field-label" }, "komentar"), komentar
             ]));
 
             const btnRow = el("div", { class: "btn-row" });
@@ -1346,7 +1346,7 @@ Screens.openIzmeniTest = async function (test, cv) {
             btnOtkazi.addEventListener("click", () => win.close());
 
             btnIzmeni.addEventListener("click", async () => {
-                const ok = await confirmBox(`Da li zelite da izmenite test ${test.VrstaTestiranja}?`);
+                const ok = await confirmBox(`Da li zelite da izmenite test ${test.vrstaTestiranja}?`);
                 if (!ok) return;
 
                 if (!vrsta.value.trim()) {
@@ -1354,18 +1354,18 @@ Screens.openIzmeniTest = async function (test, cv) {
                     return;
                 }
                 if (Number(rezultat.value) < 0 || Number(rezultat.value) > 100) {
-                    await alertBox("Rezultat mora biti izmedju 1 i 100.", "Greska", MsgIcon.WARN);
+                    await alertBox("rezultat mora biti izmedju 1 i 100.", "Greska", MsgIcon.WARN);
                     return;
                 }
 
-                test.Rezultat = Number(rezultat.value);
-                test.DatumTestiranja = dateInputToIso(datum.value);
-                test.VrstaTestiranja = vrsta.value.trim();
-                test.Komentar = komentar.value.trim();
+                test.rezultat = Number(rezultat.value);
+                test.datumTestiranja = dateInputToIso(datum.value);
+                test.vrstaTestiranja = vrsta.value.trim();
+                test.komentar = komentar.value.trim();
 
                 try {
                     await api.test.edit(test);
-                    await alertBox(`Uspesno ste izmenili test sa ID=${test.TestId}!`, "Uspesno");
+                    await alertBox(`Uspesno ste izmenili test sa ID=${test.testId}!`, "Uspesno");
                     win.close();
                 } catch (err) {
                     await errorBox(err.message);
@@ -1399,17 +1399,17 @@ Screens.openSveCVPrijave = async function () {
             const listHolder = body.querySelector("#listHolder");
 
             const columns = [
-                { header: "ID", render: (c) => String(c.CvId) },
-                { header: "Ime", render: (c) => c.Ime || "" },
-                { header: "Prezime", render: (c) => c.Prezime || "" },
-                { header: "Email", render: (c) => c.Email || "" },
-                { header: "Telefon", render: (c) => c.Telefon || "" },
-                { header: "Datum podnosenja", render: (c) => formatDate(c.DatumPodnosenja) },
-                { header: "Status", render: (c) => prettyEnum(c.Status) },
-                { header: "Oglas ID", render: (c) => String(c.OglasID) }
+                { header: "ID", render: (c) => String(c.cvId) },
+                { header: "ime", render: (c) => c.ime || "" },
+                { header: "prezime", render: (c) => c.prezime || "" },
+                { header: "email", render: (c) => c.email || "" },
+                { header: "telefon", render: (c) => c.telefon || "" },
+                { header: "datum podnosenja", render: (c) => formatDate(c.datumPodnosenja) },
+                { header: "status", render: (c) => prettyEnum(c.status) },
+                { header: "Oglas ID", render: (c) => String(c.oglasID) }
             ];
 
-            const lv = buildListView({ columns, rows: [], rowId: (c) => c.CvId, emptyText: "Trenutno nema CV prijava." });
+            const lv = buildListView({ columns, rows: [], rowId: (c) => c.cvId, emptyText: "Trenutno nema CV prijava." });
             listHolder.appendChild(lv.el);
 
             async function refresh() {
@@ -1431,7 +1431,7 @@ Screens.openSveCVPrijave = async function () {
                 const ok = await confirmYesNo("Da li ste sigurni da zelite da obrisete izabranu CV prijavu?", "Potvrda brisanja");
                 if (!ok) return;
                 try {
-                    await api.cv.deletePrijava(sel.CvId);
+                    await api.cv.deletePrijava(sel.cvId);
                     await alertBox("CV prijava je uspesno obrisana.", "Obavestenje");
                     await refresh();
                 } catch (err) {
