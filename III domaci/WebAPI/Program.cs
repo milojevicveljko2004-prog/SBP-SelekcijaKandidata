@@ -17,7 +17,13 @@ builder.Services.AddCors(policy =>
     });
 });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // DTO klase u DatabaseAccess projektu koriste javna polja (fields), a ne properties,
+        // pa System.Text.Json po difoltu ne bi ni serijalizovao ni deserijalizovao te podatke.
+        options.JsonSerializerOptions.IncludeFields = true;
+    });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
