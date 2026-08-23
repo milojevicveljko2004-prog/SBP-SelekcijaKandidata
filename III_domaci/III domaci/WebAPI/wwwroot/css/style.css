@@ -1,0 +1,550 @@
+/* ==========================================================================
+   Retro Windows Forms - style za HR/Oglasi frontend
+   ========================================================================== */
+
+:root {
+    --face: #ece9d8;          /* klasicna Windows XP "silver" pozadina kontrola */
+    --face-dark: #d9d5c4;
+    --border-light: #ffffff;
+    --border-dark: #716f64;
+    --border-darker: #3b3a32;
+    --title-start: #0a53c4;
+    --title-end: #3a91ff;
+    --title-inactive-start: #7f9db9;
+    --title-inactive-end: #b0c4de;
+    --desktop-1: #1a5276;
+    --desktop-2: #2e86ab;
+    --accent: #0a53c4;
+    --select-bg: #316ac5;
+    --select-fg: #ffffff;
+    --ok-green: #2e7d32;
+    --err-red: #a4262c;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: "Tahoma", "Segoe UI", "MS Sans Serif", Arial, sans-serif;
+    font-size: 12px;
+    color: #000;
+    overflow: hidden;
+    background: radial-gradient(ellipse at top left, var(--desktop-2), var(--desktop-1) 70%);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Desktop / taskbar                                                      */
+/* ---------------------------------------------------------------------- */
+
+#desktop {
+    position: relative;
+    width: 100vw;
+    height: calc(100vh - 34px);
+    overflow: hidden;
+    background-image:
+        linear-gradient(135deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+}
+
+#taskbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 34px;
+    background: linear-gradient(to bottom, #2a6fc9, #1c4faa 40%, #12377e);
+    border-top: 1px solid #4f92ea;
+    display: flex;
+    align-items: center;
+    padding: 0 6px;
+    gap: 6px;
+    z-index: 10000;
+    font-size: 12px;
+    color: #fff;
+}
+
+#taskbar .start-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(to bottom, #4caf50, #2e7d32);
+    border: 1px solid #1b5e20;
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-weight: bold;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
+}
+
+#taskbar .task-clock {
+    margin-left: auto;
+    background: rgba(0,0,0,0.25);
+    border: 1px solid #0e2b57;
+    border-radius: 3px;
+    padding: 4px 10px;
+}
+
+#taskbar .task-items {
+    display: flex;
+    gap: 4px;
+}
+
+#taskbar .task-item {
+    background: linear-gradient(to bottom, #3a7bd5, #2a5db0);
+    border: 1px solid #123a75;
+    border-radius: 3px;
+    padding: 4px 10px;
+    cursor: pointer;
+    max-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#taskbar .task-item.minimized {
+    opacity: 0.65;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Pocetni ekran (glavna forma)                                           */
+/* ---------------------------------------------------------------------- */
+
+#pocetna {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+}
+
+.pocetna-icon {
+    width: 92px;
+    text-align: center;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    cursor: pointer;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 8px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    user-select: none;
+}
+
+.pocetna-icon:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.3);
+}
+
+.pocetna-icon .glyph {
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    background: linear-gradient(to bottom, #fff7cf, #ffe28a);
+    border: 1px solid #8a6d1a;
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+
+.pocetna-icon span.label {
+    font-size: 12px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Prozori                                                                 */
+/* ---------------------------------------------------------------------- */
+
+.win {
+    position: absolute;
+    min-width: 320px;
+    background: var(--face);
+    border: 1px solid var(--border-darker);
+    box-shadow: 3px 3px 10px rgba(0,0,0,0.45);
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.win.dragging {
+    opacity: 0.92;
+}
+
+.win-titlebar {
+    background: linear-gradient(to bottom, var(--title-start), var(--title-end));
+    color: #fff;
+    padding: 4px 4px 4px 8px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: default;
+    user-select: none;
+    border-radius: 3px 3px 0 0;
+    flex: 0 0 auto;
+}
+
+.win.inactive .win-titlebar {
+    background: linear-gradient(to bottom, var(--title-inactive-start), var(--title-inactive-end));
+}
+
+.win-titlebar .win-title-text {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+}
+
+.win-titlebar .win-btn {
+    width: 20px;
+    height: 18px;
+    margin-left: 3px;
+    background: linear-gradient(to bottom, #f6b8b1, #d9534f);
+    border: 1px solid #7a1f1a;
+    border-radius: 2px;
+    color: #fff;
+    font-size: 11px;
+    line-height: 16px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.win-titlebar .win-btn:active {
+    filter: brightness(0.85);
+}
+
+.win-titlebar .win-btn.min {
+    background: linear-gradient(to bottom, #fff3b0, #e0b400);
+    border-color: #7a5c00;
+    color: #3a2c00;
+}
+
+.win-body {
+    padding: 10px;
+    overflow: auto;
+    flex: 1 1 auto;
+    background: var(--face);
+}
+
+.win-statusbar {
+    border-top: 1px solid var(--border-dark);
+    background: var(--face);
+    padding: 3px 8px;
+    font-size: 11px;
+    color: #333;
+    flex: 0 0 auto;
+}
+
+.win-resize-handle {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 14px;
+    height: 14px;
+    cursor: nwse-resize;
+    background:
+        linear-gradient(135deg, transparent 0 40%, var(--border-dark) 40% 46%, transparent 46% 60%,
+        var(--border-dark) 60% 66%, transparent 66% 80%, var(--border-dark) 80% 86%, transparent 86%);
+}
+
+/* Overlay za modalne prozore */
+.modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.25);
+    z-index: 9000;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Form kontrole                                                          */
+/* ---------------------------------------------------------------------- */
+
+fieldset.groupbox {
+    border: 1px solid var(--border-dark);
+    border-radius: 2px;
+    margin: 0 0 10px 0;
+    padding: 12px 10px 10px 10px;
+    background: var(--face);
+    box-shadow: inset 1px 1px 0 var(--border-light);
+}
+
+fieldset.groupbox legend {
+    padding: 0 4px;
+    font-weight: bold;
+    color: #10306b;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 150px minmax(160px, 1fr);
+    gap: 6px 10px;
+    align-items: center;
+}
+
+.form-grid.two-col {
+    grid-template-columns: 150px minmax(140px, 1fr) 150px minmax(140px, 1fr);
+}
+
+.form-row-full {
+    grid-column: 1 / -1;
+}
+
+label.field-label {
+    text-align: right;
+    padding-right: 4px;
+    white-space: nowrap;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="email"],
+select,
+textarea {
+    font-family: inherit;
+    font-size: 12px;
+    padding: 3px 4px;
+    border: 1px solid var(--border-dark);
+    border-top-color: var(--border-darker);
+    border-left-color: var(--border-darker);
+    background: #fff;
+    border-radius: 1px;
+    width: 100%;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 48px;
+    font-family: inherit;
+}
+
+input:disabled, select:disabled, textarea:disabled {
+    background: var(--face-dark);
+    color: #6b6b6b;
+}
+
+input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    vertical-align: middle;
+}
+
+.checkline {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.inline-fields {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.inline-fields input {
+    flex: 1 1 auto;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Dugmad (Windows 3D beveled buttons)                                    */
+/* ---------------------------------------------------------------------- */
+
+button.winbtn {
+    font-family: inherit;
+    font-size: 12px;
+    padding: 5px 14px;
+    background: var(--face);
+    border: 1px solid var(--border-dark);
+    border-top-color: var(--border-light);
+    border-left-color: var(--border-light);
+    box-shadow: 1px 1px 0 var(--border-darker);
+    border-radius: 2px;
+    cursor: pointer;
+    min-width: 84px;
+}
+
+button.winbtn:hover {
+    background: #f5f3ea;
+}
+
+button.winbtn:active {
+    box-shadow: none;
+    border-color: var(--border-darker);
+    transform: translate(1px, 1px);
+}
+
+button.winbtn:disabled {
+    color: #8f8f8f;
+    cursor: default;
+    box-shadow: none;
+}
+
+button.winbtn.primary {
+    font-weight: bold;
+}
+
+button.winbtn.danger {
+    color: #7a1f1a;
+}
+
+.btn-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.btn-row.right {
+    justify-content: flex-end;
+}
+
+.toolbar {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-dark);
+}
+
+/* ---------------------------------------------------------------------- */
+/* ListView (tabela)                                                      */
+/* ---------------------------------------------------------------------- */
+
+.listview-wrap {
+    border: 1px solid var(--border-dark);
+    background: #fff;
+    max-height: 340px;
+    overflow: auto;
+}
+
+table.listview {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 12px;
+}
+
+table.listview thead th {
+    position: sticky;
+    top: 0;
+    background: linear-gradient(to bottom, #f7f6f0, #dcd9cc);
+    border: 1px solid var(--border-dark);
+    border-top: none;
+    padding: 4px 6px;
+    text-align: left;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+table.listview tbody td {
+    padding: 3px 6px;
+    border-bottom: 1px solid #e5e3da;
+    border-right: 1px solid #ececec;
+    white-space: nowrap;
+}
+
+table.listview tbody tr {
+    cursor: pointer;
+}
+
+table.listview tbody tr:nth-child(even) {
+    background: #f5f5ef;
+}
+
+table.listview tbody tr:hover {
+    background: #dfeaff;
+}
+
+table.listview tbody tr.selected {
+    background: var(--select-bg) !important;
+    color: var(--select-fg);
+}
+
+.listview-empty {
+    padding: 14px;
+    color: #666;
+    font-style: italic;
+    text-align: center;
+}
+
+.count-badge {
+    display: inline-block;
+    background: #fff;
+    border: 1px solid var(--border-dark);
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-weight: bold;
+    min-width: 40px;
+    text-align: center;
+}
+
+/* ---------------------------------------------------------------------- */
+/* MessageBox                                                              */
+/* ---------------------------------------------------------------------- */
+
+.msgbox {
+    width: 340px;
+}
+
+.msgbox-body {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 6px 4px 14px 4px;
+}
+
+.msgbox-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    flex: 0 0 auto;
+}
+
+.msgbox-icon.info { background: #2f76d9; }
+.msgbox-icon.warn { background: #e0a300; }
+.msgbox-icon.error { background: var(--err-red); }
+.msgbox-icon.question { background: #6b6b6b; }
+
+.msgbox-text {
+    white-space: pre-line;
+    line-height: 1.4;
+}
+
+.field-error {
+    grid-column: 1 / -1;
+    color: var(--err-red);
+    font-size: 11px;
+    display: none;
+}
+
+.section-title {
+    font-weight: bold;
+    color: #10306b;
+    margin: 4px 0 6px 0;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.small-note {
+    font-size: 11px;
+    color: #555;
+    margin-top: 4px;
+}

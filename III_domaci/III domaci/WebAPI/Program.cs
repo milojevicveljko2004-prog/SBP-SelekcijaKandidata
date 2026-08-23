@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(policy =>
@@ -23,6 +25,10 @@ builder.Services.AddControllers()
         // DTO klase u DatabaseAccess projektu koriste javna polja (fields), a ne properties,
         // pa System.Text.Json po difoltu ne bi ni serijalizovao ni deserijalizovao te podatke.
         options.JsonSerializerOptions.IncludeFields = true;
+
+        // Enumi (VrstaOglasa, StatusOglasa, CVStatus, TipIntervjua, StatusOdluke...) se serijalizuju
+        // kao stringovi (npr. "STALNI") umesto kao brojevi - isto kao select box-ovi u Windows Forms aplikaciji.
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -40,6 +46,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("CORS");
 
+app.UseDefaultFiles();
 app.UseStaticFiles();
 
 app.UseAuthorization();
