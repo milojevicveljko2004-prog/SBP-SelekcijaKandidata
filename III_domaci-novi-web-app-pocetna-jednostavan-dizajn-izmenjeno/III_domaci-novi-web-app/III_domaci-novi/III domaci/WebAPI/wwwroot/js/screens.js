@@ -1,17 +1,7 @@
-// ============================================================================
-// screens.js - svaka funkcija ovde odgovara jednoj formi iz Windows Forms
-// aplikacije (Forme/*.cs). Nazivi i redosled provera su namerno zadrzani
-// isti kao u originalnoj desktop aplikaciji.
-// ============================================================================
-
 const Screens = {};
-
-// ---------------------------------------------------------------------------
-// OGLASI (OglasiForm)
-// ---------------------------------------------------------------------------
-
 Screens.openOglasi = async function () {
     await openModal({
+        page: true,
         title: "Oglasi",
         width: 920,
         height: 560,
@@ -59,8 +49,8 @@ Screens.openOglasi = async function () {
             }
 
             body.querySelector("#btnDodajOglas").addEventListener("click", async () => {
-                await Screens.openDodajOglas();
-                await refresh();
+                navigateToPage("dodaj-oglas.html");
+                return;
             });
 
             body.querySelector("#btnIzmeniOglas").addEventListener("click", async () => {
@@ -70,8 +60,8 @@ Screens.openOglasi = async function () {
                     return;
                 }
                 const ob = await api.oglas.get(sel.oglasId);
-                await Screens.openIzmeniOglas(ob);
-                await refresh();
+                navigateToPage("izmeni-oglas.html", { id: ob.oglasId });
+                return;
             });
 
             body.querySelector("#btnObrisiOglas").addEventListener("click", async () => {
@@ -98,8 +88,8 @@ Screens.openOglasi = async function () {
                     return;
                 }
                 const ob = await api.oglas.get(sel.oglasId);
-                await Screens.openCVPrijaveZaOglas(ob);
-                await refresh();
+                navigateToPage("cv-prijave.html", { oglasId: ob.oglasId });
+                return;
             });
 
             body.querySelector("#btnPosebniPodaci").addEventListener("click", async () => {
@@ -109,8 +99,8 @@ Screens.openOglasi = async function () {
                     return;
                 }
                 const ob = await api.oglas.get(sel.oglasId);
-                await Screens.openPosebniPodaci(ob);
-                await refresh();
+                navigateToPage("posebni-podaci.html", { oglasId: ob.oglasId });
+                return;
             });
 
             body.querySelector("#btnOsvezi").addEventListener("click", refresh);
@@ -120,13 +110,11 @@ Screens.openOglasi = async function () {
     });
 };
 
-// --- zajednicko gradjenje forme za dodavanje/izmenu oglasa ----------------
-
 function renderOglasFormFields(container, oglas) {
     const f = {};
 
     f.naziv = makeInput("text", "f_naziv", oglas?.nazivPozicije || "");
-    f.vrsta = makeSelect("f_vrsta", Enums.vrstaOglasa, oglas?.vrstaOglasa || "STALNI");
+    f.vrsta = makeSelect("f_vrsta", Enums.VrstaOglasa, oglas?.vrstaOglasa || "STALNI");
     f.status = makeSelect("f_status", Enums.StatusOglasa, oglas?.status || "AKTIVAN");
     f.opis = makeTextarea("f_opis", oglas?.opis || "");
     f.zahtevi = makeTextarea("f_zahtevi", oglas?.zahtevi || "");
@@ -152,7 +140,6 @@ function renderOglasFormFields(container, oglas) {
     ]);
     container.appendChild(grid);
 
-    // Praksa
     f.mentorIme = makeInput("text", "f_mentorIme", oglas?.mentorIme || "");
     f.mentorPrezime = makeInput("text", "f_mentorPrezime", oglas?.mentorPrezime || "");
     f.duzinaTrajanja = makeInput("number", "f_duzina", oglas?.duzinaTrajanja ?? 1);
@@ -165,7 +152,6 @@ function renderOglasFormFields(container, oglas) {
         ])
     ]);
 
-    // Privremeni
     f.projekat = makeInput("text", "f_projekat", oglas?.projekat || "");
     f.datumPocetka = makeInput("date", "f_datumPocetka", toDateInputValue(oglas?.datumPocetka) || new Date().toISOString().substring(0, 10));
     f.datumZavrsetka = makeInput("date", "f_datumZavrsetka", toDateInputValue(oglas?.datumZavrsetka) || new Date().toISOString().substring(0, 10));
@@ -178,7 +164,6 @@ function renderOglasFormFields(container, oglas) {
         ])
     ]);
 
-    // Sezonski
     f.sezona = makeInput("text", "f_sezona", oglas?.sezona || "");
     f.lokacija = makeInput("text", "f_lokacija", oglas?.lokacija || "");
     const gbSezonski = el("fieldset", { class: "groupbox hidden", id: "gbSezonski" }, [
@@ -291,6 +276,7 @@ function validateAndBuildOglas(f, existing) {
 
 Screens.openDodajOglas = async function () {
     await openModal({
+        page: true,
         title: "Dodavanje novog oglasa",
         width: 560,
         height: 620,
@@ -334,6 +320,7 @@ Screens.openDodajOglas = async function () {
 
 Screens.openIzmeniOglas = async function (oglasOsnovni) {
     await openModal({
+        page: true,
         title: `Azuriranje oglasa ${oglasOsnovni.nazivPozicije?.toUpperCase() || ""}`,
         width: 560,
         height: 640,
@@ -386,7 +373,7 @@ Screens.openIzmeniOglas = async function (oglasOsnovni) {
                     else if (dto.vrstaOglasa === "SEZONSKI") await api.oglas.editSezonski(dto, staraVrsta);
                     else await api.oglas.editStalni(dto, staraVrsta);
 
-                    await alertBox(`Uspesno ste izmenili oglas sa ID=${dto.oglasId}!`, "Uspesno");
+                    await alertBox("Uspesno ste izmenili oglas!", "Uspesno");
                     win.close();
                 } catch (err) {
                     await errorBox(err.message);
@@ -396,29 +383,26 @@ Screens.openIzmeniOglas = async function (oglasOsnovni) {
     });
 };
 
-// ---------------------------------------------------------------------------
-// POSEBNI PODACI (OglasPraksaForm / OglasPrivremeniForm / OglasSezonskiForm)
-// ---------------------------------------------------------------------------
-
 Screens.openPosebniPodaci = async function (oglas) {
     if (oglas.vrstaOglasa === "STALNI") {
         await alertBox("Oglas za stalni rad nema posebne podatke.");
         return;
     }
-    if (oglas.vrstaOglasa === "PRAKSA") return Screens.openPosebniPraksa(oglas);
-    if (oglas.vrstaOglasa === "PRIVREMENI") return Screens.openPosebniPrivremeni(oglas);
-    if (oglas.vrstaOglasa === "SEZONSKI") return Screens.openPosebniSezonski(oglas);
+    if (oglas.vrstaOglasa === "PRAKSA") return navigateToPage("posebni-praksa.html", { oglasId: oglas.oglasId });
+    if (oglas.vrstaOglasa === "PRIVREMENI") return navigateToPage("posebni-privremeni.html", { oglasId: oglas.oglasId });
+    if (oglas.vrstaOglasa === "SEZONSKI") return navigateToPage("posebni-sezonski.html", { oglasId: oglas.oglasId });
 };
 
 Screens.openPosebniPraksa = async function (oglas) {
     await openModal({
+        page: true,
         title: "Podaci o praksi",
         width: 440,
         build: async (body, win) => {
             let podaci = null;
             try {
                 podaci = await api.oglasPraksa.get(oglas.oglasId);
-            } catch { /* nema podataka */ }
+            } catch {}
 
             win.setTitle(podaci ? "Izmena podataka o praksi" : "Podaci o praksi nisu pronadjeni");
 
@@ -473,13 +457,14 @@ Screens.openPosebniPraksa = async function (oglas) {
 
 Screens.openPosebniPrivremeni = async function (oglas) {
     await openModal({
+        page: true,
         title: "Podaci o privremenom oglasu",
         width: 460,
         build: async (body, win) => {
             let podaci = null;
             try {
                 podaci = await api.oglasPrivremeni.get(oglas.oglasId);
-            } catch { /* nema podataka */ }
+            } catch {}
 
             if (!podaci) {
                 body.innerHTML = `<div class="listview-empty">Podaci o privremenom oglasu ne postoje.</div>`;
@@ -536,13 +521,14 @@ Screens.openPosebniPrivremeni = async function (oglas) {
 
 Screens.openPosebniSezonski = async function (oglas) {
     await openModal({
+        page: true,
         title: "Podaci o sezonskom oglasu",
         width: 440,
         build: async (body, win) => {
             let podaci = null;
             try {
                 podaci = await api.oglasSezonski.get(oglas.oglasId);
-            } catch { /* nema podataka */ }
+            } catch { }
 
             if (!podaci) {
                 body.innerHTML = `<div class="listview-empty">Podaci o sezonskom oglasu ne postoje.</div>`;
@@ -590,12 +576,9 @@ Screens.openPosebniSezonski = async function (oglas) {
     });
 };
 
-// ---------------------------------------------------------------------------
-// CV PRIJAVE ZA OGLAS (CVPrijaveZaOglasForm)
-// ---------------------------------------------------------------------------
-
 Screens.openCVPrijaveZaOglas = async function (oglas) {
     await openModal({
+        page: true,
         title: `Oglas ${oglas.nazivPozicije?.toUpperCase() || ""}`,
         width: 860,
         height: 520,
@@ -639,16 +622,16 @@ Screens.openCVPrijaveZaOglas = async function (oglas) {
             }
 
             body.querySelector("#btnDodajCV").addEventListener("click", async () => {
-                await Screens.openDodajCV(oglas);
-                await refresh();
+                navigateToPage("dodaj-cv.html", { oglasId: oglas.oglasId });
+                return;
             });
 
             body.querySelector("#btnIzmeniCV").addEventListener("click", async () => {
                 const sel = lv.getSelected();
                 if (!sel) return alertBox("Izaberite CV prijavu cije podatke zelite da izmenite!");
                 const cvb = await api.cv.get(sel.cvId);
-                await Screens.openIzmeniCV(cvb, oglas);
-                await refresh();
+                navigateToPage("izmeni-cv.html", { id: cvb.cvId, oglasId: oglas.oglasId });
+                return;
             });
 
             body.querySelector("#btnObrisiCV").addEventListener("click", async () => {
@@ -669,21 +652,24 @@ Screens.openCVPrijaveZaOglas = async function (oglas) {
                 const sel = lv.getSelected();
                 if (!sel) return alertBox("Izaberite CV za koji zelite da vidite intervjue!");
                 const cvb = await api.cv.get(sel.cvId);
-                await Screens.openIntervjui(cvb);
+                navigateToPage("intervjui.html", { cvId: cvb.cvId });
+                return;
             });
 
             body.querySelector("#btnTestovi").addEventListener("click", async () => {
                 const sel = lv.getSelected();
                 if (!sel) return alertBox("Izaberite CV za koji zelite da vidite testove!");
                 const cvb = await api.cv.get(sel.cvId);
-                await Screens.openTestovi(cvb);
+                navigateToPage("testovi.html", { cvId: cvb.cvId });
+                return;
             });
 
             body.querySelector("#btnOdluka").addEventListener("click", async () => {
                 const sel = lv.getSelected();
                 if (!sel) return alertBox("Izaberite CV za koji zelite da vidite Odluku!");
                 const cvb = await api.cv.get(sel.cvId);
-                await Screens.openOdluka(cvb);
+                navigateToPage("odluka.html", { cvId: cvb.cvId });
+                return;
             });
 
             await refresh();
@@ -693,6 +679,7 @@ Screens.openCVPrijaveZaOglas = async function (oglas) {
 
 Screens.openDodajCV = async function (oglas) {
     await openModal({
+        page: true,
         title: `Novi CV za oglas ${oglas.nazivPozicije || ""}`,
         width: 440,
         build: (body, win) => {
@@ -751,6 +738,7 @@ Screens.openDodajCV = async function (oglas) {
 
 Screens.openIzmeniCV = async function (cv, oglas) {
     await openModal({
+        page: true,
         title: `Izmena CV-a za oglas ${oglas.nazivPozicije || ""}`,
         width: 440,
         build: (body, win) => {
@@ -807,12 +795,9 @@ Screens.openIzmeniCV = async function (cv, oglas) {
     });
 };
 
-// ---------------------------------------------------------------------------
-// ODLUKA (Odluka_CV_Za_Oglas_Form)
-// ---------------------------------------------------------------------------
-
 Screens.openOdluka = async function (cv) {
     await openModal({
+        page: true,
         title: `Odluka za CV: ${cv.ime} ${cv.prezime}`,
         width: 480,
         height: 520,
@@ -962,12 +947,9 @@ Screens.openOdluka = async function (cv) {
     });
 };
 
-// ---------------------------------------------------------------------------
-// INTERVJUI (IntervjuiForm)
-// ---------------------------------------------------------------------------
-
 Screens.openIntervjui = async function (cv) {
     await openModal({
+        page: true,
         title: `Intervjui za CV: ${cv.ime} ${cv.prezime}`,
         width: 860,
         height: 500,
@@ -1008,7 +990,8 @@ Screens.openIntervjui = async function (cv) {
             }
 
             body.querySelector("#btnDodaj").addEventListener("click", async () => {
-                await Screens.openDodajIntervju(cv);
+                navigateToPage("dodaj-intervju.html", { cvId: cv.cvId });
+                return;
                 await refresh();
             });
 
@@ -1016,7 +999,8 @@ Screens.openIntervjui = async function (cv) {
                 const sel = lv.getSelected();
                 if (!sel) return alertBox("Izaberite intervju koji zelite da menjate!");
                 const ib = await api.intervju.get(sel.intervjuId);
-                await Screens.openIzmeniIntervju(ib, cv);
+                navigateToPage("izmeni-intervju.html", { id: ib.intervjuId, cvId: cv.cvId });
+                return;
                 await refresh();
             });
 
@@ -1041,6 +1025,7 @@ Screens.openIntervjui = async function (cv) {
 
 Screens.openDodajIntervju = async function (cv) {
     await openModal({
+        page: true,
         title: "Novi intervju",
         width: 460,
         height: 520,
@@ -1116,6 +1101,7 @@ Screens.openDodajIntervju = async function (cv) {
 
 Screens.openIzmeniIntervju = async function (intervju, cv) {
     await openModal({
+        page: true,
         title: `Izmena intervjua za CV sa ID = ${cv.cvId}`,
         width: 460,
         height: 520,
@@ -1175,7 +1161,7 @@ Screens.openIzmeniIntervju = async function (intervju, cv) {
 
                 try {
                     await api.intervju.edit(intervju);
-                    await alertBox(`Uspesno ste izmenili intervju sa ID=${intervju.intervjuId}!`, "Uspesno");
+                    await alertBox("Uspesno ste izmenili intervju!", "Uspesno");
                     win.close();
                 } catch (err) {
                     await errorBox(err.message);
@@ -1185,12 +1171,9 @@ Screens.openIzmeniIntervju = async function (intervju, cv) {
     });
 };
 
-// ---------------------------------------------------------------------------
-// TESTOVI (TestoviForm)
-// ---------------------------------------------------------------------------
-
 Screens.openTestovi = async function (cv) {
     await openModal({
+        page: true,
         title: `Testovi za CV: ${cv.ime} ${cv.prezime}`,
         width: 760,
         height: 480,
@@ -1227,7 +1210,8 @@ Screens.openTestovi = async function (cv) {
             }
 
             body.querySelector("#btnDodaj").addEventListener("click", async () => {
-                await Screens.openDodajTest(cv);
+                navigateToPage("dodaj-test.html", { cvId: cv.cvId });
+                return;
                 await refresh();
             });
 
@@ -1235,7 +1219,8 @@ Screens.openTestovi = async function (cv) {
                 const sel = lv.getSelected();
                 if (!sel) return alertBox("Izaberite test koji zelite da menjate!");
                 const tb = await api.test.get(sel.testId);
-                await Screens.openIzmeniTest(tb, cv);
+                navigateToPage("izmeni-test.html", { id: tb.testId, cvId: cv.cvId });
+                return;
                 await refresh();
             });
 
@@ -1260,6 +1245,7 @@ Screens.openTestovi = async function (cv) {
 
 Screens.openDodajTest = async function (cv) {
     await openModal({
+        page: true,
         title: "Novi test",
         width: 440,
         build: (body, win) => {
@@ -1320,6 +1306,7 @@ Screens.openDodajTest = async function (cv) {
 
 Screens.openIzmeniTest = async function (test, cv) {
     await openModal({
+        page: true,
         title: `Izmena testa za CV sa ID = ${cv.cvId}`,
         width: 440,
         build: (body, win) => {
@@ -1365,7 +1352,7 @@ Screens.openIzmeniTest = async function (test, cv) {
 
                 try {
                     await api.test.edit(test);
-                    await alertBox(`Uspesno ste izmenili test sa ID=${test.testId}!`, "Uspesno");
+                    await alertBox("Uspesno ste izmenili test!", "Uspesno");
                     win.close();
                 } catch (err) {
                     await errorBox(err.message);
@@ -1375,12 +1362,9 @@ Screens.openIzmeniTest = async function (test, cv) {
     });
 };
 
-// ---------------------------------------------------------------------------
-// SVE CV PRIJAVE (SveCVPrijaveForm)
-// ---------------------------------------------------------------------------
-
 Screens.openSveCVPrijave = async function () {
     await openModal({
+        page: true,
         title: "Sve CV prijave",
         width: 860,
         height: 540,

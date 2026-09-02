@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using DatabaseAccess;
 
 namespace WebAPI.Controllers;
@@ -89,7 +89,7 @@ public class TestController : ControllerBase
         {
             DTOManager.obrisiTest(id);
 
-            return StatusCode(204, $"Uspešno obrisan test sa ID={id}");
+            return NoContent();
         }
         catch (Exception ex)
         {

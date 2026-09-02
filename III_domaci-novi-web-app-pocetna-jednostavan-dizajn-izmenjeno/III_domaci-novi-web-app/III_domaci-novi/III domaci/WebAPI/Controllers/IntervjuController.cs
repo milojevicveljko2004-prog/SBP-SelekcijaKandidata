@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using DatabaseAccess;
 
 namespace WebAPI.Controllers;
@@ -89,7 +89,7 @@ public class IntervjuController : ControllerBase
         {
             DTOManager.obrisiIntervju(id);
 
-            return StatusCode(204, $"Uspešno obrisan intervju sa ID={id}");
+            return NoContent();
         }
         catch (Exception ex)
         {

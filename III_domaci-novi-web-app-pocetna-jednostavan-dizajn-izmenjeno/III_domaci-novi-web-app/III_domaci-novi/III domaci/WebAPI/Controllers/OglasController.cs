@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using DatabaseAccess;
 using DatabaseAccess.Entiteti.Enums;
 
@@ -229,7 +229,7 @@ public class OglasController : ControllerBase
         {
             DTOManager.obrisiOglas(id);
 
-            return StatusCode(204, $"Uspešno obrisan oglas sa ID={id}");
+            return NoContent();
         }
         catch (Exception ex)
         {

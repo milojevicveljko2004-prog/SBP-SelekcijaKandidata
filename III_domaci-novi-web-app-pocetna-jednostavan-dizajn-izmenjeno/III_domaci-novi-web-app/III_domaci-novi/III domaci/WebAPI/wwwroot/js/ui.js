@@ -1,11 +1,3 @@
-// ============================================================================
-// ui.js - "window manager" koji imitira Windows Forms ShowDialog() ponasanje:
-// svaki openModal() prikazuje prozor preko overlay-a koji blokira sve iza
-// njega (kao modalna forma), i vraca Promise koji se razresava kada se
-// prozor zatvori - potpuno analogno "form.ShowDialog(); popuniPodacima();"
-// obrascu iz originalne desktop aplikacije.
-// ============================================================================
-
 let zCounter = 1000;
 const openStack = [];
 
@@ -84,14 +76,81 @@ function makeResizable(win, handle, onResize) {
         resizing = false;
     });
 }
-
-/**
- * Otvara modalni prozor (analogno Form.ShowDialog()).
- * opts: { title, width, height, resizable, build(bodyEl, winCtl), statusText }
- * build dobija (bodyEl, winCtl) gde winCtl ima .close(result), .setTitle(text), .setStatus(text), .bodyEl, .rootEl
- * Vraca Promise koji se razresava sa "result" prosledjenim u winCtl.close(result).
- */
 function openModal(opts) {
+    if (opts.page) {
+        return new Promise((resolve) => {
+            const desktop = document.getElementById("desktop");
+            desktop.innerHTML = "";
+
+            const page = document.createElement("main");
+            page.className = "app-page";
+
+            const header = document.createElement("header");
+            header.className = "page-header";
+
+            const backBtn = document.createElement("button");
+            backBtn.className = "back-link";
+            backBtn.type = "button";
+            backBtn.innerHTML = "&#8592; <span>Nazad</span>";
+            backBtn.addEventListener("click", () => {
+                const currentFile = window.location.pathname.split("/").pop().toLowerCase();
+                if (["posebni-praksa.html", "posebni-privremeni.html", "posebni-sezonski.html"].includes(currentFile)) {
+                    window.location.href = "oglasi.html";
+                    return;
+                }
+
+                if (window.history.length > 1) window.history.back();
+                else window.location.href = "index.html";
+            });
+
+            const heading = document.createElement("div");
+            heading.className = "page-heading";
+            const titleText = document.createElement("h1");
+            titleText.textContent = opts.title || "";
+            heading.appendChild(titleText);
+
+            const statusbar = document.createElement("div");
+            statusbar.className = "page-status";
+            statusbar.textContent = opts.statusText || "";
+
+            header.appendChild(backBtn);
+            header.appendChild(heading);
+            header.appendChild(statusbar);
+
+            const body = document.createElement("section");
+            body.className = "page-body";
+
+            page.appendChild(header);
+            page.appendChild(body);
+            desktop.appendChild(page);
+
+            let closed = false;
+            const winCtl = {
+                rootEl: page,
+                bodyEl: body,
+                setTitle: (t) => { titleText.textContent = t; },
+                setStatus: (t) => { statusbar.textContent = t; },
+                close: (result) => {
+                    if (closed) return;
+                    closed = true;
+                    resolve(result);
+                    if (window.history.length > 1) window.history.back();
+                    else window.location.href = "index.html";
+                }
+            };
+
+            try {
+                const result = opts.build(body, winCtl);
+                if (result && typeof result.then === "function") result.catch((err) => {
+                    console.error(err);
+                    body.innerHTML = `<div class="listview-empty">Greska pri prikazu stranice: ${escapeHtml(err.message || String(err))}</div>`;
+                });
+            } catch (err) {
+                console.error(err);
+                body.innerHTML = `<div class="listview-empty">Greska pri prikazu stranice: ${escapeHtml(err.message || String(err))}</div>`;
+            }
+        });
+    }
     return new Promise((resolve) => {
         const desktop = document.getElementById("desktop");
 
@@ -139,7 +198,6 @@ function openModal(opts) {
         desktop.appendChild(overlay);
         desktop.appendChild(winEl);
         centerWindow(winEl, opts.width || 480, opts.height || 320);
-
         makeDraggable(winEl, titlebar);
 
         let closed = false;
@@ -161,7 +219,6 @@ function openModal(opts) {
 
         closeBtn.addEventListener("click", () => winCtl.close(undefined));
         winEl.addEventListener("mousedown", () => bringToFront(winEl));
-
         openStack.push(winCtl);
 
         try {
@@ -172,10 +229,6 @@ function openModal(opts) {
         }
     });
 }
-
-// ---------------------------------------------------------------------------
-// MessageBox - imitacija System.Windows.Forms.MessageBox
-// ---------------------------------------------------------------------------
 
 const MsgIcon = { INFO: "info", WARN: "warn", ERROR: "error", QUESTION: "question" };
 const iconGlyph = { info: "i", warn: "!", error: "\u2715", question: "?" };
@@ -226,10 +279,6 @@ async function confirmYesNo(message, title = "Potvrda", icon = MsgIcon.WARN) {
 async function errorBox(message, title = "Greska") {
     await msgBox(message, title, ["OK"], MsgIcon.ERROR);
 }
-
-// ---------------------------------------------------------------------------
-// Pomocne funkcije za gradjenje formi
-// ---------------------------------------------------------------------------
 
 function escapeHtml(str) {
     if (str === null || str === undefined) return "";
@@ -303,10 +352,6 @@ function makeCheckbox(id, checked) {
     return c;
 }
 
-// ---------------------------------------------------------------------------
-// Datumi
-// ---------------------------------------------------------------------------
-
 function toDateInputValue(isoStr) {
     if (!isoStr) return "";
     return isoStr.substring(0, 10);
@@ -356,10 +401,6 @@ function formatMoney(val) {
     const n = Number(val);
     return n.toLocaleString("sr-Latn-RS", { maximumFractionDigits: 2 });
 }
-
-// ---------------------------------------------------------------------------
-// ListView - tabela sa selekcijom reda (analogno System.Windows.Forms.ListView)
-// ---------------------------------------------------------------------------
 
 function buildListView({ columns, rows, rowId, emptyText }) {
     const wrap = el("div", { class: "listview-wrap" });

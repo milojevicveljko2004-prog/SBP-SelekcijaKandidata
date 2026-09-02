@@ -28,7 +28,7 @@ internal static class DataLayer
             var cfg = OracleManagedDataClientConfiguration.Oracle10
                         .ShowSql()
                         .ConnectionString(c =>
-                            c.Is("Data Source=gislab-oracle.elfak.ni.ac.rs:1521/SBP_PDB;User Id=S19586;Password=S19586"));
+                            c.Is("Data Source=gislab-oracle.elfak.ni.ac.rs:1521/SBP_PDB;User Id=S19751;Password=S19751"));
 
             return Fluently.Configure()
                 .Database(cfg)

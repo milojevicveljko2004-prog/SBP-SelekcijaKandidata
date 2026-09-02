@@ -1,0 +1,185 @@
+
+:root{
+    --bg:#f4f7fb;
+    --surface:#ffffff;
+    --surface-2:#f8fafc;
+    --text:#172033;
+    --muted:#687386;
+    --line:#e4e9f0;
+    --primary:#2563eb;
+    --primary-dark:#1d4ed8;
+    --danger:#dc2626;
+    --shadow:0 18px 50px rgba(24,39,75,.10);
+    --radius:18px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);background:var(--bg)}
+body{min-height:100vh}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+
+#desktop{min-height:100vh}
+.hidden{display:none!important}
+
+/* --------------------------------------------------------------------------
+   Pocetna stranica
+   -------------------------------------------------------------------------- */
+.home-page{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:40px 20px;
+    text-align:center;
+}
+
+.home-page h1{
+    margin:0 0 42px;
+    font-size:clamp(42px, 6vw, 72px);
+    line-height:1.05;
+    letter-spacing:-.055em;
+    font-weight:800;
+}
+
+.home-buttons{
+    display:flex;
+    gap:18px;
+    justify-content:center;
+    align-items:center;
+}
+
+.home-button{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-width:230px;
+    min-height:58px;
+    padding:15px 28px;
+    border:1px solid #d7dee8;
+    border-radius:12px;
+    background:#fff;
+    color:var(--text);
+    font-size:16px;
+    font-weight:700;
+    box-shadow:0 4px 14px rgba(24,39,75,.06);
+    transition:background .15s ease,border-color .15s ease,transform .15s ease,box-shadow .15s ease;
+}
+
+.home-button:hover{
+    background:#f8fafc;
+    border-color:#c4cedb;
+    transform:translateY(-2px);
+    box-shadow:0 8px 22px rgba(24,39,75,.09);
+}
+
+@media(max-width:600px){
+    .home-page h1{
+        font-size:38px;
+        margin-bottom:32px;
+    }
+
+    .home-buttons{
+        width:100%;
+        flex-direction:column;
+        gap:12px;
+    }
+
+    .home-button{
+        width:min(100%,340px);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Prave stranice aplikacije
+   -------------------------------------------------------------------------- */
+.app-page{min-height:100vh;max-width:1280px;margin:0 auto;padding:24px 28px 40px}
+.page-header{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:160px 1fr auto;align-items:center;gap:20px;padding:12px 0 22px;background:linear-gradient(var(--bg) 78%,rgba(244,247,251,0))}
+.back-link{justify-self:start;border:0;background:transparent;color:var(--muted);font-weight:700;padding:9px 0;display:inline-flex;align-items:center;gap:8px;transition:color .15s}
+.back-link:hover{color:var(--text)}
+.page-heading h1{font-size:28px;line-height:1.15;letter-spacing:-.04em;margin:0}
+.page-status{justify-self:end;color:var(--muted);font-size:12px;font-weight:600;white-space:nowrap}
+.page-body{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 10px 35px rgba(24,39,75,.06);padding:22px;min-height:260px}
+
+/* toolbar */
+.toolbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:18px}
+.toolbar .winbtn{margin:0}
+
+/* buttons */
+.winbtn{appearance:none;border:1px solid #d7dee8;background:#fff;color:#344054;padding:9px 14px;border-radius:10px;font-weight:700;font-size:13px;line-height:1.2;transition:.15s ease;box-shadow:0 1px 2px rgba(16,24,40,.03)}
+.winbtn:hover{background:#f8fafc;border-color:#c4cedb;transform:translateY(-1px)}
+.winbtn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.winbtn.primary:hover{background:var(--primary-dark);border-color:var(--primary-dark)}
+.winbtn.danger{background:#fff;border-color:#fecaca;color:var(--danger)}
+.winbtn.danger:hover{background:#fef2f2}
+.btn-row{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
+.btn-row.right{justify-content:flex-end}
+
+/* forms */
+.form-grid{display:grid;grid-template-columns:minmax(145px,220px) minmax(0,1fr);gap:13px 18px;align-items:center}
+.field-label{font-size:12px;font-weight:750;color:#4b5565}
+.form-grid input,.form-grid select,.form-grid textarea{width:100%}
+input,select,textarea{border:1px solid #d8e0e9;background:#fff;color:var(--text);border-radius:10px;padding:10px 11px;outline:none;transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus,textarea:focus{border-color:#8db4ff;box-shadow:0 0 0 3px rgba(37,99,235,.10)}
+input:disabled,select:disabled{background:#f1f4f8;color:#8b95a5}
+textarea{min-height:96px;resize:vertical}
+.inline-fields{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.checkline{display:inline-flex;align-items:center;gap:7px;font-size:13px}
+.checkline input{width:auto}
+.groupbox{border:1px solid var(--line);border-radius:14px;padding:17px 18px 18px;margin-top:20px;background:var(--surface-2)}
+.groupbox legend{padding:0 8px;color:#475467;font-size:12px;font-weight:800}
+.groupbox .form-grid{grid-template-columns:180px minmax(0,1fr)}
+.small-note{margin-top:14px;color:var(--muted);font-size:12px;line-height:1.55}
+.section-title{font-weight:800}
+
+/* table/list */
+.listview-wrap{width:100%;overflow:auto;border:1px solid var(--line);border-radius:13px;background:#fff}
+.listview{width:100%;min-width:760px;border-collapse:separate;border-spacing:0;font-size:12px}
+.listview th{position:sticky;top:0;background:#f8fafc;color:#667085;font-size:10px;letter-spacing:.05em;text-transform:uppercase;text-align:left;font-weight:800;padding:12px;border-bottom:1px solid var(--line);white-space:nowrap}
+.listview td{padding:12px;border-bottom:1px solid #edf0f4;color:#344054;vertical-align:top;max-width:330px}
+.listview tbody tr{cursor:pointer;transition:background .12s}
+.listview tbody tr:hover{background:#f8fbff}
+.listview tbody tr.selected{background:#eef5ff}
+.listview tbody tr:last-child td{border-bottom:0}
+.listview-empty{padding:52px 20px;text-align:center;color:var(--muted);font-size:13px}
+.status-badge{display:inline-flex}
+
+/* modal messages */
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.42);backdrop-filter:blur(3px);z-index:1000}
+.win{position:fixed;background:#fff;border:1px solid #d9e0e8;border-radius:16px;box-shadow:0 25px 80px rgba(15,23,42,.25);overflow:hidden;z-index:1001;max-width:calc(100vw - 24px)}
+.win-titlebar{height:48px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;background:#fff;border-bottom:1px solid var(--line);font-size:14px;font-weight:800}
+.win-btn{border:0;background:transparent;color:#8a94a3;font-size:17px;width:30px;height:30px;border-radius:8px;cursor:pointer}
+.win-btn:hover{background:#f2f4f7;color:#344054}
+.win-body{padding:20px;overflow:auto;max-height:calc(100vh - 120px)}
+.win-statusbar{padding:8px 14px;border-top:1px solid var(--line);color:var(--muted);font-size:11px;background:#fafbfc}
+.win-resize-handle{position:absolute;right:2px;bottom:2px;width:14px;height:14px;cursor:nwse-resize}
+.msgbox-body{display:flex;gap:14px;align-items:flex-start}
+.msgbox-icon{width:34px;height:34px;flex:0 0 auto;border-radius:50%;display:grid;place-items:center;background:#eef2ff;color:#4f46e5;font-weight:900}
+.msgbox-icon.warn{background:#fff7ed;color:#c2410c}
+.msgbox-icon.error{background:#fef2f2;color:#dc2626}
+.msgbox-icon.question{background:#eff6ff;color:#2563eb}
+.msgbox-text{font-size:13px;line-height:1.55;color:#344054;padding-top:5px}
+
+/* responsive */
+@media(max-width:800px){
+    .home-shell,.app-page{padding:18px 14px 28px}
+    .home-header{margin-bottom:20px}
+    .header-pill{display:none}
+    .hero{padding:34px 27px;min-height:280px}
+    .hero-icon{display:none}
+    .home-grid{grid-template-columns:1fr}
+    .page-header{grid-template-columns:auto 1fr;gap:14px}
+    .page-status{grid-column:2;justify-self:start}
+    .page-heading h1{font-size:23px}
+    .page-body{padding:14px}
+    .form-grid,.groupbox .form-grid{grid-template-columns:1fr;gap:7px}
+    .form-grid .field-label{margin-top:7px}
+}
+@media(max-width:520px){
+    .hero h1{font-size:31px}
+    .hero p{font-size:14px}
+    .toolbar{align-items:stretch}
+    .toolbar .winbtn{flex:1 1 auto}
+    .btn-row .winbtn{flex:1 1 auto}
+}

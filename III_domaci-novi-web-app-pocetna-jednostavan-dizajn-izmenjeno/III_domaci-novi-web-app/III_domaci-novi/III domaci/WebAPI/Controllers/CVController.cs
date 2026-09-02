@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using DatabaseAccess;
 
 namespace WebAPI.Controllers;
@@ -105,7 +105,7 @@ public class CVController : ControllerBase
         {
             DTOManager.obrisiCV(id);
 
-            return StatusCode(204, $"Uspešno obrisana CV prijava sa ID={id}");
+            return NoContent();
         }
         catch (Exception ex)
         {
@@ -126,6 +126,6 @@ public class CVController : ControllerBase
             return StatusCode(error?.StatusCode ?? 400, error?.Message);
         }
 
-        return StatusCode(204, $"Uspešno obrisana CV prijava sa ID={id}");
+        return NoContent();
     }
 }

@@ -1,9 +1,3 @@
-// ============================================================================
-// api.js - tanak sloj preko fetch-a za komunikaciju sa WebAPI kontrolerima.
-// Frontend se servira iz istog wwwroot-a kao i API, pa se koriste relativne
-// putanje (isti origin), bez potrebe za CORS podesavanjima.
-// ============================================================================
-
 const ApiError = class extends Error {};
 
 async function apiRequest(method, url, body) {
