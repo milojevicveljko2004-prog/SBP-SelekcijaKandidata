@@ -12,6 +12,8 @@ namespace App.Mapiranja
     {
         public OglasPraksaMapiranja()
         {
+            //mapiranje tabele, kljuca i svojstava
+
             Table("OGLAS_PRAKSA");
 
             KeyColumn("OGLAS_ID");

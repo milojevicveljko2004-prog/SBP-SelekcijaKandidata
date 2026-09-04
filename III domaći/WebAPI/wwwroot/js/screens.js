@@ -250,7 +250,9 @@ function validateAndBuildOglas(f, existing) {
     }
 
     const datumObjave = existing ? existing.datumObjave : new Date().toISOString();
-    const datumZatvaranja = f.datumZatvaranjaChk.checked ? dateInputToIso(f.datumZatvaranja.value) : null;
+    const datumZatvaranja = f.datumZatvaranjaChk.checked
+        ? dateInputToEndOfDayIso(f.datumZatvaranja.value)
+        : null;
 
     if (datumZatvaranja && new Date(datumZatvaranja) < new Date(datumObjave.substring(0, 10) + "T00:00:00")) {
         alertBox("datum zatvaranja ne moze biti pre datuma objave.", "Greska", MsgIcon.WARN);

@@ -147,12 +147,12 @@ namespace App.Forme
 
                 case VrstaOglasa.PRIVREMENI:
                     groupBoxPrivremeni.Visible = true;
-                    groupBoxPraksa.BringToFront();
+                    groupBoxPrivremeni.BringToFront();
                     break;
 
                 case VrstaOglasa.SEZONSKI:
                     groupBoxSezonski.Visible = true;
-                    groupBoxPraksa.BringToFront();
+                    groupBoxSezonski.BringToFront();
                     break;
 
                 case VrstaOglasa.STALNI:
@@ -298,9 +298,17 @@ namespace App.Forme
             noviOglas.MaxPlata = maxPlata;
             noviOglas.DatumObjave = DateTime.Now;
 
+            //noviOglas.DatumZatvaranja =
+            //    date_datumZatvaranja.Checked
+            //        ? date_datumZatvaranja.Value
+            //        : (DateTime?)null;
+
+            //mora ovako da bi izabrani datum predstavljao kraj dana
             noviOglas.DatumZatvaranja =
                 date_datumZatvaranja.Checked
-                    ? date_datumZatvaranja.Value
+                    ? date_datumZatvaranja.Value.Date
+                        .AddDays(1)
+                        .AddSeconds(-1)
                     : (DateTime?)null;
 
             //datum objave ne sme da bude veci od datuma zatvaranja

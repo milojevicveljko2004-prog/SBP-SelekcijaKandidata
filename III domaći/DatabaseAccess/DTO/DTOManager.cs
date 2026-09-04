@@ -39,6 +39,9 @@ namespace DatabaseAccess
             {
                 ISession s = DataLayer.GetSession();
 
+                p.DatumObjave = DateTime.Now;
+                normalizujDatumZatvaranja(p);
+
                 Oglas o;
 
                 OglasPraksaBasic praksa = p as OglasPraksaBasic;
@@ -105,6 +108,8 @@ namespace DatabaseAccess
             {
                 try
                 {
+                    normalizujDatumZatvaranja(p);
+
                     obrisiPosebanRed(s, p.OglasId, staraVrsta);
 
                     int brojIzmenjenih = s.CreateSQLQuery(@"
@@ -150,6 +155,22 @@ namespace DatabaseAccess
                         ec.Message,
                         ec);
                 }
+            }
+        }
+
+        private static void normalizujDatumZatvaranja(OglasBasic oglas)
+        {
+            if (!oglas.DatumZatvaranja.HasValue)
+                return;
+
+            oglas.DatumZatvaranja = oglas.DatumZatvaranja.Value.Date
+                .AddDays(1)
+                .AddSeconds(-1);
+
+            if (oglas.DatumZatvaranja.Value.Date < oglas.DatumObjave.Date)
+            {
+                throw new ArgumentException(
+                    "Datum zatvaranja ne moze biti pre datuma objave.");
             }
         }
 

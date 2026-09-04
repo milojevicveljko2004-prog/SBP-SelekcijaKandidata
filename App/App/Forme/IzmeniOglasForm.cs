@@ -235,9 +235,17 @@ namespace App.Forme
                 return;
             }
 
+            //DateTime? datumZatvaranja =
+            //    date_datumZatvaranja.Checked
+            //        ? date_datumZatvaranja.Value.Date
+            //        : (DateTime?)null;
+
+            //mora ovako da bi izabrani datum predstavljao kraj dana
             DateTime? datumZatvaranja =
                 date_datumZatvaranja.Checked
                     ? date_datumZatvaranja.Value.Date
+                        .AddDays(1)
+                        .AddSeconds(-1)
                     : (DateTime?)null;
 
             if (datumZatvaranja.HasValue &&

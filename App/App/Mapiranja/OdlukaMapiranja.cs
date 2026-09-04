@@ -14,6 +14,8 @@ namespace App.Mapiranja
     {
         public OdlukaMapiranja()
         {
+            //mapiranje tabele, kljuca i svojstava
+
             Table("ODLUKA");
 
             Id(x => x.OdlukaId, "ODLUKA_ID")
@@ -27,6 +29,8 @@ namespace App.Mapiranja
             Map(x => x.PrihvatioPonudu, "PRIHVATIO_PONUDU");
             Map(x => x.DatumPocetkaRada, "DATUM_POCETKA_RADA");
             Map(x => x.RazlogOdbijanja, "RAZLOG_ODBIJANJA");
+
+            //mapiranje veza
 
             References(x => x.CV)
                 .Column("CV_ID")

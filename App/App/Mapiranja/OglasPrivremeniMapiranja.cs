@@ -7,11 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace App.Mapiranja
-{
+{                                           //Subclass jer je izvedena klasa
     public class OglasPrivremeniMapiranja : SubclassMap<OglasPrivremeni>
     {
         public OglasPrivremeniMapiranja()
         {
+            //mapiranje tabele, kljuca i svojstava
+
             Table("OGLAS_PRIVREMENI");
 
             KeyColumn("OGLAS_ID");

@@ -369,6 +369,11 @@ function dateInputToIso(dateVal) {
     return new Date(dateVal + "T00:00:00").toISOString();
 }
 
+function dateInputToEndOfDayIso(dateVal) {
+    if (!dateVal) return null;
+    return new Date(dateVal + "T23:59:59").toISOString();
+}
+
 function timeInputToIso(timeVal, baseDate) {
     const datePart = baseDate ? baseDate : new Date().toISOString().substring(0, 10);
     const t = timeVal || "00:00";
